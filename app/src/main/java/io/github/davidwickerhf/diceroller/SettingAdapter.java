@@ -137,9 +137,6 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.SettingH
                         if(position != RecyclerView.NO_POSITION) {
                             //todo Setting Resources
                             itemView.setBackgroundResource(R.drawable.recycler_view_selected_background);
-                            textViewTitle.setTextColor(Color.parseColor("#ffffff"));
-                            textViewMaxNum.setTextColor(Color.parseColor("#ffffff"));
-                            editButtonView.setImageResource(R.drawable.ic_edit_selected);
                             
                             listener.onItemClick(position, itemView, textViewTitle, textViewMaxNum, editButtonView);
                             

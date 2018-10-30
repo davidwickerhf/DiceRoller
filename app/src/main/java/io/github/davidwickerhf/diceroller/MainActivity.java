@@ -35,9 +35,6 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     
     private int selectedItem;
     private View selectedItemView;
-    private TextView selectedTextViewTitle;
-    private TextView selectedTextViewMaxNum;
-    private ImageView selectedEditButtonView;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,25 +137,19 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     //todo
     
     @Override
-    public void onInputASent(int maxNumber, int position, View itemView, TextView textViewTitle, TextView textViewMaxNum, ImageView editButtonView) {
+    public void onInputASent(int maxNumber, int position, View itemView) {
         Bundle args = new Bundle();
         args.putInt("argMaxNumber", maxNumber);
         
         if(!(selectedItemView == null)) {
             if (selectedItem != position && selectedItemView != itemView){
                 selectedItemView.setBackgroundResource(R.drawable.recycler_view_background);
-                selectedTextViewTitle.setTextColor(Color.parseColor("#4A5058"));
-                selectedTextViewMaxNum.setTextColor(Color.parseColor("#4A5058"));
-                selectedEditButtonView.setImageResource(R.drawable.ic_edit);
             }
         }
         
         mHomeFragment.setArguments(args);
         
         selectedItemView = itemView;
-        selectedTextViewTitle = textViewTitle;
-        selectedTextViewMaxNum = textViewMaxNum;
-        selectedEditButtonView = editButtonView;
         selectedItem = position;
     }
     

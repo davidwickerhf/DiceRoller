@@ -102,6 +102,10 @@ public class AddSettingActivity extends AppCompatActivity {
             Toast.makeText(this, "Please insert title", Toast.LENGTH_SHORT).show();
             return;
         }
+        if(title.length() > 15){
+            Toast.makeText(this, "Title has to be shorter", Toast.LENGTH_SHORT).show();
+            return;
+        }
         
         Intent data = new Intent();
         data.putExtra(EXTRA_TITLE, title);

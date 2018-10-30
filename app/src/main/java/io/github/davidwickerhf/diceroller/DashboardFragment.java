@@ -31,7 +31,6 @@ public class DashboardFragment extends Fragment {
     private SettingAdapter adapter;
     private CoordinatorLayout coordinatorLayout;
     private ImageView addButton;
-    private ImageView itemBackgorund;
     
     private Snackbar mSnackbar;
     private Setting recoveredSetting;
@@ -40,7 +39,7 @@ public class DashboardFragment extends Fragment {
     //todo Interface for sharing data ( get Settings Information from AddSettingActivity)
     private FragmentDashboardListener listener;
     public interface FragmentDashboardListener {
-        void onInputASent(int maxNumber, int position, View itemView, TextView textViewTitle, TextView textViewMaxNum, ImageView editButtonView);
+        void onInputASent(int maxNumber, int position, View itemView);
     }
     
     private DashboardItemPositionListener itemListener;
@@ -98,7 +97,7 @@ public class DashboardFragment extends Fragment {
                 int maxNum = adapter.getSettings().get(position).getMaxDiceSum();
                 Snackbar.make(coordinatorLayout, "Setting selected", Snackbar.LENGTH_LONG).show();
                 
-                listener.onInputASent(maxNum, position, itemView, textViewTitle, textViewMaxNum, editButtonView);
+                listener.onInputASent(maxNum, position, itemView);
             }
         });
         
