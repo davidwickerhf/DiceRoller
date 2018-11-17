@@ -28,28 +28,23 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.SettingH
     private List<Setting> settings = new ArrayList<>();
     private ImageView editSettingButton;
     
-    private OnItemClickListener mListener;
-    
+
     public View itemView;
-    private int selectedItemPosition;
-    private DashboardFragment dashboard;
-    
+    //private int selectedItemPosition;
+
+    private OnItemClickListener mListener;
     public interface OnItemClickListener {
-        void onItemClick(int position, View itemView, TextView textViewTitle, TextView textViewMaxNum, ImageView editButtonView);
+        void onItemClick(int position, View itemView);
     }
-    
     public void setOnItemClickLister(OnItemClickListener listener){
         mListener = listener;
     }
     
-    
-    
+
     private OnEditItemClickListener editListener;
-    
     public interface OnEditItemClickListener {
         void onEditItemClick(int position);
     }
-    
     public void setOnEditItemClickLister(OnEditItemClickListener listener){
         editListener = listener;
     }
@@ -60,8 +55,7 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.SettingH
     @Override
     public SettingHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         
-        dashboard = new DashboardFragment();
-        selectedItemPosition = dashboard.selectedItemPosition;
+        //selectedItemPosition = dashboard.selectedItemPosition;
         
         itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.setting_item, parent, false);
@@ -138,7 +132,7 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.SettingH
                             //todo Setting Resources
                             itemView.setBackgroundResource(R.drawable.recycler_view_selected_background);
                             
-                            listener.onItemClick(position, itemView, textViewTitle, textViewMaxNum, editButtonView);
+                            listener.onItemClick(position, itemView);
                             
                             
                         }

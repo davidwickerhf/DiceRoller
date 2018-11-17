@@ -1,3 +1,7 @@
+//todo REMAINDER
+// ADD COPY OF DASHBOARD FRAGMENT LAYOUT FOR ADDING LISTS OF ITEMS
+
+
 package io.github.davidwickerhf.diceroller;
 
 import androidx.annotation.NonNull;
@@ -10,6 +14,7 @@ import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,24 +23,30 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements DashboardFragment.FragmentDashboardListener, DashboardFragment.DashboardItemPositionListener {
-    
+
+    //todo Variables
     private static final int ADD_SETTING_REQUEST = 1;
     private static final int EDIT_SETTING_REQUEST = 2;
-    
+    private int selectedItem;
+
+    //todo Views
+    private View selectedItemView;
+
+    //todo Components
     private SettingsViewModel settingsViewModel;
     private SettingAdapter adapter;
-    
+
     private HomeFragment mHomeFragment;
     private DashboardFragment mDashboardFragment;
     private ProfileFragment mProfileFragment;
-    
-    private int selectedItem;
-    private View selectedItemView;
-    
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +76,16 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         //todo Display HomeFragment:
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                 mHomeFragment).commit();
-        
+
+
+        //todo Set temporary setting when initializing activity
+        int temporaryMax = 1;
+        ArrayList<String> temporaryItems = new ArrayList<>(Arrays.asList("Select a Setting"));
+        Bundle args = new Bundle();
+        args.putInt("argMaxNumber", temporaryMax);
+        args.putStringArrayList("argItems", temporaryItems);
+        mHomeFragment.setArguments(args);
+
     }
     
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
@@ -90,10 +110,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
                     return true;
                 }
             };
-    
-    
-    //todo NOT WORKING:
-    
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -103,9 +120,8 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
             
             String title = data.getStringExtra(AddSettingActivity.EXTRA_TITLE);
             int maxDiceSum = data.getIntExtra(AddSettingActivity.EXTRA_MAX_NUMBER, 30);
-            int priority = data.getIntExtra(AddSettingActivity.EXTRA_PRIORITY, 1);
-            
-            Setting setting = new Setting(title, maxDiceSum, priority);
+
+            Setting setting = new Setting(title, maxDiceSum);
             settingsViewModel.insert(setting);
             
             Toast.makeText(MainActivity.this, "Setting saved", Toast.LENGTH_SHORT).show();
@@ -121,9 +137,8 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     
             String title = data.getStringExtra(AddSettingActivity.EXTRA_TITLE);
             int maxDiceSum = data.getIntExtra(AddSettingActivity.EXTRA_MAX_NUMBER, 30);
-            int priority = data.getIntExtra(AddSettingActivity.EXTRA_PRIORITY, 1);
-            
-            Setting setting = new Setting(title, maxDiceSum, priority);
+
+            Setting setting = new Setting(title, maxDiceSum);
             setting.setId(id);
             settingsViewModel.update(setting);
     
@@ -135,24 +150,32 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         }
     }
     //todo
-    
+
+
+
+
+    // Sends Info from DashboardFragment to HomeFragment
     @Override
-    public void onInputASent(int maxNumber, int position, View itemView) {
+    public void onInputASent(int maxNumber, ArrayList<String> items, int position, View itemView) {
+        Log.d("HomeFragment", "Item List arrived in Main is:" + items.toString());
         Bundle args = new Bundle();
         args.putInt("argMaxNumber", maxNumber);
-        
+        args.putStringArrayList("argItems", items);
+
+        // Change color of selected setting
         if(!(selectedItemView == null)) {
             if (selectedItem != position && selectedItemView != itemView){
                 selectedItemView.setBackgroundResource(R.drawable.recycler_view_background);
             }
         }
-        
+
+        // send setting info to Home Fragment
         mHomeFragment.setArguments(args);
         
         selectedItemView = itemView;
         selectedItem = position;
     }
-    
+
     @Override
     public void onEditInputASent(int position) {
         
@@ -160,7 +183,6 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         intent.putExtra(AddSettingActivity.EXTRA_ID, adapter.getSettingAt(position).getId());
         intent.putExtra(AddSettingActivity.EXTRA_TITLE, adapter.getSettingAt(position).getTitle());
         intent.putExtra(AddSettingActivity.EXTRA_MAX_NUMBER, adapter.getSettingAt(position).getMaxDiceSum());
-        intent.putExtra(AddSettingActivity.EXTRA_PRIORITY, adapter.getSettingAt(position).getPriority());
         startActivityForResult(intent, EDIT_SETTING_REQUEST);
         
     }

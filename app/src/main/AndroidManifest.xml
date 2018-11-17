@@ -3,32 +3,42 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="io.github.davidwickerhf.diceroller">
 
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppThemeNoActionBar"
+        android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".LoginActivity"
+
+        <!-- Change this to LOGIN ACTIVITY later -->
+        <activity
+            android:name=".MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
 
-        </activity>
-        <activity
-            android:name=".MainActivity"
-            android:screenOrientation="portrait">
-        </activity>
         <activity
             android:name=".AddSettingActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
-            android:screenOrientation="portrait" />
-        <activity android:name=".RegisterActivity"/>
+            android:parentActivityName="io.github.davidwickerhf.diceroller.MainActivity">
+
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="io.github.davidwickerhf.diceroller.MainActivity"
+            />
+        </activity>
+
+
+        <activity android:name=".AddSettingByID"/>
     </application>
 
 </manifest>

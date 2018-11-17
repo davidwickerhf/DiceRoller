@@ -1,33 +1,31 @@
 <resources>
+    <!--Activity Names-->
     <string name="app_name">DiceRoller</string>
+    <string name="dashboard_title">Dashboard</string>
     <string name="nav_home_icon">Home</string>
     <string name="nav_dashboard_icon">Dashboard</string>
     <string name="nav_myprofile_icon">My Profile</string>
+    <string name="add_setting_toolbar_title">Add Setting</string>
+
+
+    <!--Default Text-->
     <string name="selected_number_textview">00</string>
-    <string name="user_text_view">User</string>
+    <string name="user_text_view"> </string>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="dashboard_title">Dashboard</string>
-    <string name="settings_number">3 Settings</string>
-
+    <!--STRINGS-->
+    <!--AlertDialog-->
+    <string name="dialog_add_setting_title">Add Setting</string>
+    <string name="dialog_add_custom_setting">Add Custom</string>
+    <string name="dialog_add_setting_by_id">Add by ID</string>
 
 
     <string name="prompt_email">Email</string>
     <string name="prompt_username">Username</string>
     <string name="prompt_password">Password</string>
     <string name="prompt_password_again">Confirm Password</string>
-    <string name="prompt_msg">Type a message</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_register">Register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="action_sign_up">Sign up</string>
-    <string name="action_send">Send</string>
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">Password too short or does not match</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
-    <string name="sample_message">Hello!</string>
+    <string name="save_setting">Save Setting</string>
+    <string name="profile_fragment_toolbar_title">My Profile</string>
+    <string name="edit_setting_toolbar_title">Edit Setting</string>
+    <string name="_btn">ADD ITEMS</string>
+
 </resources>

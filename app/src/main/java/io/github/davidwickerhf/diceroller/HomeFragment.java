@@ -23,24 +23,30 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 public class HomeFragment extends Fragment {
-    
+
+
+    //todo Views
     private Button mRollButton;
     private TextView mNumberView;
+    private TextView selectedItemTextView;
     private ImageView mDice1;
     private ImageView mDice2;
     private ImageView mDice3;
     private ImageView mDice4;
     private ImageView mDice5;
     public ImageView mDice6;
-    
+
+    //todo Classes and Components
     private MainActivity mMainActivity;
     private SettingsViewModel settingsViewModel;
     private SettingAdapter adapter;
-    
+
+    //todo Variables
     private final int[] diceArray = new int[7];
     private List<Integer> addedItems = new ArrayList<>();
     
     private int mMaximumGenerated;
+    private ArrayList<String> items;
     
     
     
@@ -48,12 +54,20 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View fragmentView;
-        
+
+        items  = new ArrayList<>();
+
         if (getArguments() != null) {
             mMaximumGenerated = getArguments().getInt("argMaxNumber");
+            //check if item list is null (shouldn't be because condition is already checked in DashboardFragment in "Item Click Listener")
+            if (getArguments().getStringArrayList("argItems") != null) {
+                items.addAll(getArguments().getStringArrayList("argItems"));
+            } else {
+                Toast.makeText(mMainActivity, "Setting has no corresponding Items", Toast.LENGTH_SHORT).show();
+            }
         }
         
-        //todo Set Layout
+        //todo Choose Layout (Number of Dices)
         if (mMaximumGenerated <= 12)
             fragmentView = inflater.inflate(R.layout.fragment_home_2dices, container, false);
         else if (mMaximumGenerated <= 30)
@@ -63,6 +77,8 @@ public class HomeFragment extends Fragment {
         
         
         mMainActivity = new MainActivity();
+
+
         //todo ViewModel
         settingsViewModel = ViewModelProviders.of(this).get(SettingsViewModel.class);
         settingsViewModel.getAllSettings().observe(this, new Observer<List<Setting>>() {
@@ -75,9 +91,11 @@ public class HomeFragment extends Fragment {
         adapter = new SettingAdapter();
         //todo Initiate Roll Button:
         mRollButton = fragmentView.findViewById(R.id.home_roll_button);
-        //todo Selected Number
+        //todo Selected Number Text View
         mNumberView = fragmentView.findViewById(R.id.selected_number_text_view);
-        //todo Dices - Create new Layouts with dice 6
+        //todo Selected Item Text View
+        selectedItemTextView = fragmentView.findViewById(R.id.selected_item_text_view);
+        //todo Dices - Initialize 6 Dices
         mDice1 = fragmentView.findViewById(R.id.dice1);
         mDice2 = fragmentView.findViewById(R.id.dice2);
         mDice3 = fragmentView.findViewById(R.id.dice3);
@@ -95,16 +113,27 @@ public class HomeFragment extends Fragment {
         diceArray[6] = R.drawable.dice6;
         
         Toast.makeText(getActivity(), "Maximum Number is: " + mMaximumGenerated, Toast.LENGTH_SHORT).show();
-        //todo Select Random and change Dice resources:
-        
+
+
+        //todo Select Random Number and change Dice resources:  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
         mRollButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("Dicee", "Roll Button Clicked");
+
                 Random randomNumberGenerator = new Random();
-                int mKeyNumber = randomNumberGenerator.nextInt(mMaximumGenerated + 1);
+                int mKeyNumber = randomNumberGenerator.nextInt(mMaximumGenerated) + 1;
                 Log.d("Dicee", "Chosen number: " + mKeyNumber);
+                Log.d("HomeFragment", "List size in HomeFragment = " + items.size());
+                Log.d("HomeFragment", "Item List arrived in Home is:" + items.toString());
+
                 mNumberView.setText(String.valueOf(mKeyNumber));
+                if(items.size() != 0) {
+                    selectedItemTextView.setText(items.get(mKeyNumber - 1));
+                    Log.d("HomeFragment", "List size = " + items.size());
+                    Log.d("HomeFragment", "Item String = " + items.get(mKeyNumber - 1));
+
+                }
                 if (mMaximumGenerated <= 12)
                     update2Dices(mKeyNumber, mMaximumGenerated);
                 else if (mMaximumGenerated <= 30) {

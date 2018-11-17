@@ -1,6 +1,7 @@
 package io.github.davidwickerhf.diceroller;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.room.Entity;
@@ -11,22 +12,25 @@ public class Setting {
     
     @PrimaryKey(autoGenerate = true)
     private int id;
-    
-    
+
     private int maxDiceSum;
-    
-    private int priority;
-    
+
     private String title;
-    
-    
-    public Setting(String title, int maxDiceSum, int priority) {
+
+    private ArrayList<String> items = new ArrayList<>();
+
+    public Setting(String title, int maxDiceSum) {
         this.title = title;
         this.maxDiceSum = maxDiceSum;
-        this.priority = priority;
     }
-    
-    
+
+    public Setting(String title, int maxDiceSum, List<String> items) {
+        this.title = title;
+        this.maxDiceSum = maxDiceSum;
+        this.items.addAll(items);
+    }
+
+
     public void setId(int id) {
         this.id = id;
     }
@@ -38,15 +42,17 @@ public class Setting {
     public String getTitle() {
         return title;
     }
-    
+
+    public ArrayList<String> getItems() {return items;}
+
+    public void setItems(ArrayList<String> items) {
+        this.items = items;
+    }
+
     public int getMaxDiceSum() {
         return maxDiceSum;
     }
-    
-    public int getPriority() {
-        return priority;
-    }
-    
+
     
     
  

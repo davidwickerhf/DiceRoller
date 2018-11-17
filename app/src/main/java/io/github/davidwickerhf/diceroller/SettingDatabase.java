@@ -2,15 +2,22 @@ package io.github.davidwickerhf.diceroller;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.provider.Telephony;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 
-@Database(entities = Setting.class, version = 2)
+@Database(entities = Setting.class, version = 5)
+
+@TypeConverters({Converters.class})
 public abstract class SettingDatabase extends RoomDatabase {
     
     private static SettingDatabase instance;
@@ -50,9 +57,9 @@ public abstract class SettingDatabase extends RoomDatabase {
         @Override
         protected Void doInBackground(Void... voids) {
             
-            settingDao.insert(new Setting("2 Dices", 12, 1));
-            settingDao.insert(new Setting("5 Dices", 30, 2));
-            settingDao.insert(new Setting("6 Dices", 36, 3));
+            settingDao.insert(new Setting("2 Dices", 12));
+            settingDao.insert(new Setting("5 Dices", 30));
+            settingDao.insert(new Setting("6 Dices", 36));
 
             return null;
         }
