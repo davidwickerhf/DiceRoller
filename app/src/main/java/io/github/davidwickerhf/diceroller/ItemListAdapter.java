@@ -7,48 +7,77 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ItemListAdapter  extends RecyclerView.Adapter {
 
+    private OnListItemClickListener itemClickListener;
+    public interface OnListItemClickListener {
+        void onItemClick(int position, View itemView);
+    }
+    public void setOnItemClickLister(OnListItemClickListener listener){
+        itemClickListener = listener;
+    }
+
+
+    private OnDeleteItemClickListener deleteListener;
+    public interface OnDeleteItemClickListener {
+        void onDeleteItemClick(int position);
+    }
+    public void setOnDeleteItemClickLister(OnDeleteItemClickListener listener){
+        deleteListener = listener;
+    }
+
     //todo Views
     public View itemView;
+
+    //todo Variables
+    List<String> items = new ArrayList<>();
 
     @NonNull
     @Override
     public ItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.setting_item, parent, false);
+                .inflate(R.layout.item_list_item, parent, false);
 
-        return new ItemListAdapter.ItemHolder(itemView, mListener);
+        return new ItemListAdapter.ItemHolder(itemView, itemClickListener, deleteListener);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {}
 
-    }
 
+    //todo GET ITEM COUNT  to return to setting holder as Max Number
     @Override
     public int getItemCount() {
-        return 0;
+        return items.size();
     }
 
+
+
+    public void addItem(String itemString) {
+        items.add(itemString);
+    }
+
+    //todo ITEM HOLDER
     class ItemHolder extends RecyclerView.ViewHolder {
-        private TextView textViewTitle;
-        private TextView textViewMaxNum;
-        private ImageView editButtonView;
+        private TextView textViewItemString;
+        private ImageView deleteItemButtonView;
 
 
-        public ItemHolder(@NonNull final View itemView, final SettingAdapter.OnItemClickListener deleteListener, final SettingAdapter.OnEditItemClickListener deleteListener) {
+        public ItemHolder(@NonNull final View itemView, final OnListItemClickListener itemClickListener, final OnDeleteItemClickListener deleteListener) {
             super(itemView);
-            textViewTitle = itemView.findViewById(R.id.text_view_title);
-            textViewMaxNum = itemView.findViewById(R.id.text_view_maxnumber);
-            editButtonView = itemView.findViewById(R.id.edit_setting_button);
+            textViewItemString = itemView.findViewById(R.id.text_view_item_string);
+            deleteItemButtonView = itemView.findViewById(R.id.delete_item_button);
 
             Log.d("Dicee", "Item view; " + itemView);
 
-            editSettingButton.setOnClickListener(new View.OnClickListener() {
+            //Create Delete Item Button
+            deleteItemButtonView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(deleteListener != null) {
@@ -56,24 +85,23 @@ public class ItemListAdapter  extends RecyclerView.Adapter {
                         Log.d("Dicee", "position: " + position);
 
                         if(position != RecyclerView.NO_POSITION) {
-                            Log.d("Dicee", "setting: " + settings.get(position));
-                            deleteListener.onEditItemClick(position);
+                            deleteListener.onDeleteItemClick(position);
                         }
                     }
                 }
             });
 
-
+            //On Item View Bring String to Edit Text
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(deleteListener != null) {
+                    if(itemClickListener != null) {
                         int position = getAdapterPosition();
                         if(position != RecyclerView.NO_POSITION) {
                             //todo Setting Resources
                             itemView.setBackgroundResource(R.drawable.recycler_view_selected_background);
 
-                            deleteListener.onItemClick(position, itemView);
+                            itemClickListener.onItemClick(position, itemView);
 
 
                         }

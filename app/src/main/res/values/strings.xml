@@ -29,5 +29,8 @@
     <string name="_btn">ADD ITEMS</string>
     <string name="maximum_number">Maximum number:</string>
     <string name="max_num_default_value">0</string>
+    <string name="add_item_hint">Add Item...</string>
+    <string name="add_setting_toast_item_title_is_too_long">Item Title should be shorter</string>
+    <string name="add_setting_toast_no_title">Item should have a title</string>
 
 </resources>
