@@ -30,7 +30,6 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.SettingH
     
 
     public View itemView;
-    //private int selectedItemPosition;
 
     private OnItemClickListener mListener;
     public interface OnItemClickListener {
@@ -54,9 +53,7 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.SettingH
     @NonNull
     @Override
     public SettingHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        
-        //selectedItemPosition = dashboard.selectedItemPosition;
-        
+
         itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.setting_item, parent, false);
         itemView.setBackgroundResource(R.drawable.recycler_view_background);

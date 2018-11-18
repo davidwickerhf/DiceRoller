@@ -27,5 +27,7 @@
     <string name="profile_fragment_toolbar_title">My Profile</string>
     <string name="edit_setting_toolbar_title">Edit Setting</string>
     <string name="_btn">ADD ITEMS</string>
+    <string name="maximum_number">Maximum number:</string>
+    <string name="max_num_default_value">0</string>
 
 </resources>

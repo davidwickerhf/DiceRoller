@@ -44,7 +44,7 @@ public class AddSettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_setting);
 
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
     
         editTextTitle = findViewById(R.id.edit_text_title);
         seekBarMaxNumber = findViewById(R.id.seek_bar);
@@ -55,7 +55,7 @@ public class AddSettingActivity extends AppCompatActivity {
         addSettingsToolbar = findViewById(R.id.add_setting_toolbar);
         setSupportActionBar(addSettingsToolbar);
         // Get a support ActionBar corresponding to this toolbar
-        ActionBar ab = getSupportActionBar();
+        final ActionBar ab = getSupportActionBar();
 
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
@@ -96,6 +96,29 @@ public class AddSettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setContentView(R.layout.activity_add_setting_with_items);
+                editTextTitle = findViewById(R.id.edit_text_title);
+                seekBarMaxNumber = findViewById(R.id.seek_bar);
+                maxNumberText = findViewById(R.id.max_number_text);
+                addItemsButton = findViewById(R.id.add_items_btn);
+
+                //todo Toolbar
+                addSettingsToolbar = findViewById(R.id.add_setting_toolbar);
+                setSupportActionBar(addSettingsToolbar);
+                // Enable the Up button
+                ab.setDisplayHomeAsUpEnabled(true);
+                ab.setHomeAsUpIndicator(R.drawable.ic_close);
+
+                if (intent.hasExtra(EXTRA_ID)){
+                    setTitle(R.string.edit_setting_toolbar_title);
+                    editTextTitle.setText(intent.getStringExtra(EXTRA_TITLE));
+
+                    int maxNum = intent.getIntExtra(EXTRA_MAX_NUMBER, 2);
+                    maxNumberText.setText(String.valueOf(maxNum));
+                    maxNumber = maxNum;
+                }
+
+                //todo Add List Logic
+
             }
         });
     }
