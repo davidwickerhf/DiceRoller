@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
+    android:id="@+id/add_setting_constraint_layout"
     tools:context=".AddSettingActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -33,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="@drawable/setting_title_edit_text"
-        android:hint="Title"
+        android:hint="@string/add_setting_edit_text_setting_title"
         android:inputType="text"
         android:singleLine="true"
         android:textAlignment="center"
@@ -43,33 +44,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
-
+    <!--Ask for Max Num Text View-->
     <TextView
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="Maximum number:"
+        android:text="@string/add_setting_text_view_maximum_number_title"
         android:textColor="@color/greyText"
         android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_text_title" />
 
-    <SeekBar
-        android:id="@+id/seek_bar"
-        style="@style/Base.Widget.AppCompat.SeekBar.Discrete"
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:max="36"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/max_number_text" />
-
+    <!--Maximum Number Text Views-->
     <TextView
         android:id="@+id/max_number_text"
         android:layout_width="wrap_content"
@@ -84,6 +72,35 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
+    <TextView
+        android:id="@+id/max_number_text_with_items"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/max_num_default_value"
+        android:textColor="@color/greyText"
+        android:textSize="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_title" />
+
+    <!--Choose Max Num SeekBar - Should disappear on click -->
+    <SeekBar
+        android:id="@+id/seek_bar"
+        style="@style/Base.Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:max="36"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/max_number_text" />
+
+
+    <!--Add Item List Button - Should disappear on click-->
     <Button
         android:id="@+id/add_items_btn"
         style="@style/Widget.MaterialComponents.Button.TextButton"
@@ -104,6 +121,87 @@
         app:layout_constraintTop_toTopOf="@+id/guideline3"
         app:strokeColor="@color/greyText"
         app:strokeWidth="9dp" />
+
+
+
+
+    <!--Views Appear after button click-->
+
+    <!--Add Item Button-->
+    <ImageButton
+        android:id="@+id/add_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="@color/lightGrey"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_under_item_edit_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline4"
+        app:srcCompat="@drawable/ic_add_dark"
+        android:visibility="invisible"/>
+
+    <!--Add Item String Edit Text-->
+    <EditText
+        android:id="@+id/edit_text_item_string"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:hint="@string/add_item_hint"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_under_item_edit_text"
+        app:layout_constraintEnd_toStartOf="@+id/delete_item_list"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/add_item"
+        app:layout_constraintTop_toTopOf="@+id/guideline4"
+        android:visibility="invisible"/>
+
+    <!--Delete Items List Button-->
+    <ImageButton
+        android:id="@+id/delete_item_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="@color/lightGrey"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_under_item_edit_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline4"
+        app:srcCompat="@drawable/ic_close"
+        android:visibility="invisible"/>
+
+
+    <!--Items Recycler View-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/item_list_recycler_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline_under_item_edit_text"
+        android:visibility="invisible">
+
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_under_item_edit_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.41" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.33" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"

@@ -2,17 +2,21 @@ package io.github.davidwickerhf.diceroller;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -36,13 +40,16 @@ public class AddSettingActivity extends AppCompatActivity {
     boolean hasItemList;
 
     //todo Views
+    private ConstraintLayout addSettingConstraint;
     private TextView maxNumberText;
     private EditText editTextTitle;
     private SeekBar seekBarMaxNumber;
     androidx.appcompat.widget.Toolbar addSettingsToolbar;
-    private Button addItemsButton;
-    private ImageView addItem;
+    private Button addItemListButton;
+    private TextView maxNumberTextRepositioned;
+    private ImageButton addItemButton;
     private EditText itemEditText;
+    private ImageButton deleteItemsList;
 
     //todo Components
     ItemListAdapter itemListAdapter;
@@ -55,20 +62,38 @@ public class AddSettingActivity extends AppCompatActivity {
 
         final Intent intent = getIntent();
 
+        //todo Views Initialized
+        addSettingConstraint = findViewById(R.id.add_setting_constraint_layout);
         editTextTitle = findViewById(R.id.edit_text_title);
         seekBarMaxNumber = findViewById(R.id.seek_bar);
         maxNumberText = findViewById(R.id.max_number_text);
-        addItemsButton = findViewById(R.id.add_items_btn);
+        addItemListButton = findViewById(R.id.add_items_btn);
+        // With Item List
+        maxNumberTextRepositioned = findViewById(R.id.max_number_text_with_items);
+        addItemButton= findViewById(R.id.add_item);
+        itemEditText = findViewById(R.id.edit_text_item_string);
+        deleteItemsList = findViewById(R.id.delete_item_list);
+
         hasItemList = false;
+
         //todo Toolbar
         addSettingsToolbar = findViewById(R.id.add_setting_toolbar);
         setSupportActionBar(addSettingsToolbar);
-        // Get a support ActionBar corresponding to this toolbar
-        final ActionBar ab = getSupportActionBar();
 
+        //todo  Get a support ActionBar corresponding to this toolbar
+        final ActionBar ab = getSupportActionBar();
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
         ab.setHomeAsUpIndicator(R.drawable.ic_close);
+
+        //todo RecyclerView
+        itemListRecyclerView = findViewById(R.id.item_list_recycler_view);
+        itemListRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        itemListRecyclerView.setHasFixedSize(true);
+
+        //todo Adapter
+        itemListAdapter = new ItemListAdapter();
+        itemListRecyclerView.setAdapter(itemListAdapter);
 
         if (intent.hasExtra(EXTRA_ID)) {
             setTitle(R.string.edit_setting_toolbar_title);
@@ -78,6 +103,7 @@ public class AddSettingActivity extends AppCompatActivity {
             seekBarMaxNumber.setProgress(seekbarProgress);
             maxNumberText.setText(String.valueOf(seekbarProgress));
             maxNumber = seekbarProgress;
+
 
         } else {
             setTitle(R.string.add_setting_toolbar_title);
@@ -101,64 +127,57 @@ public class AddSettingActivity extends AppCompatActivity {
         });
 
         //todo Add Items Button
-        addItemsButton.setOnClickListener(new View.OnClickListener() {
+        addItemListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 hasItemList = true;
-                setContentView(R.layout.activity_add_setting_with_items);
-                editTextTitle = findViewById(R.id.edit_text_title);
-                seekBarMaxNumber = findViewById(R.id.seek_bar);
-                maxNumberText = findViewById(R.id.max_number_text);
-                addItemsButton = findViewById(R.id.add_items_btn);
-                addItem = findViewById(R.id.add_item);
-                itemEditText = findViewById(R.id.edit_text_item_string);
+                // Hide Views
+                seekBarMaxNumber.setVisibility(View.INVISIBLE);
+                maxNumberText.setVisibility(View.INVISIBLE);
+                addItemListButton.setVisibility(View.INVISIBLE);
+                // Show Views for Item List
+                addSettingConstraint.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.add_item_list_background));
+                maxNumberTextRepositioned.setVisibility(View.VISIBLE);
+                addItemButton.setVisibility(View.VISIBLE);
+                itemEditText.setVisibility(View.VISIBLE);
+                deleteItemsList.setVisibility(View.VISIBLE);
+            }
+        });
 
-                //todo Toolbar
-                addSettingsToolbar = findViewById(R.id.add_setting_toolbar);
-                setSupportActionBar(addSettingsToolbar);
-                // Enable the Up button
-                ab.setDisplayHomeAsUpEnabled(true);
-                ab.setHomeAsUpIndicator(R.drawable.ic_close);
+        deleteItemsList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hasItemList = false;
+                //Show Items List Views
+                addSettingConstraint.setBackgroundColor(getResources().getColor(R.color.white));
+                seekBarMaxNumber.setVisibility(View.VISIBLE);
+                maxNumberText.setVisibility(View.VISIBLE);
+                addItemListButton.setVisibility(View.VISIBLE);
+                //Hide No Item List Views
+                maxNumberTextRepositioned.setVisibility(View.INVISIBLE);
+                addItemButton.setVisibility(View.INVISIBLE);
+                itemEditText.setVisibility(View.INVISIBLE);
+                deleteItemsList.setVisibility(View.INVISIBLE);
+            }
+        });
 
-                //todo RecyclerView
-                itemListRecyclerView = findViewById(R.id.item_list_recycler_view);
-                itemListRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                itemListRecyclerView.setHasFixedSize(true);
-
-                //todo Adapter
-                itemListAdapter = new ItemListAdapter();
-                itemListRecyclerView.setAdapter(itemListAdapter);
-
-                if (intent.hasExtra(EXTRA_ID)) {
-                    setTitle(R.string.edit_setting_toolbar_title);
-                    editTextTitle.setText(intent.getStringExtra(EXTRA_TITLE));
-
-                    int maxNum = intent.getIntExtra(EXTRA_MAX_NUMBER, 2);
-                    maxNumberText.setText(String.valueOf(maxNum));
-                    maxNumber = maxNum;
+        //This would be null
+        addItemButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(AddSettingActivity.this, "Button Clicked", Toast.LENGTH_SHORT).show();
+                Log.d("AddSettingActivity", "Button Pressed");
+                String itemString = itemEditText.getText().toString();
+                if (itemString.trim().isEmpty()) {
+                    Toast.makeText(AddSettingActivity.this, getString(R.string.add_setting_toast_no_title), Toast.LENGTH_SHORT).show();
+                } else if (itemString.length() > 10) {
+                    Toast.makeText(AddSettingActivity.this, getString(R.string.add_setting_toast_item_title_is_too_long), Toast.LENGTH_SHORT).show();
+                } else {
+                    itemListAdapter.addItem(itemString);
                 }
             }
         });
 
-        //todo Add List Logic
-        if(hasItemList){
-            addItem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String itemString = itemEditText.getText().toString();
-                    if (itemString.trim().isEmpty()){
-                        Toast.makeText(AddSettingActivity.this, getString(R.string.add_setting_toast_no_title), Toast.LENGTH_SHORT).show();
-                    }
-                    else if (itemString.length() > 10){
-                        Toast.makeText(AddSettingActivity.this, getString(R.string.add_setting_toast_item_title_is_too_long), Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        itemListAdapter.addItem(itemString);
-                    }
-                }
-            });
-
-        }
 
     }
 
