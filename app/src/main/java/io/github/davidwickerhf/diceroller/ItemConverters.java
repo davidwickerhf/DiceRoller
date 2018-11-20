@@ -5,10 +5,11 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import androidx.room.TypeConverter;
 
-public class Converters {
+public class ItemConverters {
     @TypeConverter
     public static ArrayList<String> fromString(String value) {
         Type listType = new TypeToken<ArrayList<String>>() {}.getType();

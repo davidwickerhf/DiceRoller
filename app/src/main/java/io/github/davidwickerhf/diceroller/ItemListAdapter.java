@@ -13,7 +13,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ItemListAdapter  extends RecyclerView.Adapter {
+public class ItemListAdapter  extends RecyclerView.Adapter<ItemListAdapter.ItemHolder> {
 
     private OnListItemClickListener itemClickListener;
     public interface OnListItemClickListener {
@@ -44,11 +44,14 @@ public class ItemListAdapter  extends RecyclerView.Adapter {
         itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_list_item, parent, false);
 
-        return new ItemListAdapter.ItemHolder(itemView, itemClickListener, deleteListener);
+        return new ItemHolder(itemView, itemClickListener, deleteListener);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {}
+    public void onBindViewHolder(@NonNull ItemHolder holder, int position) {
+        String currentItem = items.get(position);
+        holder.textViewItemString.setText(currentItem);
+    }
 
 
     //todo GET ITEM COUNT  to return to setting holder as Max Number
@@ -59,8 +62,9 @@ public class ItemListAdapter  extends RecyclerView.Adapter {
 
 
 
-    public void addItem(String itemString) {
-        items.add(itemString);
+    public void setItems(ArrayList<String> items) {
+        this.items = items;
+        notifyDataSetChanged();
     }
 
     //todo ITEM HOLDER

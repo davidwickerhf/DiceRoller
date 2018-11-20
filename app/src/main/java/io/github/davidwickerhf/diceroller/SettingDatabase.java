@@ -15,9 +15,9 @@ import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 
-@Database(entities = Setting.class, version = 5)
+@Database(entities = Setting.class, version = 9)
 
-@TypeConverters({Converters.class})
+@TypeConverters(ItemConverters.class)
 public abstract class SettingDatabase extends RoomDatabase {
     
     private static SettingDatabase instance;

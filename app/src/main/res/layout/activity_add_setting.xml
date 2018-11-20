@@ -7,7 +7,8 @@
     android:background="@color/white"
     android:orientation="vertical"
     android:id="@+id/add_setting_constraint_layout"
-    tools:context=".AddSettingActivity">
+    tools:context=".AddSettingActivity"
+    android:windowSoftInputMode="adjustNothing">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -72,17 +73,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
-    <TextView
-        android:id="@+id/max_number_text_with_items"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/max_num_default_value"
-        android:textColor="@color/greyText"
-        android:textSize="30dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_title" />
 
     <!--Choose Max Num SeekBar - Should disappear on click -->
     <SeekBar
@@ -126,7 +116,19 @@
 
 
     <!--Views Appear after button click-->
-
+    <!--Max Num TextView With Items-->
+    <TextView
+        android:id="@+id/max_number_text_with_items"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/max_num_default_value"
+        android:textColor="@color/greyText"
+        android:textSize="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_title"
+        android:visibility="invisible"/>
     <!--Add Item Button-->
     <ImageButton
         android:id="@+id/add_item"

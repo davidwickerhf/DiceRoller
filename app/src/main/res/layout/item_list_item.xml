@@ -30,7 +30,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textColor="@color/greyText"
-            android:textSize="30dp"
+            android:textSize="18dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

@@ -120,8 +120,17 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
             
             String title = data.getStringExtra(AddSettingActivity.EXTRA_TITLE);
             int maxDiceSum = data.getIntExtra(AddSettingActivity.EXTRA_MAX_NUMBER, 30);
+            ArrayList<String> items;
 
-            Setting setting = new Setting(title, maxDiceSum);
+            Setting setting;
+            if(data.hasExtra("EXTRA_ITEMS_LIST")) {
+                items = data.getStringArrayListExtra(AddSettingActivity.EXTRA_ITEMS_LIST);
+                setting = new Setting(title, maxDiceSum, items);
+            }
+            else {
+                setting = new Setting(title, maxDiceSum);
+            }
+
             settingsViewModel.insert(setting);
             
             Toast.makeText(MainActivity.this, "Setting saved", Toast.LENGTH_SHORT).show();

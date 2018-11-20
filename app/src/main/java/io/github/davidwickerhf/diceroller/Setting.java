@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "setting_table")
@@ -19,15 +20,17 @@ public class Setting {
 
     private ArrayList<String> items = new ArrayList<>();
 
+    @Ignore
     public Setting(String title, int maxDiceSum) {
         this.title = title;
         this.maxDiceSum = maxDiceSum;
     }
 
-    public Setting(String title, int maxDiceSum, List<String> items) {
+
+    public Setting(String title, int maxDiceSum, ArrayList<String> items) {
         this.title = title;
         this.maxDiceSum = maxDiceSum;
-        this.items.addAll(items);
+        this.items = items;
     }
 
 
