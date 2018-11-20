@@ -56,7 +56,8 @@
         android:textColor="@color/greyText"
         android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_title" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_title"
+        android:windowSoftInputMode="adjustNothing"/>
 
     <!--Maximum Number Text Views-->
     <TextView
@@ -71,7 +72,8 @@
         android:textSize="18dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+        app:layout_constraintTop_toBottomOf="@+id/textView6"
+        android:windowSoftInputMode="adjustNothing"/>
 
 
     <!--Choose Max Num SeekBar - Should disappear on click -->
@@ -87,7 +89,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/max_number_text" />
+        app:layout_constraintTop_toBottomOf="@+id/max_number_text"
+        android:windowSoftInputMode="adjustNothing"/>
 
 
     <!--Add Item List Button - Should disappear on click-->
@@ -110,7 +113,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline3"
         app:strokeColor="@color/greyText"
-        app:strokeWidth="9dp" />
+        app:strokeWidth="9dp"
+        android:windowSoftInputMode="adjustNothing"/>
 
 
 
@@ -128,7 +132,8 @@
         android:textSize="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_text_title"
-        android:visibility="invisible"/>
+        android:visibility="invisible"
+        android:windowSoftInputMode="adjustNothing"/>
     <!--Add Item Button-->
     <ImageButton
         android:id="@+id/add_item"
@@ -141,7 +146,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline4"
         app:srcCompat="@drawable/ic_add_dark"
-        android:visibility="invisible"/>
+        android:visibility="invisible"
+        android:windowSoftInputMode="adjustNothing"/>
 
     <!--Add Item String Edit Text-->
     <EditText
@@ -157,7 +163,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/add_item"
         app:layout_constraintTop_toTopOf="@+id/guideline4"
-        android:visibility="invisible"/>
+        android:visibility="invisible"
+        android:windowSoftInputMode="adjustNothing"/>
 
     <!--Delete Items List Button-->
     <ImageButton
@@ -172,7 +179,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline4"
         app:srcCompat="@drawable/ic_close"
-        android:visibility="invisible"/>
+        android:visibility="invisible"
+        android:windowSoftInputMode="adjustNothing"/>
 
 
     <!--Items Recycler View-->

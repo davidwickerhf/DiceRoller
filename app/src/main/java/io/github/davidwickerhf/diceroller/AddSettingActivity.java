@@ -190,7 +190,7 @@ public class AddSettingActivity extends AppCompatActivity {
                 } else {
                     items.add(itemEditText.getText().toString());
                     itemListAdapter.setItems(items);
-                    maxNumberTextRepositioned.setText(Integer.toString(items.size()));
+                    maxNumberTextRepositioned.setText(String.format("%s", items.size()));
                 }
             }
         });
@@ -201,8 +201,6 @@ public class AddSettingActivity extends AppCompatActivity {
     private void saveSetting() {
         String title = editTextTitle.getText().toString();
         if (hasItemList)
-            maxNumber = itemListAdapter.items.size();
-        //todo Added a + 1 to the priority to leave the first priority always empty, so it can be used for the selected setting
         if (title.trim().isEmpty()) {
             Toast.makeText(this, "Please insert title", Toast.LENGTH_SHORT).show();
             return;
@@ -212,11 +210,11 @@ public class AddSettingActivity extends AppCompatActivity {
             return;
         }
 
-
         Intent data = new Intent();
         data.putExtra(EXTRA_TITLE, title);
         if (hasItemList) {
             maxNumber = items.size();
+            Log.d("AddSetting", "Items in AddSetting size: " + items.size() + " Items in ItemAdaptor: " + itemListAdapter.items.size() +  " MaxNum: " +  maxNumber);
             data.putExtra(EXTRA_MAX_NUMBER, maxNumber);
             data.putExtra(EXTRA_ITEMS_LIST, items);
         } else {

@@ -119,22 +119,28 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
             
             
             String title = data.getStringExtra(AddSettingActivity.EXTRA_TITLE);
-            int maxDiceSum = data.getIntExtra(AddSettingActivity.EXTRA_MAX_NUMBER, 30);
             ArrayList<String> items;
 
             Setting setting;
+
+            Log.d("AddActivity", "Has items: " + data.hasExtra("EXTRA_ITEMS_LIST"));
             if(data.hasExtra("EXTRA_ITEMS_LIST")) {
                 items = data.getStringArrayListExtra(AddSettingActivity.EXTRA_ITEMS_LIST);
+                int maxDiceSum = items.size();
                 setting = new Setting(title, maxDiceSum, items);
             }
             else {
+                int maxDiceSum = data.getIntExtra(AddSettingActivity.EXTRA_MAX_NUMBER, 2);
                 setting = new Setting(title, maxDiceSum);
             }
 
             settingsViewModel.insert(setting);
             
             Toast.makeText(MainActivity.this, "Setting saved", Toast.LENGTH_SHORT).show();
-            
+
+
+
+
             
         } else if (requestCode == EDIT_SETTING_REQUEST && resultCode == RESULT_OK) {
             int id = data.getIntExtra(AddSettingActivity.EXTRA_ID, -1);
