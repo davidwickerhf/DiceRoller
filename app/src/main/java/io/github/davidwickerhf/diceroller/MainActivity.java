@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         
         if (requestCode == ADD_SETTING_REQUEST && resultCode == RESULT_OK) {
             
-            
+
             String title = data.getStringExtra(AddSettingActivity.EXTRA_TITLE);
             ArrayList<String> items;
 

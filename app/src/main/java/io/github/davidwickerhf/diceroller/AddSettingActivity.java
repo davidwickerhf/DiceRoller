@@ -212,6 +212,7 @@ public class AddSettingActivity extends AppCompatActivity {
 
         Intent data = new Intent();
         data.putExtra(EXTRA_TITLE, title);
+        Log.d("AddActivity", "hasItemList:" + hasItemList);
         if (hasItemList) {
             maxNumber = items.size();
             Log.d("AddSetting", "Items in AddSetting size: " + items.size() + " Items in ItemAdaptor: " + itemListAdapter.items.size() +  " MaxNum: " +  maxNumber);
