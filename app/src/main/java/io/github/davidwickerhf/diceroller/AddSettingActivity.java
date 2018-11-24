@@ -169,10 +169,10 @@ public class AddSettingActivity extends AppCompatActivity {
                 maxNumber = items.size();
                 items.clear();
                 if (maxNumber > 1) {
-                    maxNumberText.setText(maxNumber);
-                    seekBarMaxNumber.setProgress(maxNumber + 2);
+                    maxNumberText.setText(String.valueOf(maxNumber));
+                    seekBarMaxNumber.setProgress(maxNumber);
                 } else {
-                    maxNumberText.setText(0);
+                    maxNumberText.setText("2");
                     seekBarMaxNumber.setProgress(2);
                 }
             }
@@ -198,9 +198,9 @@ public class AddSettingActivity extends AppCompatActivity {
 
     }
 
-    private void saveSetting() {
+    private void saveSetting(boolean hasItemList) {
         String title = editTextTitle.getText().toString();
-        if (hasItemList)
+
         if (title.trim().isEmpty()) {
             Toast.makeText(this, "Please insert title", Toast.LENGTH_SHORT).show();
             return;
@@ -243,7 +243,7 @@ public class AddSettingActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.save_setting:
-                saveSetting();
+                saveSetting(hasItemList);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

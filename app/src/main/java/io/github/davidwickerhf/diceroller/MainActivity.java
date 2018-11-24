@@ -123,9 +123,9 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 
             Setting setting;
 
-            Log.d("AddActivity", "Has items: " + data.hasExtra("EXTRA_ITEMS_LIST"));
-            if(data.hasExtra("EXTRA_ITEMS_LIST")) {
-                items = data.getStringArrayListExtra(AddSettingActivity.EXTRA_ITEMS_LIST);
+            Log.d("AddActivity", "Has items: " + data.hasExtra(AddSettingActivity.EXTRA_ITEMS_LIST));
+            if(data.hasExtra(AddSettingActivity.EXTRA_ITEMS_LIST)) {
+                items = (ArrayList<String>) data.getStringArrayListExtra(AddSettingActivity.EXTRA_ITEMS_LIST);
                 int maxDiceSum = items.size();
                 setting = new Setting(title, maxDiceSum, items);
             }
