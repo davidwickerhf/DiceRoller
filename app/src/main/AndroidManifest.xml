@@ -27,6 +27,7 @@
 
         <activity
             android:name=".AddSettingActivity"
+            android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:parentActivityName="io.github.davidwickerhf.diceroller.MainActivity">

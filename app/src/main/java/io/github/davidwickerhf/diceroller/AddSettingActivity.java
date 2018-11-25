@@ -24,7 +24,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddSettingActivity extends AppCompatActivity {
+public class AddSettingActivity extends AppCompatActivity{
 
     //todo Variables
     public static final String EXTRA_ID =
@@ -178,7 +178,7 @@ public class AddSettingActivity extends AppCompatActivity {
             }
         });
 
-        //This would be null
+        //todo ADD ITEM
         addItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -191,6 +191,7 @@ public class AddSettingActivity extends AppCompatActivity {
                     items.add(itemEditText.getText().toString());
                     itemListAdapter.setItems(items);
                     maxNumberTextRepositioned.setText(String.format("%s", items.size()));
+                    itemEditText.setText("");
                 }
             }
         });

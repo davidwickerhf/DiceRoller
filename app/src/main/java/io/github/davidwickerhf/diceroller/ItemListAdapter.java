@@ -84,6 +84,7 @@ public class ItemListAdapter  extends RecyclerView.Adapter<ItemListAdapter.ItemH
             deleteItemButtonView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     if(deleteListener != null) {
                         int position = getAdapterPosition();
                         Log.d("Dicee", "position: " + position);
@@ -102,8 +103,6 @@ public class ItemListAdapter  extends RecyclerView.Adapter<ItemListAdapter.ItemH
                     if(itemClickListener != null) {
                         int position = getAdapterPosition();
                         if(position != RecyclerView.NO_POSITION) {
-                            //todo Setting Resources
-                            itemView.setBackgroundResource(R.drawable.recycler_view_selected_background);
 
                             itemClickListener.onItemClick(position, itemView);
 
