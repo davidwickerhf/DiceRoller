@@ -9,20 +9,17 @@
     android:layout_height="match_parent"
     tools:context=".DashboardFragment">
 
-    <!--THIS NEEDS TO BE CHANGED!!! WATCH YOUTUBE VIDEO ON OPTION MENUS-->
-    <!--Add Dialogs. Search for how to make a custom dialog-->
-
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="0dp">
+        app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/dashboard_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            android:elevation="0dp"
+            app:elevation="0dp"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
             app:layout_scrollFlags="scroll|enterAlways|snap"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
