@@ -35,6 +35,8 @@ public class AddSettingActivity extends AppCompatActivity{
             "io.github.davidwickerhf.diceroller.EXTRA_MAX_NUMBER";
     public static final String EXTRA_ITEMS_LIST =
             "io.github.davidwickerhf.diceroller.EXTRA_MAX_NUMBER";
+    public static final String EXTRA_HAS_ITEMS =
+            "io.github.davidwickerhf.diceroller.EXTRA_MAX_NUMBER";
     private int seekbarProgress;
     int maxNumber;
     ArrayList<String> items = new ArrayList<>();
@@ -76,7 +78,8 @@ public class AddSettingActivity extends AppCompatActivity{
         itemEditText = findViewById(R.id.edit_text_item_string);
         deleteItemsList = findViewById(R.id.delete_item_list);
 
-        hasItemList = false;
+        hasItemList = false; //default Value for adding a setting. If true, It means the setting has Items (strings entered by users, attached to the number)
+        maxNumber = 2; // Lowest number should be 2
 
         //todo Toolbar
         addSettingsToolbar = findViewById(R.id.add_setting_toolbar);
@@ -105,7 +108,7 @@ public class AddSettingActivity extends AppCompatActivity{
             seekBarMaxNumber.setProgress(seekbarProgress);
             maxNumberText.setText(String.valueOf(seekbarProgress));
             maxNumber = seekbarProgress;
-
+            
 
         } else {
             setTitle(R.string.add_setting_toolbar_title);
@@ -134,18 +137,7 @@ public class AddSettingActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 hasItemList = true;
-                // Hide Views
-                maxNumber = 2;
-                seekBarMaxNumber.setVisibility(View.INVISIBLE);
-                maxNumberText.setVisibility(View.INVISIBLE);
-                addItemListButton.setVisibility(View.INVISIBLE);
-                // Show Views for Item List
-                itemListRecyclerView.setVisibility(View.VISIBLE);
-                addSettingConstraint.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.add_item_list_background));
-                maxNumberTextRepositioned.setVisibility(View.VISIBLE);
-                addItemButton.setVisibility(View.VISIBLE);
-                itemEditText.setVisibility(View.VISIBLE);
-                deleteItemsList.setVisibility(View.VISIBLE);
+                changeStateHasItems(hasItemList);
             }
         });
 
@@ -154,27 +146,7 @@ public class AddSettingActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 hasItemList = false;
-                //Show Items List Views
-                itemListRecyclerView.setVisibility(View.INVISIBLE);
-                addSettingConstraint.setBackgroundColor(getResources().getColor(R.color.white));
-                seekBarMaxNumber.setVisibility(View.VISIBLE);
-                maxNumberText.setVisibility(View.VISIBLE);
-                addItemListButton.setVisibility(View.VISIBLE);
-                //Hide No Item List Views
-                maxNumberTextRepositioned.setVisibility(View.INVISIBLE);
-                addItemButton.setVisibility(View.INVISIBLE);
-                itemEditText.setVisibility(View.INVISIBLE);
-                deleteItemsList.setVisibility(View.INVISIBLE);
-                //Transition Max Num from Number of Items to SeekBar
-                maxNumber = items.size();
-                items.clear();
-                if (maxNumber > 1) {
-                    maxNumberText.setText(String.valueOf(maxNumber));
-                    seekBarMaxNumber.setProgress(maxNumber);
-                } else {
-                    maxNumberText.setText("2");
-                    seekBarMaxNumber.setProgress(2);
-                }
+                changeStateHasItems(hasItemList);
             }
         });
 
@@ -191,7 +163,7 @@ public class AddSettingActivity extends AppCompatActivity{
                     items.add(itemEditText.getText().toString());
                     itemListAdapter.setItems(items);
                     maxNumberTextRepositioned.setText(String.format("%s", items.size()));
-                    itemEditText.setText("");
+                    itemEditText.setText(""); // resets edit text input every time an item is added
                 }
             }
         });
@@ -199,9 +171,51 @@ public class AddSettingActivity extends AppCompatActivity{
 
     }
 
+    private void changeStateHasItems(boolean hasItemList){
+        if(hasItemList){
+            // Hide Views
+            maxNumber = 2;
+            seekBarMaxNumber.setVisibility(View.INVISIBLE);
+            maxNumberText.setVisibility(View.INVISIBLE);
+            addItemListButton.setVisibility(View.INVISIBLE);
+            // Show Views for Item List
+            itemListRecyclerView.setVisibility(View.VISIBLE);
+            addSettingConstraint.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.add_item_list_background));
+            maxNumberTextRepositioned.setVisibility(View.VISIBLE);
+            addItemButton.setVisibility(View.VISIBLE);
+            itemEditText.setVisibility(View.VISIBLE);
+            deleteItemsList.setVisibility(View.VISIBLE);
+        } else {
+            //Show Items List Views
+            itemListRecyclerView.setVisibility(View.INVISIBLE);
+            addSettingConstraint.setBackgroundColor(getResources().getColor(R.color.white));
+            seekBarMaxNumber.setVisibility(View.VISIBLE);
+            maxNumberText.setVisibility(View.VISIBLE);
+            addItemListButton.setVisibility(View.VISIBLE);
+            //Hide No Item List Views
+            maxNumberTextRepositioned.setVisibility(View.INVISIBLE);
+            addItemButton.setVisibility(View.INVISIBLE);
+            itemEditText.setVisibility(View.INVISIBLE);
+            deleteItemsList.setVisibility(View.INVISIBLE);
+            //Transition Max Num from Number of Items to SeekBar
+            maxNumber = items.size();
+            items.clear();
+            if (maxNumber > 1) {
+                maxNumberText.setText(String.valueOf(maxNumber));
+                seekBarMaxNumber.setProgress(maxNumber);
+            } else {
+                maxNumberText.setText("2");
+                seekBarMaxNumber.setProgress(2);
+            }
+        }
+    }
+
     private void saveSetting(boolean hasItemList) {
+        Log.d("AddActivity", "HasItemList bool = " +  hasItemList);
+
         String title = editTextTitle.getText().toString();
 
+        //todo Check Title isn't empty
         if (title.trim().isEmpty()) {
             Toast.makeText(this, "Please insert title", Toast.LENGTH_SHORT).show();
             return;
@@ -213,13 +227,20 @@ public class AddSettingActivity extends AppCompatActivity{
 
         Intent data = new Intent();
         data.putExtra(EXTRA_TITLE, title);
-        Log.d("AddActivity", "hasItemList:" + hasItemList);
+
+
+        //todo Insert Extras
         if (hasItemList) {
             maxNumber = items.size();
-            Log.d("AddSetting", "Items in AddSetting size: " + items.size() + " Items in ItemAdaptor: " + itemListAdapter.items.size() +  " MaxNum: " +  maxNumber);
+            Log.d("AddActivity", "Items in AddSetting size: " + items.size() + " Items in ItemAdaptor: " + itemListAdapter.items.size() +  " MaxNum: " +  maxNumber);
+            for (int a = 0; a < maxNumber; a++){
+                Log.d("AddActivity", "(AddSettingActivity) Item number " + a + ": " + items.get(a));
+            }
             data.putExtra(EXTRA_MAX_NUMBER, maxNumber);
-            data.putExtra(EXTRA_ITEMS_LIST, items);
+            data.putExtra("items", items);
+            data.putExtra(EXTRA_HAS_ITEMS, true);
         } else {
+            Log.d("AddActivity", "Has Item List is false, max number is = " + maxNumber);
             data.putExtra(EXTRA_MAX_NUMBER, maxNumber);
         }
         int id = getIntent().getIntExtra(EXTRA_ID, -1);
@@ -228,10 +249,14 @@ public class AddSettingActivity extends AppCompatActivity{
             data.putExtra(EXTRA_ID, id);
         }
 
+
+        // send results
         setResult(RESULT_OK, data);
         finish();
 
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

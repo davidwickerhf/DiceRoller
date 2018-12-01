@@ -121,13 +121,15 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 
             String title = data.getStringExtra(AddSettingActivity.EXTRA_TITLE);
             ArrayList<String> items;
-
             Setting setting;
 
-            Log.d("AddActivity", "Has items: " + data.hasExtra(AddSettingActivity.EXTRA_ITEMS_LIST));
-            if(data.hasExtra(AddSettingActivity.EXTRA_ITEMS_LIST)) {
-                items = (ArrayList<String>) data.getStringArrayListExtra(AddSettingActivity.EXTRA_ITEMS_LIST);
-                int maxDiceSum = items.size();
+            boolean hasItems = data.getBooleanExtra(AddSettingActivity.EXTRA_HAS_ITEMS, false);
+
+            if(hasItems) {
+                items = (ArrayList<String>) data.getStringArrayListExtra("items");
+
+                Log.d("AddActivity", "Items In Main Activity: " +items);
+                int maxDiceSum = data.getIntExtra(AddSettingActivity.EXTRA_MAX_NUMBER, 2);
                 setting = new Setting(title, maxDiceSum, items);
             }
             else {
@@ -150,9 +152,9 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
                 Toast.makeText(MainActivity.this, "Setting Can't be Updated", Toast.LENGTH_SHORT).show();
                 return;
             }
-    
+
             String title = data.getStringExtra(AddSettingActivity.EXTRA_TITLE);
-            int maxDiceSum = data.getIntExtra(AddSettingActivity.EXTRA_MAX_NUMBER, 30);
+            int maxDiceSum = data.getIntExtra(AddSettingActivity.EXTRA_MAX_NUMBER, 2);
 
             Setting setting = new Setting(title, maxDiceSum);
             setting.setId(id);
