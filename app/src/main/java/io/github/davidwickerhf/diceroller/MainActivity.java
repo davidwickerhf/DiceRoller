@@ -34,7 +34,12 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     //todo Variables
     private static final int ADD_SETTING_REQUEST = 1;
     private static final int EDIT_SETTING_REQUEST = 2;
+    public static final String SETTING_SELECTED = "SETTING_SELECTED";
+    public static final String TEMPORARY_MAX_NUM = "TEMPORARY_MAX_NUM";
+    public static final String TEMPORARY_ITEM_LIST = "TEMPORARY_ITEM_LIST";
     private int selectedItem;
+    int settingsSize;   // this is momentary, might not work...
+
 
     //todo Views
     private View selectedItemView;
@@ -55,13 +60,16 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 
         //todo Initilize SettingsAdapter
         adapter = new SettingAdapter();
-        
+        settingsSize = adapter.getItemCount(); // this is momentary, might not work...
+
         //todo Initialize ViewModel
         settingsViewModel = ViewModelProviders.of(this).get(SettingsViewModel.class);
         settingsViewModel.getAllSettings().observe(this, new Observer<List<Setting>>() {
             @Override
             public void onChanged(@Nullable List<Setting> settings) {
                 adapter.setSettings(settings);
+                settingsSize = adapter.getItemCount();
+                Log.d("AddActivity", "Adapter has settings? " + adapter.getItemCount() + " settingSize = " + settingsSize);
             }
         });
         
@@ -75,18 +83,33 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         mProfileFragment = new ProfileFragment();
         
         //todo Display HomeFragment:
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                mHomeFragment).commit();
 
+        //todo ADAPTER SETTING LIST SIZE IS NOT PASSED DOWN... THIS IS THE BUG!!!!!
 
         //todo Set temporary setting when initializing activity
-        int temporaryMax = 1;
-        ArrayList<String> temporaryItems = new ArrayList<>(Arrays.asList("Select a Setting"));
-        Bundle args = new Bundle();
-        args.putInt("argMaxNumber", temporaryMax);
-        args.putStringArrayList("argItems", temporaryItems);
-        mHomeFragment.setArguments(args);
+        Log.d("AddActivity", "Database has Setting? " +  settingsSize);
+        if (settingsSize > 0) {
+            Log.d("AddActivity", "Database has Stored Settings");
+            Setting temporarySetting = adapter.getSettingAt(0);
+            int maxNum = temporarySetting.getMaxDiceSum();
+            ArrayList<String> items;
+            Bundle temporarySettingSelected = new Bundle();
 
+            if (temporarySetting.hasItemList()) {
+                items = temporarySetting.getItems();
+                temporarySettingSelected.putStringArrayList(TEMPORARY_ITEM_LIST, items);
+            }
+            Log.d("AddActivity", "Temporary Max received in Main: " + temporarySetting.getMaxDiceSum());
+            temporarySettingSelected.putInt(TEMPORARY_MAX_NUM, maxNum);
+            temporarySettingSelected.putBoolean(SETTING_SELECTED, true);
+            mHomeFragment.setArguments(temporarySettingSelected);
+        } else {
+            Bundle noSetting = new Bundle();
+            noSetting.putBoolean(SETTING_SELECTED, false);
+            mHomeFragment.setArguments(noSetting);
+        }
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mHomeFragment).commit();
     }
     
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
@@ -122,19 +145,19 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
             String title = data.getStringExtra(AddSettingActivity.EXTRA_TITLE);
             ArrayList<String> items;
             Setting setting;
+            int maxDiceSum;
 
             boolean hasItems = data.getBooleanExtra(AddSettingActivity.EXTRA_HAS_ITEMS, false);
+            maxDiceSum = data.getIntExtra(AddSettingActivity.EXTRA_MAX_NUMBER, 2);
 
             if(hasItems) {
-                items = (ArrayList<String>) data.getStringArrayListExtra("items");
+                items = (ArrayList<String>) data.getStringArrayListExtra(AddSettingActivity.EXTRA_ITEMS_LIST);
 
                 Log.d("AddActivity", "Items In Main Activity: " +items);
-                int maxDiceSum = data.getIntExtra(AddSettingActivity.EXTRA_MAX_NUMBER, 2);
-                setting = new Setting(title, maxDiceSum, items);
+                setting = new Setting(title, maxDiceSum, items, hasItems);
             }
             else {
-                int maxDiceSum = data.getIntExtra(AddSettingActivity.EXTRA_MAX_NUMBER, 2);
-                setting = new Setting(title, maxDiceSum);
+                setting = new Setting(title, maxDiceSum, hasItems);
             }
 
             settingsViewModel.insert(setting);
@@ -147,6 +170,8 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
             
         } else if (requestCode == EDIT_SETTING_REQUEST && resultCode == RESULT_OK) {
             int id = data.getIntExtra(AddSettingActivity.EXTRA_ID, -1);
+
+            boolean hasItems = data.getBooleanExtra(AddSettingActivity.EXTRA_HAS_ITEMS, false);
             
             if(id == -1){
                 Toast.makeText(MainActivity.this, "Setting Can't be Updated", Toast.LENGTH_SHORT).show();
@@ -155,8 +180,17 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 
             String title = data.getStringExtra(AddSettingActivity.EXTRA_TITLE);
             int maxDiceSum = data.getIntExtra(AddSettingActivity.EXTRA_MAX_NUMBER, 2);
+            ArrayList<String> items;
+            Setting setting;
 
-            Setting setting = new Setting(title, maxDiceSum);
+            if (hasItems){
+                items = data.getStringArrayListExtra(AddSettingActivity.EXTRA_ITEMS_LIST);
+                setting = new Setting(title, maxDiceSum, items, true);
+            }
+            else{
+                setting = new Setting(title, maxDiceSum, false);
+            }
+
             setting.setId(id);
             settingsViewModel.update(setting);
     
@@ -177,8 +211,8 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     public void onInputASent(int maxNumber, ArrayList<String> items, int position, View itemView) {
         Log.d("HomeFragment", "Item List arrived in Main is:" + items.toString());
         Bundle args = new Bundle();
-        args.putInt("argMaxNumber", maxNumber);
-        args.putStringArrayList("argItems", items);
+        args.putInt(AddSettingActivity.EXTRA_MAX_NUMBER, maxNumber);
+        args.putStringArrayList(AddSettingActivity.EXTRA_ITEMS_LIST, items);
 
         // Change color of selected setting
         if(!(selectedItemView == null)) {
@@ -201,6 +235,8 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         intent.putExtra(AddSettingActivity.EXTRA_ID, adapter.getSettingAt(position).getId());
         intent.putExtra(AddSettingActivity.EXTRA_TITLE, adapter.getSettingAt(position).getTitle());
         intent.putExtra(AddSettingActivity.EXTRA_MAX_NUMBER, adapter.getSettingAt(position).getMaxDiceSum());
+        intent.putExtra(AddSettingActivity.EXTRA_ITEMS_LIST, adapter.getSettingAt(position).getItems());
+        intent.putExtra(AddSettingActivity.EXTRA_HAS_ITEMS, adapter.getSettingAt(position).hasItemList());
         startActivityForResult(intent, EDIT_SETTING_REQUEST);
         
     }

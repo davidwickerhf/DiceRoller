@@ -15,7 +15,7 @@ import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 
-@Database(entities = Setting.class, version = 9)
+@Database(entities = Setting.class, version = 10)
 
 @TypeConverters(ItemConverters.class)
 public abstract class SettingDatabase extends RoomDatabase {
@@ -57,9 +57,9 @@ public abstract class SettingDatabase extends RoomDatabase {
         @Override
         protected Void doInBackground(Void... voids) {
             
-            settingDao.insert(new Setting("2 Dices", 12));
-            settingDao.insert(new Setting("5 Dices", 30));
-            settingDao.insert(new Setting("6 Dices", 36));
+            settingDao.insert(new Setting("2 Dices", 12, false));
+            settingDao.insert(new Setting("5 Dices", 30, false));
+            settingDao.insert(new Setting("6 Dices", 36, false));
 
             return null;
         }

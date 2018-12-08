@@ -29,12 +29,17 @@ public class HomeFragment extends Fragment {
     private Button mRollButton;
     private TextView mNumberView;
     private TextView selectedItemTextView;
+    private TextView mRollBtnText;
     private ImageView mDice1;
     private ImageView mDice2;
     private ImageView mDice3;
     private ImageView mDice4;
     private ImageView mDice5;
     public ImageView mDice6;
+
+    private Button mAddSetting;
+    private TextView mAddSettingBtnText;
+    //todo LINK THESE VIEWS, SET THE VISIBILITY WEHN NEEDED!!!
 
     //todo Classes and Components
     private MainActivity mMainActivity;
@@ -44,38 +49,43 @@ public class HomeFragment extends Fragment {
     //todo Variables
     private final int[] diceArray = new int[7];
     private List<Integer> addedItems = new ArrayList<>();
-    
+
     private int mMaximumGenerated;
     private ArrayList<String> items;
-    
-    
-    
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View fragmentView;
 
-        items  = new ArrayList<>();
 
-        if (getArguments() != null) {
-            mMaximumGenerated = getArguments().getInt("argMaxNumber");
-            //check if item list is null (shouldn't be because condition is already checked in DashboardFragment in "Item Click Listener")
-            if (getArguments().getStringArrayList("argItems") != null) {
-                items.addAll(getArguments().getStringArrayList("argItems"));
+        //todo NO Temporary SETTING IS AVAILABLE
+        // need to check if it is a Temporary setting, or a normal setting
+        if (/*has setting*/ getArguments().getBoolean(MainActivity.SETTING_SELECTED)){
+            mMaximumGenerated = getArguments().getInt(MainActivity.TEMPORARY_MAX_NUM);
+            if (getArguments().getStringArrayList(MainActivity.TEMPORARY_ITEM_LIST) != null) {
+                items = getArguments().getStringArrayList(MainActivity.TEMPORARY_ITEM_LIST);
             } else {
                 Toast.makeText(mMainActivity, "Setting has no corresponding Items", Toast.LENGTH_SHORT).show();
             }
-        }
-        
-        //todo Choose Layout (Number of Dices)
-        if (mMaximumGenerated <= 12)
-            fragmentView = inflater.inflate(R.layout.fragment_home_2dices, container, false);
-        else if (mMaximumGenerated <= 30)
+
+
+            //todo Choose Layout (Number of Dices)
+            if (mMaximumGenerated <= 12)
+                fragmentView = inflater.inflate(R.layout.fragment_home_2dices, container, false);
+            else if (mMaximumGenerated <= 30)
+                fragmentView = inflater.inflate(R.layout.fragment_home, container, false);
+            else
+                fragmentView = inflater.inflate(R.layout.fragment_home_6dices, container, false);
+        //todo No Setting Available, Create a setting
+        } else {
+            // No Setting. Ask User to add one
             fragmentView = inflater.inflate(R.layout.fragment_home, container, false);
-        else
-            fragmentView = inflater.inflate(R.layout.fragment_home_6dices, container, false);
-        
-        
+
+        }
+
+
         mMainActivity = new MainActivity();
 
 
@@ -89,8 +99,12 @@ public class HomeFragment extends Fragment {
         });
         //todo SettingsAdapter
         adapter = new SettingAdapter();
-        //todo Initiate Roll Button:
+        //todo Initialize Buttons:
         mRollButton = fragmentView.findViewById(R.id.home_roll_button);
+        mAddSetting = fragmentView.findViewById(R.id.home_add_setting_button);
+        //todo Initialize Button Text
+        mRollBtnText = fragmentView.findViewById(R.id.home_roll_button_text);
+        mAddSettingBtnText = fragmentView.findViewById(R.id.home_add_setting_text);
         //todo Selected Number Text View
         mNumberView = fragmentView.findViewById(R.id.selected_number_text_view);
         //todo Selected Item Text View
@@ -102,7 +116,7 @@ public class HomeFragment extends Fragment {
         mDice4 = fragmentView.findViewById(R.id.dice4);
         mDice5 = fragmentView.findViewById(R.id.dice5);
         mDice6 = fragmentView.findViewById(R.id.dice6);
-        
+
         //todo Dice Resources Array
         diceArray[0] = R.drawable.dice0;
         diceArray[1] = R.drawable.dice1;
@@ -111,15 +125,16 @@ public class HomeFragment extends Fragment {
         diceArray[4] = R.drawable.dice4;
         diceArray[5] = R.drawable.dice5;
         diceArray[6] = R.drawable.dice6;
-        
+
         Toast.makeText(getActivity(), "Maximum Number is: " + mMaximumGenerated, Toast.LENGTH_SHORT).show();
+        Log.d("AddActivity", "Max Num is: " + mMaximumGenerated);
 
 
         //todo Select Random Number and change Dice resources:  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
         mRollButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
                 Log.d("Dicee", "Roll Button Clicked");
+
 
                 Random randomNumberGenerator = new Random();
                 int mKeyNumber = randomNumberGenerator.nextInt(mMaximumGenerated) + 1;
@@ -128,7 +143,7 @@ public class HomeFragment extends Fragment {
                 Log.d("HomeFragment", "Item List arrived in Home is:" + items.toString());
 
                 mNumberView.setText(String.valueOf(mKeyNumber));
-                if(items.size() != 0) {
+                if (items.size() != 0) {
                     selectedItemTextView.setText(items.get(mKeyNumber - 1));
                     Log.d("HomeFragment", "List size = " + items.size());
                     Log.d("HomeFragment", "Item String = " + items.get(mKeyNumber - 1));
@@ -140,20 +155,20 @@ public class HomeFragment extends Fragment {
                     update5Dices(mKeyNumber, mMaximumGenerated);
                 } else
                     update6Dices(mKeyNumber, mMaximumGenerated);
-                
+
             }
         });
-        
-        
+
+
         return fragmentView;
     }
-    
+
     private void update2Dices(int key, int maximumGenerated) {
-        
+
         //TODO Assign a value to a variable
         Log.d("Dicee", ".");
         int[] intForIndex = new int[2];
-        
+
         //TODO Two inputs
         if (key % 6 == 0) {
             int a = 0;
@@ -171,34 +186,34 @@ public class HomeFragment extends Fragment {
             key -= (key / 2);
             intForIndex[1] = key;
         }
-        
-        Log.d("Dicee", "" + intForIndex[0] + intForIndex[1] );
-        
-        
+
+        Log.d("Dicee", "" + intForIndex[0] + intForIndex[1]);
+
+
         // TODO Randomizing picks in the array, to randomize the dice number position.
         int setter = returnDiceIndex(maximumGenerated);
         mDice1.setImageResource(diceArray[intForIndex[setter]]);
         addedItems.add(setter);
         Log.d("Dicee", "Dice 1 added resource");
-        
-        
+
+
         setter = returnDiceIndex(maximumGenerated);
         mDice2.setImageResource(diceArray[intForIndex[setter]]);
         addedItems.add(setter);
         Log.d("Dicee", "Dice 2 added resource");
-        
+
         Log.d("Dicee", "" + addedItems);
         addedItems.clear();
-    
-    
+
+
     }
-    
+
     private void update5Dices(int key, int maximumGenerated) {
-        
+
         //TODO Assign a value to a variable
         Log.d("Dicee", ".");
         int[] intForIndex = new int[5];
-        
+
         //TODO Five inputs
         if (key % 6 == 0) {
             int a = 0;
@@ -212,7 +227,7 @@ public class HomeFragment extends Fragment {
         }
         // Five inputs
         else if (key < 18) {
-            
+
             intForIndex[0] = (key / 3);
             key -= (key / 3);
             intForIndex[1] = (key / 2);
@@ -220,7 +235,7 @@ public class HomeFragment extends Fragment {
             intForIndex[2] = key;
             intForIndex[3] = 0;
             intForIndex[4] = 0;
-            
+
         } else {
             int a;
             for (a = 0; a < 4; a++) {
@@ -229,52 +244,52 @@ public class HomeFragment extends Fragment {
             key -= 18;
             intForIndex[3] = (key / 2);
             key -= (key / 2);
-            
+
             intForIndex[4] = (key);
         }
-        
+
         Log.d("Dicee", "" + intForIndex[0] + intForIndex[1] + intForIndex[2] + intForIndex[3] + intForIndex[4]);
-        
-        
+
+
         // TODO Randomizing picks in the array, to randomize the dice number position.
         int setter = returnDiceIndex(maximumGenerated);
         mDice1.setImageResource(diceArray[intForIndex[setter]]);
         addedItems.add(setter);
         Log.d("Dicee", "Dice 1 added resource");
-        
-        
+
+
         setter = returnDiceIndex(maximumGenerated);
         mDice2.setImageResource(diceArray[intForIndex[setter]]);
         addedItems.add(setter);
         Log.d("Dicee", "Dice 2 added resource");
-        
+
         setter = returnDiceIndex(maximumGenerated);
         mDice3.setImageResource(diceArray[intForIndex[setter]]);
         addedItems.add(setter);
         Log.d("Dicee", "Dice 3 added resource");
-        
+
         setter = returnDiceIndex(maximumGenerated);
         mDice4.setImageResource(diceArray[intForIndex[setter]]);
         addedItems.add(setter);
         Log.d("Dicee", "Dice 4 added resource");
-        
+
         setter = returnDiceIndex(maximumGenerated);
         mDice5.setImageResource(diceArray[intForIndex[setter]]);
         addedItems.add(setter);
         Log.d("Dicee", "Dice 5 added resource");
-        
+
         Log.d("Dicee", "" + addedItems);
         addedItems.clear();
-    
-    
+
+
     }
-    
+
     private void update6Dices(int key, int maximumGenerated) {
-        
+
         //TODO Assign a value to a variable
         Log.d("Dicee", ".");
         int[] intForIndex = new int[6];
-        
+
         //TODO Six inputs
         if (key % 6 == 0) {
             int a = 0;
@@ -288,7 +303,7 @@ public class HomeFragment extends Fragment {
         }
         //todo Six inputs
         else if (key < 18) {
-            
+
             intForIndex[0] = (key / 3);
             key -= (key / 3);
             intForIndex[1] = (key / 2);
@@ -297,9 +312,8 @@ public class HomeFragment extends Fragment {
             intForIndex[3] = 0;
             intForIndex[4] = 0;
             intForIndex[5] = 0;
-            
-        }
-        else if (key <=24) {
+
+        } else if (key <= 24) {
             int a;
             for (a = 0; a < 3; a++) {
                 intForIndex[a] = (6);
@@ -314,56 +328,56 @@ public class HomeFragment extends Fragment {
                 intForIndex[a] = (6);
             }
             key -= 24;
-            intForIndex[4] = (key/2);
-            key -= (key/2);
-            intForIndex[5]=key;
+            intForIndex[4] = (key / 2);
+            key -= (key / 2);
+            intForIndex[5] = key;
         }
-        
-        
+
+
         Log.d("Dicee", "" + intForIndex[0] + intForIndex[1] + intForIndex[2] + intForIndex[3] + intForIndex[4] + intForIndex[5]);
-        
-        
+
+
         // TODO Randomizing picks in the array, to randomize the dice number position.
         int setter = returnDiceIndex(maximumGenerated);
         mDice1.setImageResource(diceArray[intForIndex[setter]]);
         addedItems.add(setter);
         Log.d("Dicee", "Dice 1 added resource, setter is:" + setter + " : " + diceArray[intForIndex[setter]]);
-        
+
         setter = returnDiceIndex(maximumGenerated);
         mDice2.setImageResource(diceArray[intForIndex[setter]]);
         addedItems.add(setter);
         Log.d("Dicee", "Dice 2 added resource, setter is:" + setter + " : " + diceArray[intForIndex[setter]]);
-        
+
         setter = returnDiceIndex(maximumGenerated);
         mDice3.setImageResource(diceArray[intForIndex[setter]]);
         addedItems.add(setter);
         Log.d("Dicee", "Dice 3 added resource, setter is:" + setter + " : " + diceArray[intForIndex[setter]]);
-        
+
         setter = returnDiceIndex(maximumGenerated);
         mDice4.setImageResource(diceArray[intForIndex[setter]]);
         addedItems.add(setter);
         Log.d("Dicee", "Dice 4 added resource, setter is:" + setter + " : " + diceArray[intForIndex[setter]]);
-        
+
         setter = returnDiceIndex(maximumGenerated);
         mDice5.setImageResource(diceArray[intForIndex[setter]]);
         addedItems.add(setter);
         Log.d("Dicee", "Dice 5 added resource, setter is:" + setter + " : " + diceArray[intForIndex[setter]]);
-    
+
         setter = returnDiceIndex(maximumGenerated);
         mDice6.setImageResource(diceArray[intForIndex[setter]]);
         addedItems.add(setter);
         Log.d("Dicee", "Dice 6 added resource, setter is:" + setter + " : " + diceArray[intForIndex[setter]]);
-        
+
         Log.d("Dicee", "" + addedItems);
         addedItems.clear();
-    
+
     }
-    
-    
+
+
     private int returnDiceIndex(int maximumGenerated) {
         Random randomNumber = new Random();
         int randForIndex;
-        
+
         if (maximumGenerated <= 12) {
             while (true) {
                 randForIndex = randomNumber.nextInt(2);
@@ -372,8 +386,7 @@ public class HomeFragment extends Fragment {
                 }
             }
             return randForIndex;
-        }
-        else if (maximumGenerated <= 30) {
+        } else if (maximumGenerated <= 30) {
             while (true) {
                 randForIndex = randomNumber.nextInt(5);
                 if (!addedItems.contains(randForIndex)) {
@@ -381,8 +394,7 @@ public class HomeFragment extends Fragment {
                 }
             }
             return randForIndex;
-        }
-        else{
+        } else {
             while (true) {
                 randForIndex = randomNumber.nextInt(6);
                 if (!addedItems.contains(randForIndex)) {
@@ -392,6 +404,6 @@ public class HomeFragment extends Fragment {
             return randForIndex;
         }
     }
-    
-    
+
+
 }

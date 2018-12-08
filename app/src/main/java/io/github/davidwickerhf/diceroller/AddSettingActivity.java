@@ -24,19 +24,21 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddSettingActivity extends AppCompatActivity{
+public class AddSettingActivity extends AppCompatActivity {
 
     //todo Variables
     public static final String EXTRA_ID =
-            "io.github.davidwickerhf.diceroller.EXTRA_ID";
+            "EXTRA_ID";
     public static final String EXTRA_TITLE =
-            "io.github.davidwickerhf.diceroller.EXTRA_TITLE";
+            "EXTRA_TITLE";
     public static final String EXTRA_MAX_NUMBER =
-            "io.github.davidwickerhf.diceroller.EXTRA_MAX_NUMBER";
+            "EXTRA_MAX_NUMBER";
     public static final String EXTRA_ITEMS_LIST =
-            "io.github.davidwickerhf.diceroller.EXTRA_MAX_NUMBER";
+            "EXTRA_ITEMS_LIST";
+    public static final String EXTRA_EDIT_ITEMS_LIST =
+            "EXTRA_EDIT_ITEMS_LIST";
     public static final String EXTRA_HAS_ITEMS =
-            "io.github.davidwickerhf.diceroller.EXTRA_MAX_NUMBER";
+            "EXTRA_HAS_ITEMS";
     private int seekbarProgress;
     int maxNumber;
     ArrayList<String> items = new ArrayList<>();
@@ -100,6 +102,8 @@ public class AddSettingActivity extends AppCompatActivity{
         itemListAdapter = new ItemListAdapter();
         itemListRecyclerView.setAdapter(itemListAdapter);
 
+
+        //todo SET LAYOUT IF IS EDIT SETTING
         if (intent.hasExtra(EXTRA_ID)) {
             setTitle(R.string.edit_setting_toolbar_title);
             editTextTitle.setText(intent.getStringExtra(EXTRA_TITLE));
@@ -108,7 +112,23 @@ public class AddSettingActivity extends AppCompatActivity{
             seekBarMaxNumber.setProgress(seekbarProgress);
             maxNumberText.setText(String.valueOf(seekbarProgress));
             maxNumber = seekbarProgress;
-            
+
+            boolean hasItemList = intent.getBooleanExtra(EXTRA_HAS_ITEMS, false);
+            if (hasItemList){
+                //hide views
+                seekBarMaxNumber.setVisibility(View.INVISIBLE);
+                maxNumberText.setVisibility(View.INVISIBLE);
+                addItemListButton.setVisibility(View.INVISIBLE);
+                // Show Views for Item List
+                itemListRecyclerView.setVisibility(View.VISIBLE);
+                addSettingConstraint.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.add_item_list_background));
+                maxNumberTextRepositioned.setVisibility(View.VISIBLE);
+                addItemButton.setVisibility(View.VISIBLE);
+                itemEditText.setVisibility(View.VISIBLE);
+                deleteItemsList.setVisibility(View.VISIBLE);
+                //variables
+                items = intent.getStringArrayListExtra(EXTRA_EDIT_ITEMS_LIST);
+            }
 
         } else {
             setTitle(R.string.add_setting_toolbar_title);
@@ -171,8 +191,8 @@ public class AddSettingActivity extends AppCompatActivity{
 
     }
 
-    private void changeStateHasItems(boolean hasItemList){
-        if(hasItemList){
+    private void changeStateHasItems(boolean hasItemList) {
+        if (hasItemList) {
             // Hide Views
             maxNumber = 2;
             seekBarMaxNumber.setVisibility(View.INVISIBLE);
@@ -211,7 +231,7 @@ public class AddSettingActivity extends AppCompatActivity{
     }
 
     private void saveSetting(boolean hasItemList) {
-        Log.d("AddActivity", "HasItemList bool = " +  hasItemList);
+        Log.d("AddActivity", "HasItemList bool = " + hasItemList);
 
         String title = editTextTitle.getText().toString();
 
@@ -232,12 +252,12 @@ public class AddSettingActivity extends AppCompatActivity{
         //todo Insert Extras
         if (hasItemList) {
             maxNumber = items.size();
-            Log.d("AddActivity", "Items in AddSetting size: " + items.size() + " Items in ItemAdaptor: " + itemListAdapter.items.size() +  " MaxNum: " +  maxNumber);
-            for (int a = 0; a < maxNumber; a++){
+            Log.d("AddActivity", "Items in AddSetting size: " + maxNumber + " Items in ItemAdaptor: " + itemListAdapter.items.size() + " MaxNum: " + maxNumber);
+            for (int a = 0; a < maxNumber; a++) {
                 Log.d("AddActivity", "(AddSettingActivity) Item number " + a + ": " + items.get(a));
             }
             data.putExtra(EXTRA_MAX_NUMBER, maxNumber);
-            data.putExtra("items", items);
+            data.putExtra(EXTRA_ITEMS_LIST, items);
             data.putExtra(EXTRA_HAS_ITEMS, true);
         } else {
             Log.d("AddActivity", "Has Item List is false, max number is = " + maxNumber);
@@ -255,7 +275,6 @@ public class AddSettingActivity extends AppCompatActivity{
         finish();
 
     }
-
 
 
     @Override

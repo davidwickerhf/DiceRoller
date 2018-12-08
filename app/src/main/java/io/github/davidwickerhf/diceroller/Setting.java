@@ -18,18 +18,22 @@ public class Setting {
 
     private String title;
 
+    private boolean hasItemList;
+
     private ArrayList<String> items = new ArrayList<>();
 
     @Ignore
-    public Setting(String title, int maxDiceSum) {
+    public Setting(String title, int maxDiceSum, boolean hasItemList) {
         this.title = title;
         this.maxDiceSum = maxDiceSum;
+        this.hasItemList = hasItemList;
     }
 
 
-    public Setting(String title, int maxDiceSum, ArrayList<String> items) {
+    public Setting(String title, int maxDiceSum, ArrayList<String> items, boolean hasItemList) {
         this.title = title;
         this.maxDiceSum = maxDiceSum;
+        this.hasItemList = hasItemList;
         this.items = items;
     }
 
@@ -56,6 +60,7 @@ public class Setting {
         return maxDiceSum;
     }
 
+    public boolean hasItemList(){ return hasItemList; }
     
     
  
