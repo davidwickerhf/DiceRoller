@@ -60,29 +60,18 @@ public class HomeFragment extends Fragment {
         View fragmentView;
 
 
-        //todo NO Temporary SETTING IS AVAILABLE
-        // need to check if it is a Temporary setting, or a normal setting
-        if (/*has setting*/ getArguments().getBoolean(MainActivity.SETTING_SELECTED)){
-            mMaximumGenerated = getArguments().getInt(MainActivity.TEMPORARY_MAX_NUM);
-            if (getArguments().getStringArrayList(MainActivity.TEMPORARY_ITEM_LIST) != null) {
-                items = getArguments().getStringArrayList(MainActivity.TEMPORARY_ITEM_LIST);
-            } else {
-                Toast.makeText(mMainActivity, "Setting has no corresponding Items", Toast.LENGTH_SHORT).show();
-            }
-
-
-            //todo Choose Layout (Number of Dices)
-            if (mMaximumGenerated <= 12)
-                fragmentView = inflater.inflate(R.layout.fragment_home_2dices, container, false);
-            else if (mMaximumGenerated <= 30)
-                fragmentView = inflater.inflate(R.layout.fragment_home, container, false);
-            else
-                fragmentView = inflater.inflate(R.layout.fragment_home_6dices, container, false);
-        //todo No Setting Available, Create a setting
-        } else {
-            // No Setting. Ask User to add one
+        mMaximumGenerated = getArguments().getInt(AddSettingActivity.EXTRA_MAX_NUMBER);
+        //todo Choose Layout (Number of Dices)
+        if (mMaximumGenerated <= 12)
+            fragmentView = inflater.inflate(R.layout.fragment_home_2dices, container, false);
+        else if (mMaximumGenerated <= 30)
             fragmentView = inflater.inflate(R.layout.fragment_home, container, false);
+        else
+            fragmentView = inflater.inflate(R.layout.fragment_home_6dices, container, false);
 
+
+        if (getArguments().getStringArrayList(AddSettingActivity.EXTRA_ITEMS_LIST) != null) {
+            items = getArguments().getStringArrayList(AddSettingActivity.EXTRA_ITEMS_LIST);
         }
 
 
@@ -101,10 +90,8 @@ public class HomeFragment extends Fragment {
         adapter = new SettingAdapter();
         //todo Initialize Buttons:
         mRollButton = fragmentView.findViewById(R.id.home_roll_button);
-        mAddSetting = fragmentView.findViewById(R.id.home_add_setting_button);
         //todo Initialize Button Text
         mRollBtnText = fragmentView.findViewById(R.id.home_roll_button_text);
-        mAddSettingBtnText = fragmentView.findViewById(R.id.home_add_setting_text);
         //todo Selected Number Text View
         mNumberView = fragmentView.findViewById(R.id.selected_number_text_view);
         //todo Selected Item Text View
@@ -127,18 +114,18 @@ public class HomeFragment extends Fragment {
         diceArray[6] = R.drawable.dice6;
 
         Toast.makeText(getActivity(), "Maximum Number is: " + mMaximumGenerated, Toast.LENGTH_SHORT).show();
-        Log.d("AddActivity", "Max Num is: " + mMaximumGenerated);
+        Log.d("HomeFragment", "Max Num is: " + mMaximumGenerated);
 
 
         //todo Select Random Number and change Dice resources:  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
         mRollButton.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                Log.d("Dicee", "Roll Button Clicked");
-
+            @Override
+            public void onClick(View v) {
+                Log.d("HomeFragment", "Roll Button Clicked");
 
                 Random randomNumberGenerator = new Random();
                 int mKeyNumber = randomNumberGenerator.nextInt(mMaximumGenerated) + 1;
-                Log.d("Dicee", "Chosen number: " + mKeyNumber);
+                Log.d("HomeFragment", "Chosen number: " + mKeyNumber);
                 Log.d("HomeFragment", "List size in HomeFragment = " + items.size());
                 Log.d("HomeFragment", "Item List arrived in Home is:" + items.toString());
 

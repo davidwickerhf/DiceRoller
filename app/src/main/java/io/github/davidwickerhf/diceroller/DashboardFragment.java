@@ -50,7 +50,6 @@ public class DashboardFragment extends Fragment {
     //TODO VIEWS
     androidx.appcompat.widget.Toolbar dashboardToolbar;
     FloatingActionButton dashboardFab;
-
     //TODO VARIABLES
     private static final int ADD_NOTE_REQUEST = 1;
     private Setting recoveredSetting;
@@ -93,7 +92,6 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                // Move Strings to Strings file!
                 optionList = new String[]{getString(R.string.dialog_add_custom_setting), getString(R.string.dialog_add_setting_by_id)};
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
                 mBuilder.setIcon(R.drawable.ic_edit);
@@ -118,7 +116,14 @@ public class DashboardFragment extends Fragment {
             }
         });
 
-
+        //todo View Model
+        settingsViewModel = ViewModelProviders.of(this).get(SettingsViewModel.class);
+        settingsViewModel.getAllSettings().observe(this, new Observer<List<Setting>>() {
+            @Override
+            public void onChanged(@Nullable List<Setting> settings) {
+                adapter.setSettings(settings);
+            }
+        });
 
         //todo Retrieve Selected Item from Previous session
         if (getArguments() != null){
@@ -143,12 +148,12 @@ public class DashboardFragment extends Fragment {
             }
         });
         
-        //todo Interface for returning clicked item
+        //todo Interface for returning clicked item From SETTING ADAPTER - Than passes setting info to Main
         adapter.setOnItemClickLister(new SettingAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, View itemView) {
 
-                int maxNum = adapter.getSettings().get(position).getMaxDiceSum();
+                int maxNum = adapter.getSettingAt(position).getMaxDiceSum();
                 ArrayList<String> items = new ArrayList<>();
                 if(adapter.getSettings().get(position).getItems() != null) {
                     items.addAll(adapter.getSettings().get(position).getItems());
@@ -163,14 +168,7 @@ public class DashboardFragment extends Fragment {
         
         
         
-        //todo View Model
-        settingsViewModel = ViewModelProviders.of(this).get(SettingsViewModel.class);
-        settingsViewModel.getAllSettings().observe(this, new Observer<List<Setting>>() {
-            @Override
-            public void onChanged(@Nullable List<Setting> settings) {
-                adapter.setSettings(settings);
-            }
-        });
+
         
         
         

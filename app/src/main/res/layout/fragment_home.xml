@@ -43,22 +43,22 @@
         app:layout_constraintTop_toTopOf="@+id/number_guideline" />
 
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:elevation="4dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline8"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/user_guideline2"
-        app:srcCompat="@drawable/dices_image_offuscated"
+    <!--<ImageView-->
+        <!--android:id="@+id/imageView"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:elevation="4dp"-->
+        <!--android:layout_marginStart="16dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:layout_marginEnd="16dp"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--app:layout_constraintBottom_toTopOf="@+id/guideline8"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/user_guideline2"-->
+        <!--app:srcCompat="@drawable/dices_image_offuscated"-->
 
-        android:visibility="invisible"/>
+        <!--android:visibility="invisible"/>-->
 
     <ImageView
         android:id="@+id/dice1"
@@ -120,7 +120,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:elevation="6dp"
-        android:text="Roll"
+        android:text="@string/home_roll_btn"
         android:textAlignment="center"
         android:textColor="@color/colorAccent"
         android:textSize="36sp"
@@ -129,22 +129,22 @@
         app:layout_constraintStart_toStartOf="@+id/home_roll_button"
         app:layout_constraintTop_toTopOf="@+id/home_roll_button" />
 
-    <TextView
-        android:id="@+id/home_add_setting_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:elevation="5dp"
-        android:text="Add Setting"
-        android:textAlignment="center"
-        android:textColor="@color/colorAccent"
-        android:textSize="28sp"
-        app:layout_constraintBottom_toBottomOf="@+id/home_roll_button"
-        app:layout_constraintEnd_toEndOf="@+id/home_roll_button"
-        app:layout_constraintStart_toStartOf="@+id/home_roll_button"
-        app:layout_constraintTop_toTopOf="@+id/home_roll_button"
+    <!--<TextView-->
+        <!--android:id="@+id/home_add_setting_text"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:elevation="5dp"-->
+        <!--android:text="Add Setting"-->
+        <!--android:textAlignment="center"-->
+        <!--android:textColor="@color/colorAccent"-->
+        <!--android:textSize="28sp"-->
+        <!--app:layout_constraintBottom_toBottomOf="@+id/home_roll_button"-->
+        <!--app:layout_constraintEnd_toEndOf="@+id/home_roll_button"-->
+        <!--app:layout_constraintStart_toStartOf="@+id/home_roll_button"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/home_roll_button"-->
 
-        android:visibility="invisible"/>
+        <!--android:visibility="invisible"/>-->
 
     <Button
         android:id="@+id/home_roll_button"
@@ -161,22 +161,22 @@
         app:layout_constraintStart_toStartOf="@+id/margin_right"
         app:layout_constraintTop_toTopOf="@+id/guideline8" />
 
-    <Button
-        android:id="@+id/home_add_setting_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:elevation="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/rollbutton_background"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/margin_left"
-        app:layout_constraintStart_toStartOf="@+id/margin_right"
-        app:layout_constraintTop_toTopOf="@+id/guideline8"
+    <!--<Button-->
+        <!--android:id="@+id/home_add_setting_button"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--app:elevation="0dp"-->
+        <!--android:layout_marginStart="8dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:layout_marginEnd="8dp"-->
+        <!--android:layout_marginBottom="16dp"-->
+        <!--android:background="@drawable/rollbutton_background"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintEnd_toStartOf="@+id/margin_left"-->
+        <!--app:layout_constraintStart_toStartOf="@+id/margin_right"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/guideline8"-->
 
-        android:visibility="invisible"/>
+        <!--android:visibility="invisible"/>-->
 
 
     <androidx.constraintlayout.widget.Guideline
