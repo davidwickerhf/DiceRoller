@@ -175,7 +175,7 @@
         android:windowSoftInputMode="adjustNothing"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/seek_bar"
-        app:srcCompat="@drawable/ic_close" />
+        app:srcCompat="@drawable/ic_cancel_red" />
 
 
     <!--Items Recycler View-->
