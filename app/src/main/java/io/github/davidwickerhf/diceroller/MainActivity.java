@@ -34,14 +34,13 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     //todo Variables
     private static final int ADD_SETTING_REQUEST = 1;
     private static final int EDIT_SETTING_REQUEST = 2;
-    public static final String SETTING_SELECTED = "SETTING_SELECTED";
-    public static final String TEMPORARY_MAX_NUM = "TEMPORARY_MAX_NUM";
-    public static final String TEMPORARY_ITEM_LIST = "TEMPORARY_ITEM_LIST";
+
     private int selectedItem;
     private boolean settingSelected;
 
     //todo Views
     private View selectedItemView;
+    private BottomNavigationView BottomNavigationView;
 
     //todo Components
     private SettingsViewModel settingsViewModel;
@@ -67,13 +66,12 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
             @Override
             public void onChanged(@Nullable List<Setting> settings) {
                 adapter.setSettings(settings);
-                Log.d("AddActivity", "Adapter has settings? " + adapter.getItemCount());
             }
         });
 
         //todo navigation view
-        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
-        bottomNav.setOnNavigationItemSelectedListener(navListener);
+        BottomNavigationView = findViewById(R.id.bottom_navigation);
+        BottomNavigationView.setOnNavigationItemSelectedListener(navListener);
 
         //todo Initialize fragments
         mHomeFragment = new HomeFragment();
@@ -107,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
                             selectedFragment = mProfileFragment;
                             break;
                     }
+                    
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.fragment_container, selectedFragment)
                             .commit();
@@ -148,8 +147,8 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 
 
         } else if (requestCode == EDIT_SETTING_REQUEST && resultCode == RESULT_OK) {
-            int id = data.getIntExtra(AddSettingActivity.EXTRA_ID, -1);
 
+            int id = data.getIntExtra(AddSettingActivity.EXTRA_ID, -1);
             boolean hasItems = data.getBooleanExtra(AddSettingActivity.EXTRA_HAS_ITEMS, false);
 
             if(id == -1){
@@ -159,6 +158,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 
             String title = data.getStringExtra(AddSettingActivity.EXTRA_TITLE);
             int maxDiceSum = data.getIntExtra(AddSettingActivity.EXTRA_MAX_NUMBER, 2);
+
             ArrayList<String> items;
             Setting setting;
 
@@ -172,11 +172,13 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 
             setting.setId(id);
             settingsViewModel.update(setting);
-
             Toast.makeText(MainActivity.this, "Setting updated", Toast.LENGTH_SHORT).show();
 
+         //todo  ADD WAY TO ADD A SETTING BY ID
+        } else if (true){
 
-        } else {
+
+        }else {
             Toast.makeText(MainActivity.this, "Setting Not Saved", Toast.LENGTH_SHORT).show();
         }
     }

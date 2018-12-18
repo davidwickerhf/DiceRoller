@@ -1,9 +1,11 @@
 package io.github.davidwickerhf.diceroller;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,6 +23,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,10 +39,10 @@ public class AddSettingActivity extends AppCompatActivity {
             "EXTRA_MAX_NUMBER";
     public static final String EXTRA_ITEMS_LIST =
             "EXTRA_ITEMS_LIST";
-    public static final String EXTRA_EDIT_ITEMS_LIST =
-            "EXTRA_EDIT_ITEMS_LIST";
     public static final String EXTRA_HAS_ITEMS =
             "EXTRA_HAS_ITEMS";
+
+
     private int seekbarProgress;
     int maxNumber;
     ArrayList<String> items = new ArrayList<>();
@@ -113,7 +117,7 @@ public class AddSettingActivity extends AppCompatActivity {
             maxNumberText.setText(String.valueOf(seekbarProgress));
             maxNumber = seekbarProgress;
 
-            boolean hasItemList = intent.getBooleanExtra(EXTRA_HAS_ITEMS, false);
+            hasItemList = intent.getBooleanExtra(EXTRA_HAS_ITEMS, false);
             if (hasItemList){
                 //hide views
                 seekBarMaxNumber.setVisibility(View.INVISIBLE);
@@ -127,7 +131,9 @@ public class AddSettingActivity extends AppCompatActivity {
                 itemEditText.setVisibility(View.VISIBLE);
                 deleteItemsList.setVisibility(View.VISIBLE);
                 //variables
-                items = intent.getStringArrayListExtra(EXTRA_EDIT_ITEMS_LIST);
+                items = intent.getStringArrayListExtra(EXTRA_ITEMS_LIST);
+                itemListAdapter.setItems(items);
+                maxNumberTextRepositioned.setText(String.format("%s", items.size()));
             }
 
         } else {
@@ -152,7 +158,7 @@ public class AddSettingActivity extends AppCompatActivity {
         });
 
         //todo Add Items Button
-        //todo HAS ITEMS!!!!
+        //todo ADD ITEM LIST
         addItemListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -161,12 +167,13 @@ public class AddSettingActivity extends AppCompatActivity {
             }
         });
 
-        //TODO HAS NO ITEMS!!!!
+        //TODO DELETE ITEM LIST
         deleteItemsList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 hasItemList = false;
                 changeStateHasItems(hasItemList);
+                itemListAdapter.setItems(items);
             }
         });
 
@@ -187,6 +194,23 @@ public class AddSettingActivity extends AppCompatActivity {
                 }
             }
         });
+
+//todo Make Recycler Swipable
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                items.remove(viewHolder.getAdapterPosition());
+                Toast.makeText(AddSettingActivity.this, "Item Removed", Toast.LENGTH_SHORT).show();
+                maxNumberTextRepositioned.setText(String.valueOf(items.size()));
+                itemListAdapter.setItems(items);
+            }
+        }).attachToRecyclerView(itemListRecyclerView);
 
 
     }
@@ -231,8 +255,6 @@ public class AddSettingActivity extends AppCompatActivity {
     }
 
     private void saveSetting(boolean hasItemList) {
-        Log.d("AddActivity", "HasItemList bool = " + hasItemList);
-
         String title = editTextTitle.getText().toString();
 
         //todo Check Title isn't empty
@@ -251,11 +273,13 @@ public class AddSettingActivity extends AppCompatActivity {
 
         //todo Insert Extras
         if (hasItemList) {
-            maxNumber = items.size();
-            Log.d("AddActivity", "Items in AddSetting size: " + maxNumber + " Items in ItemAdaptor: " + itemListAdapter.items.size() + " MaxNum: " + maxNumber);
-            for (int a = 0; a < maxNumber; a++) {
-                Log.d("AddActivity", "(AddSettingActivity) Item number " + a + ": " + items.get(a));
+
+            if (items.size() < 2){
+                Toast.makeText(this, "Setting should have at least 2 items", Toast.LENGTH_SHORT).show();
+                return;
             }
+
+            maxNumber = items.size();
             data.putExtra(EXTRA_MAX_NUMBER, maxNumber);
             data.putExtra(EXTRA_ITEMS_LIST, items);
             data.putExtra(EXTRA_HAS_ITEMS, true);

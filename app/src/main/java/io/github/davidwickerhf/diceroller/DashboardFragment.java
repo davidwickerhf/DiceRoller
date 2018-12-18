@@ -98,14 +98,15 @@ public class DashboardFragment extends Fragment {
                 mBuilder.setTitle(R.string.dialog_add_setting_title);
                 mBuilder.setSingleChoiceItems(optionList, -1, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if(which == 0) {
+                    public void onClick(DialogInterface dialog, int selected) {
+                        if(selected == 0) {
                             Intent intent = new Intent(getActivity(), AddSettingActivity.class);
                             getActivity().startActivityForResult(intent, ADD_NOTE_REQUEST);
                             dialog.dismiss();
                         }
                         else{
-                            Toast.makeText(getActivity(), "Feature coming soon!", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getActivity(), AddSettingByID.class);
+                            getActivity().startActivityForResult(intent, ADD_NOTE_REQUEST);
                             dialog.dismiss();
                         }
 
