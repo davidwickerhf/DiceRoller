@@ -13,6 +13,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -94,7 +95,6 @@ public class DashboardFragment extends Fragment {
 
                 optionList = new String[]{getString(R.string.dialog_add_custom_setting), getString(R.string.dialog_add_setting_by_id)};
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
-                mBuilder.setIcon(R.drawable.ic_edit);
                 mBuilder.setTitle(R.string.dialog_add_setting_title);
                 mBuilder.setSingleChoiceItems(optionList, -1, new DialogInterface.OnClickListener() {
                     @Override
@@ -141,15 +141,18 @@ public class DashboardFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
 
-        //todo Interface for returning edit icon item clicked
+        //todo Interface - Returns Setting Position when Clicking Edit Icon - From Adapter to Dashboard to MainActivity
         adapter.setOnEditItemClickLister(new SettingAdapter.OnEditItemClickListener() {
             @Override
             public void onEditItemClick(int position) {
                 itemListener.onEditInputASent(position);
             }
         });
-        
-        //todo Interface for returning clicked item From SETTING ADAPTER - Than passes setting info to Main
+
+
+
+
+        //todo Interface for returning clicked item From SETTING ADAPTER - Than passes setting info to MainActivity
         adapter.setOnItemClickLister(new SettingAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, View itemView) {

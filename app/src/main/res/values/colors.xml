@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#2472A0</color>
-    <color name="colorPrimaryDark">#2472a0</color>
-    <color name="lightBlueAccent">#39A2E0</color>
+    <color name="colorPrimary">#FFFFFF</color>
+    <color name="colorPrimaryDark">#FFFFFF</color>
+    <color name="colorAccent">#2472A0</color>
+
     <color name="colorPrimaryDarker">#284C73</color>
-
-
-    <color name="colorAccent">#ffffff</color>
-    <color name="white">#FFFFFF</color>
-    <color name="hintColor">#B2B7BE</color>
-    <color name="greyText">#4A5058</color>
-    <color name="lightGrey">#F7F7F7</color>
+    <color name="lightBlueAccent">#39A2E0</color>
     <color name="lightBlueText">#E5F4FB</color>
     <color name="lightBlue">#E5F4FB</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="lightGrey">#F7F7F7</color>
+    <color name="hintColor">#B2B7BE</color>
+    <color name="greyText">#4A5058</color>
+    <color name="defaultMenuColor">#949494</color>
+
     <color name="red">#FF4E6B</color>
 
 

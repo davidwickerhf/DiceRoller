@@ -86,6 +86,8 @@ public class AddSettingActivity extends AppCompatActivity {
 
         hasItemList = false; //default Value for adding a setting. If true, It means the setting has Items (strings entered by users, attached to the number)
         maxNumber = 2; // Lowest number should be 2
+        seekBarMaxNumber.setProgress(0);
+        maxNumberText.setText(String.valueOf(2));
 
         //todo Toolbar
         addSettingsToolbar = findViewById(R.id.add_setting_toolbar);
@@ -173,7 +175,7 @@ public class AddSettingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 hasItemList = false;
                 changeStateHasItems(hasItemList);
-                itemListAdapter.setItems(items);
+                itemListAdapter.setItems(items); // This clears the items in the ItemListAdapter (item list is in fact null)
             }
         });
 
@@ -218,7 +220,8 @@ public class AddSettingActivity extends AppCompatActivity {
     private void changeStateHasItems(boolean hasItemList) {
         if (hasItemList) {
             // Hide Views
-            maxNumber = 2;
+            maxNumber = 0;
+            maxNumberTextRepositioned.setText(String.valueOf(0));
             seekBarMaxNumber.setVisibility(View.INVISIBLE);
             maxNumberText.setVisibility(View.INVISIBLE);
             addItemListButton.setVisibility(View.INVISIBLE);
@@ -246,10 +249,10 @@ public class AddSettingActivity extends AppCompatActivity {
             items.clear();
             if (maxNumber > 1) {
                 maxNumberText.setText(String.valueOf(maxNumber));
-                seekBarMaxNumber.setProgress(maxNumber);
+                seekBarMaxNumber.setProgress(maxNumber - 2);
             } else {
                 maxNumberText.setText("2");
-                seekBarMaxNumber.setProgress(2);
+                seekBarMaxNumber.setProgress(0);
             }
         }
     }

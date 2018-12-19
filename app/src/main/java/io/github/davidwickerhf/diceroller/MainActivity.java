@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 
 //        //todo Display DashboardFragment:
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mDashboardFragment).commit();
+        changeSelectedMenuItem(1);
         settingSelected = false;
 
     }
@@ -96,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
                             }else{
                                 Toast.makeText(MainActivity.this, "Select a Setting first", Toast.LENGTH_SHORT).show();
                                 selectedFragment = mDashboardFragment;
+                                changeSelectedMenuItem(1);
                             }
                             break;
                         case R.id.nav_dashboard:
@@ -184,13 +186,13 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     }
     //todo
 
-
-
+    public void changeSelectedMenuItem(int position){
+        BottomNavigationView.getMenu().getItem(position).setChecked(true);
+    }
 
     //todo  Sends Info from Setting Adapter to DashboardFragment to Main to HomeFragment
     @Override
     public void onInputASent(int maxNumber, ArrayList<String> items, int position, View itemView) {
-        Log.d("HomeFragment", "Item List arrived in Main is:" + items.toString());
         Bundle args = new Bundle();
         args.putInt(AddSettingActivity.EXTRA_MAX_NUMBER, maxNumber);
         args.putStringArrayList(AddSettingActivity.EXTRA_ITEMS_LIST, items);
@@ -207,8 +209,12 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 
         selectedItemView = itemView;
         selectedItem = position;
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mHomeFragment).commit();
+        changeSelectedMenuItem(0);
     }
 
+    //todo Sends Setting info to AddSettingActivity
     @Override
     public void onEditInputASent(int position) {
 

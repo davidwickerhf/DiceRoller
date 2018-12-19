@@ -14,15 +14,12 @@
 
     <!--STRINGS-->
     <!--AlertDialog-->
-    <string name="dialog_add_setting_title">Add Setting</string>
-    <string name="dialog_add_custom_setting">Add Custom</string>
-    <string name="dialog_add_setting_by_id">Add by ID</string>
+    <string name="dialog_add_setting_title">Add Setting Method:</string>
+    <string name="dialog_add_custom_setting">Add Custom Setting</string>
+    <string name="dialog_add_setting_by_id">Add Setting by ID</string>
 
 
-    <string name="prompt_email">Email</string>
-    <string name="prompt_username">Username</string>
-    <string name="prompt_password">Password</string>
-    <string name="prompt_password_again">Confirm Password</string>
+    <!--AddSettingActivity-->
     <string name="save_setting">Save Setting</string>
     <string name="profile_fragment_toolbar_title">My Profile</string>
     <string name="edit_setting_toolbar_title">Edit Setting</string>
@@ -34,6 +31,7 @@
     <string name="add_setting_toast_no_title">Item should have a title</string>
     <string name="add_setting_text_view_maximum_number_title">Maximum number:</string>
     <string name="add_setting_edit_text_setting_title">Title</string>
+    <!--HomeFragment-->
     <string name="home_roll_btn">Roll</string>
 
 </resources>
