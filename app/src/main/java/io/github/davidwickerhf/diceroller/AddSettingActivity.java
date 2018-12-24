@@ -5,10 +5,12 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,22 +33,13 @@ import java.util.List;
 public class AddSettingActivity extends AppCompatActivity {
 
     //todo Variables
-    public static final String EXTRA_ID =
-            "EXTRA_ID";
-    public static final String EXTRA_TITLE =
-            "EXTRA_TITLE";
-    public static final String EXTRA_MAX_NUMBER =
-            "EXTRA_MAX_NUMBER";
-    public static final String EXTRA_ITEMS_LIST =
-            "EXTRA_ITEMS_LIST";
-    public static final String EXTRA_HAS_ITEMS =
-            "EXTRA_HAS_ITEMS";
-
-
     private int seekbarProgress;
     int maxNumber;
     ArrayList<String> items = new ArrayList<>();
     boolean hasItemList;
+    // for editing an item
+    boolean isEditing;
+    int itemPosition;
 
     //todo Views
     private ConstraintLayout addSettingConstraint;
@@ -59,10 +52,12 @@ public class AddSettingActivity extends AppCompatActivity {
     private ImageButton addItemButton;
     private EditText itemEditText;
     private ImageButton deleteItemsList;
+    private View itemListView;
 
     //todo Components
     ItemListAdapter itemListAdapter;
     RecyclerView itemListRecyclerView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +80,7 @@ public class AddSettingActivity extends AppCompatActivity {
         deleteItemsList = findViewById(R.id.delete_item_list);
 
         hasItemList = false; //default Value for adding a setting. If true, It means the setting has Items (strings entered by users, attached to the number)
+        isEditing = false; //Default. This is used to edit an item in the list
         maxNumber = 2; // Lowest number should be 2
         seekBarMaxNumber.setProgress(0);
         maxNumberText.setText(String.valueOf(2));
@@ -110,17 +106,17 @@ public class AddSettingActivity extends AppCompatActivity {
 
 
         //todo SET LAYOUT IF IS EDIT SETTING
-        if (intent.hasExtra(EXTRA_ID)) {
+        if (intent.hasExtra(MainActivity.EXTRA_ID)) {
             setTitle(R.string.edit_setting_toolbar_title);
-            editTextTitle.setText(intent.getStringExtra(EXTRA_TITLE));
+            editTextTitle.setText(intent.getStringExtra(MainActivity.EXTRA_TITLE));
 
-            seekbarProgress = intent.getIntExtra(EXTRA_MAX_NUMBER, 2);
+            seekbarProgress = intent.getIntExtra(MainActivity.EXTRA_MAX_NUMBER, 2);
             seekBarMaxNumber.setProgress(seekbarProgress);
             maxNumberText.setText(String.valueOf(seekbarProgress));
             maxNumber = seekbarProgress;
 
-            hasItemList = intent.getBooleanExtra(EXTRA_HAS_ITEMS, false);
-            if (hasItemList){
+            hasItemList = intent.getBooleanExtra(MainActivity.EXTRA_HAS_ITEMS, false);
+            if (hasItemList) {
                 //hide views
                 seekBarMaxNumber.setVisibility(View.INVISIBLE);
                 maxNumberText.setVisibility(View.INVISIBLE);
@@ -133,7 +129,7 @@ public class AddSettingActivity extends AppCompatActivity {
                 itemEditText.setVisibility(View.VISIBLE);
                 deleteItemsList.setVisibility(View.VISIBLE);
                 //variables
-                items = intent.getStringArrayListExtra(EXTRA_ITEMS_LIST);
+                items = intent.getStringArrayListExtra(MainActivity.EXTRA_ITEMS_LIST);
                 itemListAdapter.setItems(items);
                 maxNumberTextRepositioned.setText(String.format("%s", items.size()));
             }
@@ -183,21 +179,59 @@ public class AddSettingActivity extends AppCompatActivity {
         addItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String itemString = itemEditText.getText().toString();
-                if (itemString.trim().isEmpty()) {
-                    Toast.makeText(AddSettingActivity.this, getString(R.string.add_setting_toast_no_title), Toast.LENGTH_SHORT).show();
-                } else if (itemString.length() > 10) {
-                    Toast.makeText(AddSettingActivity.this, getString(R.string.add_setting_toast_item_title_is_too_long), Toast.LENGTH_SHORT).show();
+
+                if (!isEditing) {
+                    String itemString = itemEditText.getText().toString();
+                    if (itemString.trim().isEmpty()) {
+                        Toast.makeText(AddSettingActivity.this, getString(R.string.add_setting_toast_no_title), Toast.LENGTH_SHORT).show();
+                    } else if (itemString.length() > 23) {
+                        Toast.makeText(AddSettingActivity.this, getString(R.string.add_setting_toast_item_title_is_too_long), Toast.LENGTH_SHORT).show();
+                    } else {
+                        items.add(itemEditText.getText().toString());
+                        itemListAdapter.setItems(items);
+                        maxNumberTextRepositioned.setText(String.format("%s", items.size()));
+                        itemEditText.setText(""); // resets edit text input every time an item is added
+                    }
                 } else {
-                    items.add(itemEditText.getText().toString());
-                    itemListAdapter.setItems(items);
-                    maxNumberTextRepositioned.setText(String.format("%s", items.size()));
-                    itemEditText.setText(""); // resets edit text input every time an item is added
+                    String itemString = itemEditText.getText().toString();
+                    if (itemString.trim().isEmpty()) {
+                        Toast.makeText(AddSettingActivity.this, getString(R.string.add_setting_toast_no_title), Toast.LENGTH_SHORT).show();
+                    } else if (itemString.length() > 23) {
+                        Toast.makeText(AddSettingActivity.this, getString(R.string.add_setting_toast_item_title_is_too_long), Toast.LENGTH_SHORT).show();
+                    } else {
+                        // Save Item String
+                        items.set(itemPosition, itemString);
+                        itemListAdapter.setItems(items);
+
+                        // Reset View and Variables
+                        itemEditText.setText(""); // resets edit text input every time an item is added
+                        //itemListView.setBackgroundResource(R.drawable.list_item);
+                        addItemButton.setImageResource(R.drawable.ic_add_dark);
+                        itemPosition = 0;
+                        itemListView = null;
+                        isEditing = false;
+                    }
+
                 }
+
             }
         });
 
-//todo Make Recycler Swipable
+        //todo Edit Item when Clicking it
+        itemListAdapter.setOnItemClickLister(new ItemListAdapter.OnListItemClickListener() {
+            @Override
+            public void onItemClick(int position, View itemView) {
+                String title = items.get(position);
+                itemEditText.setText(title);
+                itemListView = itemView;
+                itemPosition = position;
+                addItemButton.setImageResource(R.drawable.ic_save);
+                isEditing = true;
+            }
+        });
+
+
+        //todo Make Recycler Swipable
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -271,31 +305,34 @@ public class AddSettingActivity extends AppCompatActivity {
         }
 
         Intent data = new Intent();
-        data.putExtra(EXTRA_TITLE, title);
+        data.putExtra(MainActivity.EXTRA_TITLE, title);
 
 
         //todo Insert Extras
         if (hasItemList) {
 
-            if (items.size() < 2){
+            if (items.size() < 2) {
                 Toast.makeText(this, "Setting should have at least 2 items", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             maxNumber = items.size();
-            data.putExtra(EXTRA_MAX_NUMBER, maxNumber);
-            data.putExtra(EXTRA_ITEMS_LIST, items);
-            data.putExtra(EXTRA_HAS_ITEMS, true);
+            data.putExtra(MainActivity.EXTRA_MAX_NUMBER, maxNumber);
+            data.putExtra(MainActivity.EXTRA_ITEMS_LIST, items);
+            data.putExtra(MainActivity.EXTRA_HAS_ITEMS, true);
         } else {
             Log.d("AddActivity", "Has Item List is false, max number is = " + maxNumber);
-            data.putExtra(EXTRA_MAX_NUMBER, maxNumber);
+            data.putExtra(MainActivity.EXTRA_MAX_NUMBER, maxNumber);
         }
-        int id = getIntent().getIntExtra(EXTRA_ID, -1);
+        int id = getIntent().getIntExtra(MainActivity.EXTRA_ID, -1);
 
         if (id != -1) {
-            data.putExtra(EXTRA_ID, id);
+            data.putExtra(MainActivity.EXTRA_ID, id);
         }
 
+        // Pass Position (From Main Edit Interface to onResult in Main)
+        int position = getIntent().getIntExtra(MainActivity.EXTRA_POSITION, -1);
+        data.putExtra(MainActivity.EXTRA_POSITION, position);
 
         // send results
         setResult(RESULT_OK, data);
@@ -321,4 +358,5 @@ public class AddSettingActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
 }

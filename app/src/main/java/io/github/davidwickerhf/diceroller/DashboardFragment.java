@@ -62,7 +62,7 @@ public class DashboardFragment extends Fragment {
     //todo Interface for sharing data ( get Settings Information from AddSettingActivity)
     private FragmentDashboardListener listener;
     public interface FragmentDashboardListener {
-        void onInputASent(int maxNumber, ArrayList<String> items, int position, View itemView);
+        void onInputASent(int maxNumber, ArrayList<String> items, int position, String title, View itemView);
     }
 
 
@@ -159,13 +159,14 @@ public class DashboardFragment extends Fragment {
 
                 int maxNum = adapter.getSettingAt(position).getMaxDiceSum();
                 ArrayList<String> items = new ArrayList<>();
+                String title = adapter.getSettingAt(position).getTitle();
                 if(adapter.getSettings().get(position).getItems() != null) {
                     items.addAll(adapter.getSettings().get(position).getItems());
                     Log.d("HomeFragment", "Item List in DashboardFragment is:" + items.toString());
                 }
                 Snackbar.make(coordinatorLayout, "Setting selected", Snackbar.LENGTH_LONG).show();
                 
-                listener.onInputASent(maxNum, items, position, itemView);
+                listener.onInputASent(maxNum, items, position, title, itemView);
             }
         });
         
@@ -190,7 +191,7 @@ public class DashboardFragment extends Fragment {
                 
                 recoveredSetting = adapter.getSettingAt(viewHolder.getAdapterPosition());
                 settingsViewModel.delete(adapter.getSettingAt(viewHolder.getAdapterPosition()));
-    
+                
                 mSnackbar = Snackbar
                         .make(coordinatorLayout, "Setting deleted", Snackbar.LENGTH_LONG)
                         .setAction("UNDO", new View.OnClickListener() {

@@ -55,10 +55,6 @@ public class ItemListAdapter  extends RecyclerView.Adapter<ItemListAdapter.ItemH
         notifyDataSetChanged();
     }
 
-    public String getItem(int position){
-        return items.get(position);
-    }
-
     //todo ITEM HOLDER
     class ItemHolder extends RecyclerView.ViewHolder {
         private TextView textViewItemString;
@@ -79,7 +75,7 @@ public class ItemListAdapter  extends RecyclerView.Adapter<ItemListAdapter.ItemH
                         if(position != RecyclerView.NO_POSITION) {
 
                             itemClickListener.onItemClick(position, itemView);
-
+                            //itemView.setBackgroundResource(R.drawable.list_item_selected);
 
                         }
                     }

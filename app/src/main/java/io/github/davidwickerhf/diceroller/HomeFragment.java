@@ -29,17 +29,13 @@ public class HomeFragment extends Fragment {
     private Button mRollButton;
     private TextView mNumberView;
     private TextView selectedItemTextView;
-    private TextView mRollBtnText;
     private ImageView mDice1;
     private ImageView mDice2;
     private ImageView mDice3;
     private ImageView mDice4;
     private ImageView mDice5;
-    public ImageView mDice6;
-
-    private Button mAddSetting;
-    private TextView mAddSettingBtnText;
-    //todo LINK THESE VIEWS, SET THE VISIBILITY WEHN NEEDED!!!
+    private ImageView mDice6;
+    private TextView selectedSettingItemView;
 
     //todo Classes and Components
     private MainActivity mMainActivity;
@@ -49,7 +45,7 @@ public class HomeFragment extends Fragment {
     //todo Variables
     private final int[] diceArray = new int[7];
     private List<Integer> addedItems = new ArrayList<>();
-
+    private String selectedSettingText;
     private int mMaximumGenerated;
     private ArrayList<String> items;
 
@@ -59,8 +55,8 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View fragmentView;
 
-
-        mMaximumGenerated = getArguments().getInt(AddSettingActivity.EXTRA_MAX_NUMBER);
+        //todo Select Layout
+        mMaximumGenerated = getArguments().getInt(MainActivity.EXTRA_MAX_NUMBER);
         //todo Choose Layout (Number of Dices)
         if (mMaximumGenerated <= 12)
             fragmentView = inflater.inflate(R.layout.fragment_home_2dices, container, false);
@@ -70,13 +66,11 @@ public class HomeFragment extends Fragment {
             fragmentView = inflater.inflate(R.layout.fragment_home_6dices, container, false);
 
 
-        if (getArguments().getStringArrayList(AddSettingActivity.EXTRA_ITEMS_LIST) != null) {
-            items = getArguments().getStringArrayList(AddSettingActivity.EXTRA_ITEMS_LIST);
+        if (getArguments().getStringArrayList(MainActivity.EXTRA_ITEMS_LIST) != null) {
+            items = getArguments().getStringArrayList(MainActivity.EXTRA_ITEMS_LIST);
         }
 
-
-        mMainActivity = new MainActivity();
-
+        selectedSettingText = getArguments().getString(MainActivity.EXTRA_TITLE);
 
         //todo ViewModel
         settingsViewModel = ViewModelProviders.of(this).get(SettingsViewModel.class);
@@ -90,12 +84,13 @@ public class HomeFragment extends Fragment {
         adapter = new SettingAdapter();
         //todo Initialize Buttons:
         mRollButton = fragmentView.findViewById(R.id.home_roll_button);
-        //todo Initialize Button Text
-        mRollBtnText = fragmentView.findViewById(R.id.home_roll_button_text);
         //todo Selected Number Text View
         mNumberView = fragmentView.findViewById(R.id.selected_number_text_view);
         //todo Selected Item Text View
         selectedItemTextView = fragmentView.findViewById(R.id.selected_item_text_view);
+        //todo Selected Setting Text View
+        selectedSettingItemView = fragmentView.findViewById(R.id.home_selected_setting_text);
+        selectedSettingItemView.setText(selectedSettingText);
         //todo Dices - Initialize 6 Dices
         mDice1 = fragmentView.findViewById(R.id.dice1);
         mDice2 = fragmentView.findViewById(R.id.dice2);

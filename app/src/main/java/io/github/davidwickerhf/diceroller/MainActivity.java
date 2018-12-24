@@ -38,6 +38,22 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     private int selectedItem;
     private boolean settingSelected;
 
+    // FINALS Variables
+    public static final String EXTRA_ID =
+            "EXTRA_ID";
+    public static final String EXTRA_TITLE =
+            "EXTRA_TITLE";
+    public static final String EXTRA_MAX_NUMBER =
+            "EXTRA_MAX_NUMBER";
+    public static final String EXTRA_ITEMS_LIST =
+            "EXTRA_ITEMS_LIST";
+    public static final String EXTRA_HAS_ITEMS =
+            "EXTRA_HAS_ITEMS";
+    public static final String EXTRA_POSITION =
+            "EXTRA_HAS_POSITION";
+
+
+
     //todo Views
     private View selectedItemView;
     private BottomNavigationView BottomNavigationView;
@@ -122,16 +138,16 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         if (requestCode == ADD_SETTING_REQUEST && resultCode == RESULT_OK) {
 
 
-            String title = data.getStringExtra(AddSettingActivity.EXTRA_TITLE);
+            String title = data.getStringExtra(MainActivity.EXTRA_TITLE);
             ArrayList<String> items;
             Setting setting;
             int maxDiceSum;
 
-            boolean hasItems = data.getBooleanExtra(AddSettingActivity.EXTRA_HAS_ITEMS, false);
-            maxDiceSum = data.getIntExtra(AddSettingActivity.EXTRA_MAX_NUMBER, 2);
+            boolean hasItems = data.getBooleanExtra(MainActivity.EXTRA_HAS_ITEMS, false);
+            maxDiceSum = data.getIntExtra(MainActivity.EXTRA_MAX_NUMBER, 2);
 
             if(hasItems) {
-                items = (ArrayList<String>) data.getStringArrayListExtra(AddSettingActivity.EXTRA_ITEMS_LIST);
+                items = (ArrayList<String>) data.getStringArrayListExtra(MainActivity.EXTRA_ITEMS_LIST);
 
                 Log.d("AddActivity", "Items In Main Activity: " +items);
                 setting = new Setting(title, maxDiceSum, items, hasItems);
@@ -150,34 +166,54 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 
         } else if (requestCode == EDIT_SETTING_REQUEST && resultCode == RESULT_OK) {
 
-            int id = data.getIntExtra(AddSettingActivity.EXTRA_ID, -1);
-            boolean hasItems = data.getBooleanExtra(AddSettingActivity.EXTRA_HAS_ITEMS, false);
+            int id = data.getIntExtra(MainActivity.EXTRA_ID, -1);
+            boolean hasItems = data.getBooleanExtra(MainActivity.EXTRA_HAS_ITEMS, false);
 
             if(id == -1){
                 Toast.makeText(MainActivity.this, "Setting Can't be Updated", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            String title = data.getStringExtra(AddSettingActivity.EXTRA_TITLE);
-            int maxDiceSum = data.getIntExtra(AddSettingActivity.EXTRA_MAX_NUMBER, 2);
-
-            ArrayList<String> items;
+            //Needed Variables
+            String title = data.getStringExtra(MainActivity.EXTRA_TITLE);
+            int maxDiceSum = data.getIntExtra(MainActivity.EXTRA_MAX_NUMBER, 2);
+            ArrayList<String> items = new ArrayList<>();
             Setting setting;
 
+            // Generate new Setting
             if (hasItems){
-                items = data.getStringArrayListExtra(AddSettingActivity.EXTRA_ITEMS_LIST);
+                items = data.getStringArrayListExtra(MainActivity.EXTRA_ITEMS_LIST);
                 setting = new Setting(title, maxDiceSum, items, true);
             }
             else{
                 setting = new Setting(title, maxDiceSum, false);
             }
 
+            // Add Generated Setting
             setting.setId(id);
             settingsViewModel.update(setting);
             Toast.makeText(MainActivity.this, "Setting updated", Toast.LENGTH_SHORT).show();
 
+            // Update Selected Setting
+            Bundle updateSelectedSetting = mHomeFragment.getArguments();
+            if(updateSelectedSetting != null) {
+                int selectedSettingPosition = /*Argument set in onInputASent*/updateSelectedSetting.getInt(MainActivity.EXTRA_POSITION);
+                int editedSettingPosition = data.getIntExtra(MainActivity.EXTRA_POSITION, -1);
+
+                if (selectedSettingPosition == editedSettingPosition) {
+                    Bundle args = new Bundle();
+                    args.putInt(MainActivity.EXTRA_POSITION, selectedSettingPosition);
+                    args.putInt(MainActivity.EXTRA_MAX_NUMBER, maxDiceSum);
+                    args.putString(MainActivity.EXTRA_TITLE, title);
+                    args.putStringArrayList(MainActivity.EXTRA_ITEMS_LIST, items);
+                    mHomeFragment.setArguments(args);
+                }
+            }
+
+
+
+
          //todo  ADD WAY TO ADD A SETTING BY ID
-        } else if (true){
 
 
         }else {
@@ -190,12 +226,15 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         BottomNavigationView.getMenu().getItem(position).setChecked(true);
     }
 
+    //todo ON CLICKING SETTING IN DASHBOARD
     //todo  Sends Info from Setting Adapter to DashboardFragment to Main to HomeFragment
     @Override
-    public void onInputASent(int maxNumber, ArrayList<String> items, int position, View itemView) {
+    public void onInputASent(int maxNumber, ArrayList<String> items, int position, String title, View itemView) {
         Bundle args = new Bundle();
-        args.putInt(AddSettingActivity.EXTRA_MAX_NUMBER, maxNumber);
-        args.putStringArrayList(AddSettingActivity.EXTRA_ITEMS_LIST, items);
+        args.putInt(MainActivity.EXTRA_POSITION, position);
+        args.putInt(MainActivity.EXTRA_MAX_NUMBER, maxNumber);
+        args.putString(MainActivity.EXTRA_TITLE, title);
+        args.putStringArrayList(MainActivity.EXTRA_ITEMS_LIST, items);
         settingSelected = true;
         // Change color of selected setting back to normal
         if(!(selectedItemView == null)) {
@@ -219,11 +258,12 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     public void onEditInputASent(int position) {
 
         Intent intent = new Intent(MainActivity.this, AddSettingActivity.class);
-        intent.putExtra(AddSettingActivity.EXTRA_ID, adapter.getSettingAt(position).getId());
-        intent.putExtra(AddSettingActivity.EXTRA_TITLE, adapter.getSettingAt(position).getTitle());
-        intent.putExtra(AddSettingActivity.EXTRA_MAX_NUMBER, adapter.getSettingAt(position).getMaxDiceSum());
-        intent.putExtra(AddSettingActivity.EXTRA_ITEMS_LIST, adapter.getSettingAt(position).getItems());
-        intent.putExtra(AddSettingActivity.EXTRA_HAS_ITEMS, adapter.getSettingAt(position).hasItemList());
+        intent.putExtra(MainActivity.EXTRA_ID, adapter.getSettingAt(position).getId());
+        intent.putExtra(MainActivity.EXTRA_TITLE, adapter.getSettingAt(position).getTitle());
+        intent.putExtra(MainActivity.EXTRA_MAX_NUMBER, adapter.getSettingAt(position).getMaxDiceSum());
+        intent.putExtra(MainActivity.EXTRA_ITEMS_LIST, adapter.getSettingAt(position).getItems());
+        intent.putExtra(MainActivity.EXTRA_HAS_ITEMS, adapter.getSettingAt(position).hasItemList());
+        intent.putExtra(MainActivity.EXTRA_POSITION, position);
         startActivityForResult(intent, EDIT_SETTING_REQUEST);
 
     }
