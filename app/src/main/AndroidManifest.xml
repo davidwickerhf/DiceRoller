@@ -39,7 +39,21 @@
         </activity>
 
 
-        <activity android:name=".AddSettingByID"/>
+        <activity
+            android:name=".AddSettingByID"
+            android:windowSoftInputMode="adjustNothing"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:parentActivityName="io.github.davidwickerhf.diceroller.MainActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="io.github.davidwickerhf.diceroller.MainActivity"
+                />
+        </activity>
+
+
+
     </application>
 
 </manifest>

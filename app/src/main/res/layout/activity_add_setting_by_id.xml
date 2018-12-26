@@ -4,6 +4,78 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/add_setting_by_id_constraint"
     tools:context=".AddSettingByID">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/add_setting_by_id_appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:elevation="0dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/add_setting_by_id_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/white"
+            app:elevation="0dp"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <EditText
+        android:id="@+id/add_setting_by_id_edit_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/setting_title_edit_text"
+        android:hint="@string/add_setting_by_id_text_view"
+        android:textAlignment="center"
+
+        android:inputType="text"
+        android:imeOptions="actionSearch"
+        android:maxLines="1"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_setting_by_id_appBarLayout" />
+
+
+    <Button
+        android:id="@+id/add_setting_by_id_check_button"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+
+
+        android:layout_marginEnd="16dp"
+        android:text="@string/add_setting_by_id_check_button_text"
+        android:textColor="@color/greyText"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_setting_by_id_edit_text" />
+
+    <TextView
+        android:id="@+id/add_setting_by_id_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="21dp"
+        android:layout_marginEnd="16dp"
+        android:text=""
+        android:textColor="@color/greyText"
+        android:textSize="18dp"
+
+
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_setting_by_id_edit_text" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

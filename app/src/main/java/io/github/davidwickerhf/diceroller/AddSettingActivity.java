@@ -2,6 +2,7 @@ package io.github.davidwickerhf.diceroller;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
@@ -11,13 +12,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -109,6 +114,7 @@ public class AddSettingActivity extends AppCompatActivity {
         if (intent.hasExtra(MainActivity.EXTRA_ID)) {
             setTitle(R.string.edit_setting_toolbar_title);
             editTextTitle.setText(intent.getStringExtra(MainActivity.EXTRA_TITLE));
+            editTextTitle.setSelection(editTextTitle.getText().length()); //this moves the cursor to the end of the String
 
             seekbarProgress = intent.getIntExtra(MainActivity.EXTRA_MAX_NUMBER, 2);
             seekBarMaxNumber.setProgress(seekbarProgress);
@@ -155,8 +161,8 @@ public class AddSettingActivity extends AppCompatActivity {
             }
         });
 
-        //todo Add Items Button
-        //todo ADD ITEM LIST
+        //todo Add and Delete Items Button
+        // ADD ITEM LIST
         addItemListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -165,17 +171,96 @@ public class AddSettingActivity extends AppCompatActivity {
             }
         });
 
-        //TODO DELETE ITEM LIST
+        //DELETE ITEM LIST
         deleteItemsList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hasItemList = false;
-                changeStateHasItems(hasItemList);
-                itemListAdapter.setItems(items); // This clears the items in the ItemListAdapter (item list is in fact null)
+                if(items.size() > 0) {
+                    AlertDialog dialog = new AlertDialog.Builder(AddSettingActivity.this, R.style.DeleteItemListAlertDialog)
+                            .setTitle("Delete Item List?")
+                            .setMessage("If you delete the item list of this Setting, you won't be able to recover it.")
+                            .setPositiveButton("Yes, delete it!", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    imm.hideSoftInputFromWindow(itemEditText.getWindowToken(), 0);
+
+                                    hasItemList = false;
+                                    changeStateHasItems(hasItemList);
+                                    itemListAdapter.setItems(items); // This clears the items in the ItemListAdapter (item list is in fact null)
+                                }
+                            })
+                            .setNegativeButton("Abort", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            })
+                            .show();
+                } else{
+                    //This part of code is copied from the method above!
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(itemEditText.getWindowToken(), 0);
+
+                    hasItemList = false;
+                    changeStateHasItems(hasItemList);
+                    itemListAdapter.setItems(items); // This clears the items in the ItemListAdapter (item list is in fact null)
+                }
             }
         });
 
-        //todo ADD ITEM
+        //todo HAS ITEMS Methods:
+        // Add an Item on ENTER button press
+        itemEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_DONE){
+                    //this part of code is copied from the method below -  If changing remember to modify the other method too!
+                    if (!isEditing) {
+                        String itemString = itemEditText.getText().toString();
+                        if (itemString.trim().isEmpty()) {
+                            Toast.makeText(AddSettingActivity.this, getString(R.string.add_setting_toast_no_title), Toast.LENGTH_SHORT).show();
+                        } else if (itemString.length() > 23) {
+                            Toast.makeText(AddSettingActivity.this, getString(R.string.add_setting_toast_item_title_is_too_long), Toast.LENGTH_SHORT).show();
+                        } else {
+                            items.add(itemEditText.getText().toString());
+                            itemListAdapter.setItems(items);
+                            maxNumberTextRepositioned.setText(String.format("%s", items.size()));
+                            itemEditText.setText(""); // resets edit text input every time an item is added
+                        }
+                    } else {
+                        String itemString = itemEditText.getText().toString();
+                        if (itemString.trim().isEmpty()) {
+                            Toast.makeText(AddSettingActivity.this, getString(R.string.add_setting_toast_no_title), Toast.LENGTH_SHORT).show();
+                        } else if (itemString.length() > 23) {
+                            Toast.makeText(AddSettingActivity.this, getString(R.string.add_setting_toast_item_title_is_too_long), Toast.LENGTH_SHORT).show();
+                        } else {
+                            // Save Item String
+                            items.set(itemPosition, itemString);
+                            itemListAdapter.setItems(items);
+
+                            // Reset View and Variables
+                            itemEditText.setText("");
+                            //itemListView.setBackgroundResource(R.drawable.list_item);
+                            addItemButton.setImageResource(R.drawable.ic_add_dark);
+                            itemPosition = 0;
+                            itemListView = null;
+                            isEditing = false;
+
+                            // Hide Soft Keyboard
+                            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(itemEditText.getWindowToken(), 0);
+                        }
+
+                    }
+
+                    // Return true to tell system the right key has been pressed
+                    return true;
+                }
+
+                return false;
+            }
+        });
+        // Add an Item on ADD button press
         addItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -204,12 +289,16 @@ public class AddSettingActivity extends AppCompatActivity {
                         itemListAdapter.setItems(items);
 
                         // Reset View and Variables
-                        itemEditText.setText(""); // resets edit text input every time an item is added
+                        itemEditText.setText("");
                         //itemListView.setBackgroundResource(R.drawable.list_item);
                         addItemButton.setImageResource(R.drawable.ic_add_dark);
                         itemPosition = 0;
                         itemListView = null;
                         isEditing = false;
+
+                        // Hide Soft Keyboard
+                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(itemEditText.getWindowToken(), 0);
                     }
 
                 }
@@ -217,7 +306,7 @@ public class AddSettingActivity extends AppCompatActivity {
             }
         });
 
-        //todo Edit Item when Clicking it
+        // Edit Item when Clicking it
         itemListAdapter.setOnItemClickLister(new ItemListAdapter.OnListItemClickListener() {
             @Override
             public void onItemClick(int position, View itemView) {
@@ -227,11 +316,17 @@ public class AddSettingActivity extends AppCompatActivity {
                 itemPosition = position;
                 addItemButton.setImageResource(R.drawable.ic_save);
                 isEditing = true;
+                itemEditText.setSelection(itemEditText.getText().length()); //This moves the cursor to the end of the string
+
+                //Show Soft Keyboard
+                itemEditText.requestFocus();
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
             }
         });
 
 
-        //todo Make Recycler Swipable
+        // Make Recycler Swipable
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -251,6 +346,7 @@ public class AddSettingActivity extends AppCompatActivity {
 
     }
 
+    //todo CHANGE STATE
     private void changeStateHasItems(boolean hasItemList) {
         if (hasItemList) {
             // Hide Views

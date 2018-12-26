@@ -15,4 +15,10 @@
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
+    <style name="DeleteItemListAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <!--Button Color-->
+        <item name="colorAccent">@color/colorAccent</item>
+
+    </style>
+
 </resources>

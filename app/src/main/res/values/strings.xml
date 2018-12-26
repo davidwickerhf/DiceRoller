@@ -33,5 +33,14 @@
     <string name="add_setting_edit_text_setting_title">Title</string>
     <!--HomeFragment-->
     <string name="home_roll_btn">Roll</string>
+    <!--AddSettingByIDActivity-->
+    <string name="add_setting_by_id_text_view">ID</string>
+    <string name="add_setting_by_id_check_button_text">CHECK</string>
+    <string name="add_setting_by_id_correct">ID is Correct</string>
+    <string name="add_setting_by_id_wrong">ID is not Correct</string>
+    <string name="add_setting_by_id_activity_title">Add Setting By ID</string>
+    <string name="add_setting_by_id_correct_toast_text">ID corresponds to a default Setting</string>
+    <string name="add_setting_by_id_wrong_toast_text">ID does not correspond to any default setting</string>
+    <string name="add_setting_by_id_save_setting_no_id_toast">Please insert a valid ID</string>
 
 </resources>

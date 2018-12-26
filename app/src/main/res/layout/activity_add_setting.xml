@@ -32,13 +32,18 @@
 
     <EditText
         android:id="@+id/edit_text_title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:background="@drawable/setting_title_edit_text"
         android:hint="@string/add_setting_edit_text_setting_title"
+
         android:inputType="text"
-        android:singleLine="true"
+        android:imeOptions="actionDone"
+        android:maxLines="1"
+
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:textAlignment="center"
         android:textColor="@color/greyText"
         android:textColorHint="@color/hintColor"
@@ -157,7 +162,12 @@
         android:layout_marginEnd="8dp"
         android:hint="@string/add_item_hint"
         android:visibility="invisible"
+        android:inputType="text"
+        android:imeOptions="actionDone"
+        android:maxLines="1"
         android:windowSoftInputMode="adjustNothing"
+        android:background="@drawable/item_title_edit_text_background"
+
         app:layout_constraintEnd_toStartOf="@+id/delete_item_list"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/add_item"

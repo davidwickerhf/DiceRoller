@@ -16,6 +16,8 @@
     <color name="defaultMenuColor">#949494</color>
 
     <color name="red">#FF4E6B</color>
+    <color name="lightRed">#FCBFC9</color>
+    <color name="green">#3FBB9F</color>
 
 
 </resources>

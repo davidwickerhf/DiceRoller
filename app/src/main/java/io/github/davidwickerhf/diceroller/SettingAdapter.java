@@ -22,14 +22,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.SettingHolder> {
     
-    private int LAYOUT_ONE = 1;
-    private int LAYOUT_TWO = 2;
-    
     private List<Setting> settings = new ArrayList<>();
     private ImageView editSettingButton;
-    
-
     public View itemView;
+
 
     private OnItemClickListener mListener;
     public interface OnItemClickListener {

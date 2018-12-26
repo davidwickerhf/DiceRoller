@@ -148,8 +148,6 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 
             if(hasItems) {
                 items = (ArrayList<String>) data.getStringArrayListExtra(MainActivity.EXTRA_ITEMS_LIST);
-
-                Log.d("AddActivity", "Items In Main Activity: " +items);
                 setting = new Setting(title, maxDiceSum, items, hasItems);
             }
             else {
