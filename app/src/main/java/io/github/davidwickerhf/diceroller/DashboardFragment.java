@@ -63,8 +63,8 @@ public class DashboardFragment extends Fragment {
     public interface DashboardItemPositionListener {
         void onEditInputASent(int position);
     }
-    
-    
+
+
     //TODO ON CREATE
     @Nullable
     @Override
@@ -79,7 +79,7 @@ public class DashboardFragment extends Fragment {
         getActivity().setTitle(R.string.dashboard_title);
 
 
-    
+
         //TODO FLOATING ACTION BUTTON
         dashboardFab = (FloatingActionButton) fragmentView.findViewById(R.id.dashboard_fab);
         dashboardFab.setOnClickListener(new View.OnClickListener() {
@@ -123,7 +123,7 @@ public class DashboardFragment extends Fragment {
         if (getArguments() != null){
             selectedItemPosition = getArguments().getInt("selectedItemPosition");
         }
-        
+
 
         //todo Recycler View:
         final RecyclerView recyclerView = fragmentView.findViewById(R.id.recycler_view);
@@ -158,19 +158,19 @@ public class DashboardFragment extends Fragment {
                     Log.d("HomeFragment", "Item List in DashboardFragment is:" + items.toString());
                 }
                 Snackbar.make(coordinatorLayout, "Setting selected", Snackbar.LENGTH_LONG).show();
-                
+
                 listener.onInputASent(maxNum, items, position, title, itemView);
             }
         });
-        
-        
-        
-        
 
-        
-        
-        
-        
+
+
+
+
+
+
+
+
         //todo Make Recycler Swipable
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -178,13 +178,13 @@ public class DashboardFragment extends Fragment {
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                 return false;
             }
-        
+
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                
+
                 recoveredSetting = adapter.getSettingAt(viewHolder.getAdapterPosition());
                 settingsViewModel.delete(adapter.getSettingAt(viewHolder.getAdapterPosition()));
-                
+
                 mSnackbar = Snackbar
                         .make(coordinatorLayout, "Setting deleted", Snackbar.LENGTH_LONG)
                         .setAction("UNDO", new View.OnClickListener() {
@@ -195,22 +195,22 @@ public class DashboardFragment extends Fragment {
                                 snackbar1.show();
                             }
                         });
-    
+
                 mSnackbar.show();
             }
         }).attachToRecyclerView(recyclerView);
-        
+
         return fragmentView;
     }
-    
-    
+
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
             listener = (FragmentDashboardListener)context;
             itemListener = (DashboardItemPositionListener)context;
     }
-    
+
     @Override
     public void onDetach() {
         super.onDetach();
