@@ -12,22 +12,15 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements DashboardFragment.FragmentDashboardListener, DashboardFragment.DashboardItemPositionListener {
 
@@ -64,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 
     private HomeFragment mHomeFragment;
     private DashboardFragment mDashboardFragment;
-    private ProfileFragment mProfileFragment;
+    private PreferencesFragment mProfileFragment;
 
 
     @Override
@@ -92,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         //todo Initialize fragments
         mHomeFragment = new HomeFragment();
         mDashboardFragment = new DashboardFragment();
-        mProfileFragment = new ProfileFragment();
+        mProfileFragment = new PreferencesFragment();
 
 //        //todo Display DashboardFragment:
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mDashboardFragment).commit();

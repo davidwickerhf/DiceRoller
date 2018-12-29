@@ -4,6 +4,8 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,9 +19,9 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import java.util.ArrayList;
 
@@ -31,12 +33,20 @@ public class AddSettingByID extends AppCompatActivity {
     private Button checkIDButton;
     private TextView correctOrWrong;
     private androidx.appcompat.widget.Toolbar addSettingByIdToolbar;
+    //Hidden Views
+    private TextView settingTitleTextView;
+    private TextView maxNumTextView;
+    private TextView maxNumDescription;
+    private ImageView maxNumBackground;
+    private RecyclerView showItemListRecyclerView;
     //Variables
     private String title;
     private int maxNum;
-    private ArrayList items;
+    private ArrayList<String> items;
     private boolean hasItems;
     private boolean isInitiated;
+    //Components
+    ShowItemListAdapter showItemListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,13 +66,30 @@ public class AddSettingByID extends AppCompatActivity {
         ab.setDisplayHomeAsUpEnabled(true);
         ab.setHomeAsUpIndicator(R.drawable.ic_close);
 
+        //Initialize views
         addSettingByIdConstraint = findViewById(R.id.add_setting_by_id_constraint);
         idInputEditText = findViewById(R.id.add_setting_by_id_edit_text);
         checkIDButton = findViewById(R.id.add_setting_by_id_check_button);
         correctOrWrong = findViewById(R.id.add_setting_by_id_text_view);
 
+        settingTitleTextView = findViewById(R.id.setting_title_text_view);
+        maxNumTextView = findViewById(R.id.max_num_text_view);
+        maxNumDescription = findViewById(R.id.max_num_description);
+        maxNumBackground = findViewById(R.id.max_num_background);
         addSettingByIdConstraint.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
 
+        // Recycler View
+        showItemListRecyclerView = findViewById(R.id.show_item_list_recycler_view);
+        showItemListRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        showItemListRecyclerView.setHasFixedSize(true);
+        // Set Adapter
+        showItemListAdapter = new ShowItemListAdapter();
+        showItemListRecyclerView.setAdapter(showItemListAdapter);
+
+        // Show Soft Keyboard
+        idInputEditText.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
         //todo Methods
         // Check input on ENTER button press
         idInputEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -92,16 +119,11 @@ public class AddSettingByID extends AppCompatActivity {
     private void initiate(String inputID){
         switch (inputID) {
             case "!1EPascal2018!":
-                correctOrWrong.setVisibility(View.VISIBLE);
-                correctOrWrong.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
-                correctOrWrong.setText(getString(R.string.add_setting_by_id_correct));
-                addSettingByIdConstraint.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.add_setting_by_id_correct_background));
+                changeViewsVisibility(true);
                 Toast.makeText(AddSettingByID.this, getString(R.string.add_setting_by_id_correct_toast_text), Toast.LENGTH_SHORT).show();
-
                 // Hide Soft Keyboard
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(idInputEditText.getWindowToken(), 0);
-
                 //Set Variables
                 title = "Classe 1E";
                 maxNum = 28;
@@ -110,7 +132,7 @@ public class AddSettingByID extends AppCompatActivity {
                     add("Bergo Beatrice");//2
                     add("Bonavero Arianna");//3
                     add("Bravi Gianluca");//4
-                    add("Brodesco Lorenzio");
+                    add("Brodesco Lorentio");
                     add("Cerato Giulio");
                     add("Coluccia Giorgia");
                     add("Danoune Nizar");
@@ -137,15 +159,13 @@ public class AddSettingByID extends AppCompatActivity {
                 }};
                 hasItems = true;
                 isInitiated = true;
+                setVariablesToViews(maxNum, title, items, isInitiated);
                 break;
+
             default: // No Setting Showed or Saved
-                correctOrWrong.setVisibility(View.VISIBLE);
-                correctOrWrong.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.red));
-                correctOrWrong.setText(getString(R.string.add_setting_by_id_wrong));
-                addSettingByIdConstraint.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+                changeViewsVisibility(false);
                 Toast.makeText(AddSettingByID.this, getString(R.string.add_setting_by_id_wrong_toast_text), Toast.LENGTH_SHORT).show();
                 isInitiated = false;
-
         }
     }
 
@@ -170,6 +190,48 @@ public class AddSettingByID extends AppCompatActivity {
         // send results
         setResult(RESULT_OK, data);
         finish();
+    }
+
+    private void changeViewsVisibility(boolean show){
+        if(show){
+            correctOrWrong.setVisibility(View.VISIBLE);
+            correctOrWrong.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
+            correctOrWrong.setText(getString(R.string.add_setting_by_id_correct));
+            addSettingByIdConstraint.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.add_setting_by_id_correct_background));
+
+            settingTitleTextView.setVisibility(View.VISIBLE);
+            maxNumTextView.setVisibility(View.VISIBLE);
+            maxNumDescription.setVisibility(View.VISIBLE);
+            maxNumBackground.setVisibility(View.VISIBLE);
+            showItemListRecyclerView.setVisibility(View.VISIBLE);
+
+        } else {
+            correctOrWrong.setVisibility(View.VISIBLE);
+            correctOrWrong.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.red));
+            correctOrWrong.setText(getString(R.string.add_setting_by_id_wrong));
+            addSettingByIdConstraint.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+
+            settingTitleTextView.setVisibility(View.INVISIBLE);
+            maxNumTextView.setVisibility(View.INVISIBLE);
+            maxNumDescription.setVisibility(View.INVISIBLE);
+            maxNumBackground.setVisibility(View.INVISIBLE);
+            showItemListRecyclerView.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void setVariablesToViews(int maxNum, String title, ArrayList<String> items, boolean isInitiated){
+        if(isInitiated) {
+            maxNumTextView.setText(String.valueOf(maxNum));
+            settingTitleTextView.setText(title);
+            showItemListAdapter.setItems(items);
+        }
+    }
+
+    private void setVariablesToViews(int maxNum, String title, boolean isInitiated){
+        if(isInitiated) {
+            maxNumTextView.setText(String.valueOf(maxNum));
+            settingTitleTextView.setText(title);
+        }
     }
 
     @Override

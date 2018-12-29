@@ -5,46 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ProfileFragment">
+    tools:context=".PreferencesFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/profile_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            android:elevation="0dp"
+            app:elevation="0dp"
             app:title="@string/profile_fragment_toolbar_title"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar"/>
 
     </com.google.android.material.appbar.AppBarLayout>
-
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tab_layout_profile"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="#fafafa"
-        android:elevation="0dp"
-        app:tabGravity="fill"
-        app:tabIndicatorColor="@color/greyText"
-        app:tabMode="fixed"
-        app:tabTextColor="@color/greyText">
-
-    </com.google.android.material.tabs.TabLayout>
-
-
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/viewpager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
-    </androidx.viewpager.widget.ViewPager>
 
 
 </LinearLayout>
