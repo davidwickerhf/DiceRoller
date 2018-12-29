@@ -52,6 +52,7 @@ public class ItemListAdapter  extends RecyclerView.Adapter<ItemListAdapter.ItemH
 
     public void setItems(ArrayList<String> items) {
         this.items = items;
+        notifyDataSetChanged();
     }
 
     //todo ITEM HOLDER
