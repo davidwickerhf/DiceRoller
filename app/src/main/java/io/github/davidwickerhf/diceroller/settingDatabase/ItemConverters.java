@@ -1,4 +1,4 @@
-package io.github.davidwickerhf.diceroller;
+package io.github.davidwickerhf.diceroller.settingDatabase;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

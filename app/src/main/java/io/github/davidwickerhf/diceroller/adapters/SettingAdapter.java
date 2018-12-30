@@ -1,6 +1,5 @@
-package io.github.davidwickerhf.diceroller;
+package io.github.davidwickerhf.diceroller.adapters;
 
-import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,8 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
+import io.github.davidwickerhf.diceroller.R;
+import io.github.davidwickerhf.diceroller.settingDatabase.Setting;
 
 
 public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.SettingHolder> {

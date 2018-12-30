@@ -18,6 +18,8 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import io.github.davidwickerhf.diceroller.adapters.SettingAdapter;
+import io.github.davidwickerhf.diceroller.settingDatabase.Setting;
 import io.github.davidwickerhf.diceroller.settingDatabase.SettingsViewModel;
 
 import android.util.Log;

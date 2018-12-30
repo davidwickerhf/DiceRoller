@@ -19,6 +19,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import io.github.davidwickerhf.diceroller.adapters.SettingAdapter;
+import io.github.davidwickerhf.diceroller.settingDatabase.Setting;
 import io.github.davidwickerhf.diceroller.settingDatabase.SettingsViewModel;
 
 public class HomeFragment extends Fragment {

@@ -1,4 +1,4 @@
-package io.github.davidwickerhf.diceroller;
+package io.github.davidwickerhf.diceroller.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import io.github.davidwickerhf.diceroller.R;
 
 public class ShowItemListAdapter extends RecyclerView.Adapter<ShowItemListAdapter.ItemHolder>{
 

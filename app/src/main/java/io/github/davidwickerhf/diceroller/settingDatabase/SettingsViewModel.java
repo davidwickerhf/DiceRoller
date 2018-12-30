@@ -7,7 +7,6 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import io.github.davidwickerhf.diceroller.Setting;
 
 public class SettingsViewModel extends AndroidViewModel {
     

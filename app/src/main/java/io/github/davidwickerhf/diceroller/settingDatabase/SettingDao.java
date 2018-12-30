@@ -9,7 +9,6 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
-import io.github.davidwickerhf.diceroller.Setting;
 
 @Dao
 public interface SettingDao {

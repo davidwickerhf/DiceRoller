@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
-import io.github.davidwickerhf.diceroller.Setting;
 
 public class Repository {
     

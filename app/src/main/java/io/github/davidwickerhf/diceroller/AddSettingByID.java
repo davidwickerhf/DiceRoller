@@ -6,6 +6,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import io.github.davidwickerhf.diceroller.adapters.ShowItemListAdapter;
 
 import android.content.Context;
 import android.content.Intent;

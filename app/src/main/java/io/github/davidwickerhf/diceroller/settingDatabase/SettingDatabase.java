@@ -9,8 +9,6 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
-import io.github.davidwickerhf.diceroller.ItemConverters;
-import io.github.davidwickerhf.diceroller.Setting;
 
 
 @Database(entities = Setting.class, version = 10)

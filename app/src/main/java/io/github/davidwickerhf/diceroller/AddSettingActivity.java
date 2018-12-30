@@ -6,10 +6,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import io.github.davidwickerhf.diceroller.adapters.ItemListAdapter;
+import io.github.davidwickerhf.diceroller.itemTouchHelper.SimpleItemTouchHelperCallback;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -30,10 +31,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import java.util.ArrayList;
-import java.util.List;
 
 public class AddSettingActivity extends AppCompatActivity {
 
@@ -60,8 +58,9 @@ public class AddSettingActivity extends AppCompatActivity {
     private View itemListView;
 
     //todo Components
-    ItemListAdapter itemListAdapter;
-    RecyclerView itemListRecyclerView;
+    private ItemListAdapter itemListAdapter;
+    private RecyclerView itemListRecyclerView;
+    private ItemTouchHelper mItemTouchHelper;
 
 
     @Override
@@ -109,6 +108,10 @@ public class AddSettingActivity extends AppCompatActivity {
         itemListAdapter = new ItemListAdapter();
         itemListRecyclerView.setAdapter(itemListAdapter);
 
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(itemListAdapter);
+        mItemTouchHelper = new ItemTouchHelper(callback);
+        mItemTouchHelper.attachToRecyclerView(itemListRecyclerView);
+
 
         //todo SET LAYOUT IF IS EDIT SETTING
         if (intent.hasExtra(MainActivity.EXTRA_ID)) {
@@ -137,7 +140,7 @@ public class AddSettingActivity extends AppCompatActivity {
                 //variables
                 items = intent.getStringArrayListExtra(MainActivity.EXTRA_ITEMS_LIST);
                 itemListAdapter.setItems(items);
-                maxNumberTextRepositioned.setText(String.format("%s", items.size()));
+                maxNumberTextRepositioned.setText(String.format("%s", itemListAdapter.getItems().size()));
             }
 
         } else {
@@ -175,7 +178,7 @@ public class AddSettingActivity extends AppCompatActivity {
         deleteItemsList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(items.size() > 0) {
+                if(itemListAdapter.getItems().size() > 0) {
                     AlertDialog dialog = new AlertDialog.Builder(AddSettingActivity.this, R.style.DeleteItemListAlertDialog)
                             .setTitle("Delete Item List?")
                             .setMessage("If you delete the item list of this Setting, you won't be able to recover it.")
@@ -224,7 +227,7 @@ public class AddSettingActivity extends AppCompatActivity {
                         } else {
                             items.add(itemEditText.getText().toString());
                             itemListAdapter.setItems(items);
-                            maxNumberTextRepositioned.setText(String.format("%s", items.size()));
+                            maxNumberTextRepositioned.setText(String.format("%s", itemListAdapter.getItems().size()));
                             itemEditText.setText(""); // resets edit text input every time an item is added
                         }
                     } else {
@@ -274,7 +277,7 @@ public class AddSettingActivity extends AppCompatActivity {
                     } else {
                         items.add(itemEditText.getText().toString());
                         itemListAdapter.setItems(items);
-                        maxNumberTextRepositioned.setText(String.format("%s", items.size()));
+                        maxNumberTextRepositioned.setText(String.format("%s", itemListAdapter.getItems().size()));
                         itemEditText.setText(""); // resets edit text input every time an item is added
                     }
                 } else {
@@ -310,7 +313,7 @@ public class AddSettingActivity extends AppCompatActivity {
         itemListAdapter.setOnItemClickLister(new ItemListAdapter.OnListItemClickListener() {
             @Override
             public void onItemClick(int position, View itemView) {
-                String title = items.get(position);
+                String title = itemListAdapter.getItems().get(position);
                 itemEditText.setText(title);
                 itemListView = itemView;
                 itemPosition = position;
@@ -326,22 +329,22 @@ public class AddSettingActivity extends AppCompatActivity {
         });
 
 
-        // Make Recycler Swipable
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
-                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                items.remove(viewHolder.getAdapterPosition());
-                Toast.makeText(AddSettingActivity.this, "Item Removed", Toast.LENGTH_SHORT).show();
-                maxNumberTextRepositioned.setText(String.valueOf(items.size()));
-                itemListAdapter.setItems(items);
-            }
-        }).attachToRecyclerView(itemListRecyclerView);
+//        // Make Recycler Swipable
+//        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
+//                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+//            @Override
+//            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+//                return false;
+//            }
+//
+//            @Override
+//            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+//                items.remove(viewHolder.getAdapterPosition());
+//                Toast.makeText(AddSettingActivity.this, "Item Removed", Toast.LENGTH_SHORT).show();
+//                maxNumberTextRepositioned.setText(String.valueOf(items.size()));
+//                itemListAdapter.setItems(items);
+//            }
+//        }).attachToRecyclerView(itemListRecyclerView);
 
 
     }
@@ -375,8 +378,9 @@ public class AddSettingActivity extends AppCompatActivity {
             itemEditText.setVisibility(View.INVISIBLE);
             deleteItemsList.setVisibility(View.INVISIBLE);
             //Transition Max Num from Number of Items to SeekBar
-            maxNumber = items.size();
+            maxNumber = itemListAdapter.getItems().size();
             items.clear();
+            itemListAdapter.setItems(items);
             if (maxNumber > 1) {
                 maxNumberText.setText(String.valueOf(maxNumber));
                 seekBarMaxNumber.setProgress(maxNumber - 2);
@@ -407,12 +411,13 @@ public class AddSettingActivity extends AppCompatActivity {
         //todo Insert Extras
         if (hasItemList) {
 
-            if (items.size() < 2) {
+            if (itemListAdapter.getItems().size() < 2) {
                 Toast.makeText(this, "Setting should have at least 2 items", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            maxNumber = items.size();
+            items = itemListAdapter.getItems();
+            maxNumber = itemListAdapter.getItems().size();
             data.putExtra(MainActivity.EXTRA_MAX_NUMBER, maxNumber);
             data.putExtra(MainActivity.EXTRA_ITEMS_LIST, items);
             data.putExtra(MainActivity.EXTRA_HAS_ITEMS, true);
