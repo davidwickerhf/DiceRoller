@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import io.github.davidwickerhf.diceroller.settingDatabase.SettingsViewModel;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -207,8 +208,8 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-            listener = (FragmentDashboardListener)context;
-            itemListener = (DashboardItemPositionListener)context;
+        listener = (FragmentDashboardListener)context;
+        itemListener = (DashboardItemPositionListener)context;
     }
 
     @Override

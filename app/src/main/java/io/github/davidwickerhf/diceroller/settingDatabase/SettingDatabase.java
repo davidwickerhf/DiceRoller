@@ -1,11 +1,7 @@
-package io.github.davidwickerhf.diceroller;
+package io.github.davidwickerhf.diceroller.settingDatabase;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.provider.Telephony;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -13,6 +9,8 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
+import io.github.davidwickerhf.diceroller.ItemConverters;
+import io.github.davidwickerhf.diceroller.Setting;
 
 
 @Database(entities = Setting.class, version = 10)

@@ -1,4 +1,4 @@
-package io.github.davidwickerhf.diceroller;
+package io.github.davidwickerhf.diceroller.itemTouchHelper;
 
 
 

@@ -1,4 +1,4 @@
-package io.github.davidwickerhf.diceroller;
+package io.github.davidwickerhf.diceroller.settingDatabase;
 
 import android.app.Application;
 import android.os.AsyncTask;
@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
+import io.github.davidwickerhf.diceroller.Setting;
 
 public class Repository {
     
@@ -30,7 +31,7 @@ public class Repository {
     public void delete(Setting setting) {
         new DeleteSettingAsyncTask(settingDao).execute(setting);
     }
-    
+
     public LiveData<List<Setting>> getAllSettings() {
         return allSettings;
     }

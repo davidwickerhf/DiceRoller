@@ -10,8 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -21,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import io.github.davidwickerhf.diceroller.settingDatabase.SettingsViewModel;
 
 public class HomeFragment extends Fragment {
 

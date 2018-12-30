@@ -1,4 +1,4 @@
-package io.github.davidwickerhf.diceroller;
+package io.github.davidwickerhf.diceroller.settingDatabase;
 
 import android.app.Application;
 
@@ -7,6 +7,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import io.github.davidwickerhf.diceroller.Setting;
 
 public class SettingsViewModel extends AndroidViewModel {
     
