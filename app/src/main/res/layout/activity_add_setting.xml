@@ -8,7 +8,9 @@
     android:orientation="vertical"
     android:id="@+id/add_setting_constraint_layout"
     tools:context=".AddSettingActivity"
-    android:windowSoftInputMode="adjustNothing">
+    android:windowSoftInputMode="adjustNothing"
+    android:clickable="true"
+    android:focusableInTouchMode="true" >
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"

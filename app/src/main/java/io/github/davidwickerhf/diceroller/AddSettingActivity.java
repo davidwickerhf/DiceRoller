@@ -6,15 +6,20 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import io.github.davidwickerhf.diceroller.adapters.ItemListAdapter;
 import io.github.davidwickerhf.diceroller.itemTouchHelper.SimpleItemTouchHelperCallback;
 
+import android.app.Activity;
+import android.app.IntentService;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -185,8 +190,7 @@ public class AddSettingActivity extends AppCompatActivity {
                             .setPositiveButton("Yes, delete it!", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                                    imm.hideSoftInputFromWindow(itemEditText.getWindowToken(), 0);
+                                    hideKeyboard(itemEditText);
 
                                     hasItemList = false;
                                     changeStateHasItems(hasItemList);
@@ -201,8 +205,7 @@ public class AddSettingActivity extends AppCompatActivity {
                             .show();
                 } else{
                     //This part of code is copied from the method above!
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(itemEditText.getWindowToken(), 0);
+                    hideKeyboard(itemEditText);
 
                     hasItemList = false;
                     changeStateHasItems(hasItemList);
@@ -250,8 +253,7 @@ public class AddSettingActivity extends AppCompatActivity {
                             isEditing = false;
 
                             // Hide Soft Keyboard
-                            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                            imm.hideSoftInputFromWindow(itemEditText.getWindowToken(), 0);
+                            hideKeyboard(itemEditText);
                         }
 
                     }
@@ -300,8 +302,7 @@ public class AddSettingActivity extends AppCompatActivity {
                         isEditing = false;
 
                         // Hide Soft Keyboard
-                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(itemEditText.getWindowToken(), 0);
+                        hideKeyboard(itemEditText);
                     }
 
                 }
@@ -328,26 +329,60 @@ public class AddSettingActivity extends AppCompatActivity {
             }
         });
 
+        itemEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if(isEditing) {
+                            String itemString = itemEditText.getText().toString();
+                            if (itemString.trim().isEmpty()) {
+                                Toast.makeText(AddSettingActivity.this, getString(R.string.add_setting_toast_no_title), Toast.LENGTH_SHORT).show();
+                            } else if (itemString.length() > 23) {
+                                Toast.makeText(AddSettingActivity.this, getString(R.string.add_setting_toast_item_title_is_too_long), Toast.LENGTH_SHORT).show();
+                            } else {
+                                // Save Item String
+                                items.set(itemPosition, itemString);
+                                itemListAdapter.setItems(items);
 
-//        // Make Recycler Swipable
-//        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
-//                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-//            @Override
-//            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-//                return false;
-//            }
-//
-//            @Override
-//            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-//                items.remove(viewHolder.getAdapterPosition());
-//                Toast.makeText(AddSettingActivity.this, "Item Removed", Toast.LENGTH_SHORT).show();
-//                maxNumberTextRepositioned.setText(String.valueOf(items.size()));
-//                itemListAdapter.setItems(items);
-//            }
-//        }).attachToRecyclerView(itemListRecyclerView);
+                                // Reset View and Variables
+                                itemEditText.setText("");
+                                //itemListView.setBackgroundResource(R.drawable.list_item);
+                                addItemButton.setImageResource(R.drawable.ic_add_dark);
+                                itemPosition = 0;
+                                itemListView = null;
+                                isEditing = false;
+                            }
 
+                    }
+                    hideKeyboard(v);
+                }
+            }
+        });
+
+        editTextTitle.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                hideKeyboard(v);
+            }
+        });
+
+        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
+        lbm.registerReceiver(receiver, new IntentFilter("sendItemListData"));
 
     }
+
+    public BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent != null) {
+                items = intent.getStringArrayListExtra(MainActivity.EXTRA_ITEMS_LIST);
+                maxNumber = items.size();
+                maxNumberTextRepositioned.setText(String.valueOf(maxNumber));
+            }
+        }
+    };
+
+
 
     //todo CHANGE STATE
     private void changeStateHasItems(boolean hasItemList) {
@@ -441,6 +476,19 @@ public class AddSettingActivity extends AppCompatActivity {
 
     }
 
+    public void hideKeyboard(View view /*edit text*/) {
+        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        hideKeyboard(editTextTitle);
+        hideKeyboard(itemEditText);
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
