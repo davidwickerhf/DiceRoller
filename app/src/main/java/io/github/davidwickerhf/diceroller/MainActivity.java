@@ -243,6 +243,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         selectedItemView = itemView;
         selectedItem = position;
 
+        // Open Home Fragment
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mHomeFragment).commit();
         changeSelectedMenuItem(0);
     }

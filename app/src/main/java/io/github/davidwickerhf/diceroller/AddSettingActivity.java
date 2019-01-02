@@ -5,6 +5,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -232,44 +233,7 @@ public class AddSettingActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(actionId == EditorInfo.IME_ACTION_DONE){
-                    //this part of code is copied from the method below -  If changing remember to modify the other method too!
-                    if (!isEditing) {
-                        String itemString = itemEditText.getText().toString();
-                        if (itemString.trim().isEmpty()) {
-                            Toast.makeText(AddSettingActivity.this, getString(R.string.add_setting_toast_no_title), Toast.LENGTH_SHORT).show();
-                        } else if (itemString.length() > 23) {
-                            Toast.makeText(AddSettingActivity.this, getString(R.string.add_setting_toast_item_title_is_too_long), Toast.LENGTH_SHORT).show();
-                        } else {
-                            items.add(itemEditText.getText().toString());
-                            itemListAdapter.setItems(items);
-                            maxNumberTextRepositioned.setText(String.format("%s", itemListAdapter.getItems().size()));
-                            itemEditText.setText(""); // resets edit text input every time an item is added
-                        }
-                    } else {
-                        String itemString = itemEditText.getText().toString();
-                        if (itemString.trim().isEmpty()) {
-                            Toast.makeText(AddSettingActivity.this, getString(R.string.add_setting_toast_no_title), Toast.LENGTH_SHORT).show();
-                        } else if (itemString.length() > 23) {
-                            Toast.makeText(AddSettingActivity.this, getString(R.string.add_setting_toast_item_title_is_too_long), Toast.LENGTH_SHORT).show();
-                        } else {
-                            // Save Item String
-                            items.set(itemPosition, itemString);
-                            itemListAdapter.setItems(items);
-
-                            // Reset View and Variables
-                            itemEditText.setText("");
-                            //itemListView.setBackgroundResource(R.drawable.list_item);
-                            addItemButton.setImageResource(R.drawable.ic_add_dark);
-                            itemPosition = 0;
-                            itemListView = null;
-                            isEditing = false;
-
-                            // Hide Soft Keyboard
-                            hideKeyboard();
-                        }
-
-                    }
-
+                    saveItem(isEditing);
                     // Return true to tell system the right key has been pressed
                     return true;
                 }
@@ -277,48 +241,23 @@ public class AddSettingActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        editTextTitle.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_DONE){
+                    editTextTitle.clearFocus();
+                    return true;
+                }
+                return false;
+            }
+        });
+
         // Add an Item on ADD button press
         addItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (!isEditing) {
-                    String itemString = itemEditText.getText().toString();
-                    if (itemString.trim().isEmpty()) {
-                        Toast.makeText(AddSettingActivity.this, getString(R.string.add_setting_toast_no_title), Toast.LENGTH_SHORT).show();
-                    } else if (itemString.length() > 23) {
-                        Toast.makeText(AddSettingActivity.this, getString(R.string.add_setting_toast_item_title_is_too_long), Toast.LENGTH_SHORT).show();
-                    } else {
-                        items.add(itemEditText.getText().toString());
-                        itemListAdapter.setItems(items);
-                        maxNumberTextRepositioned.setText(String.format("%s", itemListAdapter.getItems().size()));
-                        itemEditText.setText(""); // resets edit text input every time an item is added
-                    }
-                } else {
-                    String itemString = itemEditText.getText().toString();
-                    if (itemString.trim().isEmpty()) {
-                        Toast.makeText(AddSettingActivity.this, getString(R.string.add_setting_toast_no_title), Toast.LENGTH_SHORT).show();
-                    } else if (itemString.length() > 23) {
-                        Toast.makeText(AddSettingActivity.this, getString(R.string.add_setting_toast_item_title_is_too_long), Toast.LENGTH_SHORT).show();
-                    } else {
-                        // Save Item String
-                        items.set(itemPosition, itemString);
-                        itemListAdapter.setItems(items);
-
-                        // Reset View and Variables
-                        itemEditText.setText("");
-                        //itemListView.setBackgroundResource(R.drawable.list_item);
-                        addItemButton.setImageResource(R.drawable.ic_add_dark);
-                        itemPosition = 0;
-                        itemListView = null;
-                        isEditing = false;
-
-                        // Hide Soft Keyboard
-                        hideKeyboard();
-                    }
-
-                }
-
+                saveItem(isEditing);
             }
         });
 
@@ -330,7 +269,7 @@ public class AddSettingActivity extends AppCompatActivity {
                 itemEditText.setText(title);
                 itemListView = itemView;
                 itemPosition = position;
-                addItemButton.setImageResource(R.drawable.ic_save);
+                addItemButton.setImageResource(R.drawable.ic_save_green);
                 isEditing = true;
                 itemEditText.setSelection(itemEditText.getText().length()); //This moves the cursor to the end of the string
 
@@ -378,11 +317,35 @@ public class AddSettingActivity extends AppCompatActivity {
                     addItemEditTextBackground.setVisibility(View.INVISIBLE);
                     addItemButton.setVisibility(View.INVISIBLE);
                     itemEditText.setVisibility(View.INVISIBLE);
+
+                    ConstraintSet set = new ConstraintSet();
+
+                    set.clone(addSettingConstraint);
+                    // The following breaks the connection.
+                    set.clear(R.id.item_list_recycler_view, ConstraintSet.BOTTOM);
+                    // This is the new connection
+                    set.connect(itemListRecyclerView.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0);
+                    // Save changes
+                    set.applyTo(addSettingConstraint);
+
+
                 } else{
-                hideKeyboard(editTextTitle);
+
+                    hideKeyboard(editTextTitle);
+
                     addItemEditTextBackground.setVisibility(View.VISIBLE);
                     addItemButton.setVisibility(View.VISIBLE);
                     itemEditText.setVisibility(View.VISIBLE);
+
+                    ConstraintSet set = new ConstraintSet();
+
+                    set.clone(addSettingConstraint);
+                    // The following breaks the connection.
+                    set.clear(R.id.item_list_recycler_view, ConstraintSet.BOTTOM);
+                    // This is the new connection
+                    set.connect(itemListRecyclerView.getId(), ConstraintSet.BOTTOM, R.id.edit_text_item_string, ConstraintSet.TOP, 0);
+                    // Save changes
+                    set.applyTo(addSettingConstraint);
                 }
             }
         });
@@ -449,6 +412,47 @@ public class AddSettingActivity extends AppCompatActivity {
                 maxNumberText.setText("2");
                 seekBarMaxNumber.setProgress(0);
             }
+        }
+    }
+
+    private void saveItem(boolean isEditing){
+        if (!isEditing) {
+            String itemString = itemEditText.getText().toString();
+            if (itemString.trim().isEmpty()) {
+                Toast.makeText(AddSettingActivity.this, getString(R.string.add_setting_toast_no_title), Toast.LENGTH_SHORT).show();
+            } else if (itemString.length() > 30) {
+                Toast.makeText(AddSettingActivity.this, getString(R.string.add_setting_toast_item_title_is_too_long), Toast.LENGTH_SHORT).show();
+            } else {
+                items.add(itemEditText.getText().toString());
+                itemListAdapter.setItems(items);
+                maxNumberTextRepositioned.setText(String.format("%s", itemListAdapter.getItems().size()));
+                itemEditText.setText(""); // resets edit text input every time an item is added
+
+                //todo Change RecyclerView Position when adding and removing item !
+            }
+        } else {
+            String itemString = itemEditText.getText().toString();
+            if (itemString.trim().isEmpty()) {
+                Toast.makeText(AddSettingActivity.this, getString(R.string.add_setting_toast_no_title), Toast.LENGTH_SHORT).show();
+            } else if (itemString.length() > 30) {
+                Toast.makeText(AddSettingActivity.this, getString(R.string.add_setting_toast_item_title_is_too_long), Toast.LENGTH_SHORT).show();
+            } else {
+                // Save Item String
+                items.set(itemPosition, itemString);
+                itemListAdapter.setItems(items);
+
+                // Reset View and Variables
+                itemEditText.setText("");
+                //itemListView.setBackgroundResource(R.drawable.list_item);
+                addItemButton.setImageResource(R.drawable.ic_add_dark);
+                itemPosition = 0;
+                itemListView = null;
+                this.isEditing = false;
+
+                // Hide Soft Keyboard
+                hideKeyboard();
+            }
+
         }
     }
 
