@@ -26,12 +26,14 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,13 +62,15 @@ public class AddSettingActivity extends AppCompatActivity {
     private ImageButton addItemButton;
     private EditText itemEditText;
     private ImageButton deleteItemsList;
-    private View itemListView;
+    private TextView itemsNumberTitleTextView;
+    private ImageView addItemEditTextBackground;
+    private ImageView itemListBackground;
 
     //todo Components
     private ItemListAdapter itemListAdapter;
     private RecyclerView itemListRecyclerView;
     private ItemTouchHelper mItemTouchHelper;
-
+    private View itemListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,11 +92,16 @@ public class AddSettingActivity extends AppCompatActivity {
         itemEditText = findViewById(R.id.edit_text_item_string);
         deleteItemsList = findViewById(R.id.delete_item_list);
 
+        itemsNumberTitleTextView = findViewById(R.id.items_max_num_title_text_view);
+        addItemEditTextBackground = findViewById(R.id.item_edit_text_background);
+        itemListBackground = findViewById(R.id.item_list_background);
+
         hasItemList = false; //default Value for adding a setting. If true, It means the setting has Items (strings entered by users, attached to the number)
         isEditing = false; //Default. This is used to edit an item in the list
         maxNumber = 2; // Lowest number should be 2
         seekBarMaxNumber.setProgress(0);
         maxNumberText.setText(String.valueOf(2));
+        addSettingConstraint.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
 
         //todo Toolbar
         addSettingsToolbar = findViewById(R.id.add_setting_toolbar);
@@ -137,11 +146,14 @@ public class AddSettingActivity extends AppCompatActivity {
                 addItemListButton.setVisibility(View.INVISIBLE);
                 // Show Views for Item List
                 itemListRecyclerView.setVisibility(View.VISIBLE);
-                addSettingConstraint.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.add_item_list_background));
                 maxNumberTextRepositioned.setVisibility(View.VISIBLE);
                 addItemButton.setVisibility(View.VISIBLE);
                 itemEditText.setVisibility(View.VISIBLE);
                 deleteItemsList.setVisibility(View.VISIBLE);
+
+                itemsNumberTitleTextView.setVisibility(View.VISIBLE);
+                itemListBackground.setVisibility(View.VISIBLE);
+                addItemEditTextBackground.setVisibility(View.VISIBLE);
                 //variables
                 items = intent.getStringArrayListExtra(MainActivity.EXTRA_ITEMS_LIST);
                 itemListAdapter.setItems(items);
@@ -190,7 +202,7 @@ public class AddSettingActivity extends AppCompatActivity {
                             .setPositiveButton("Yes, delete it!", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    hideKeyboard(itemEditText);
+                                    hideKeyboard();
 
                                     hasItemList = false;
                                     changeStateHasItems(hasItemList);
@@ -205,7 +217,7 @@ public class AddSettingActivity extends AppCompatActivity {
                             .show();
                 } else{
                     //This part of code is copied from the method above!
-                    hideKeyboard(itemEditText);
+                    hideKeyboard();
 
                     hasItemList = false;
                     changeStateHasItems(hasItemList);
@@ -253,7 +265,7 @@ public class AddSettingActivity extends AppCompatActivity {
                             isEditing = false;
 
                             // Hide Soft Keyboard
-                            hideKeyboard(itemEditText);
+                            hideKeyboard();
                         }
 
                     }
@@ -302,7 +314,7 @@ public class AddSettingActivity extends AppCompatActivity {
                         isEditing = false;
 
                         // Hide Soft Keyboard
-                        hideKeyboard(itemEditText);
+                        hideKeyboard();
                     }
 
                 }
@@ -354,7 +366,7 @@ public class AddSettingActivity extends AppCompatActivity {
                             }
 
                     }
-                    hideKeyboard(v);
+                    hideKeyboard(itemEditText);
                 }
             }
         });
@@ -362,9 +374,19 @@ public class AddSettingActivity extends AppCompatActivity {
         editTextTitle.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                hideKeyboard(v);
+                if(hasFocus){
+                    addItemEditTextBackground.setVisibility(View.INVISIBLE);
+                    addItemButton.setVisibility(View.INVISIBLE);
+                    itemEditText.setVisibility(View.INVISIBLE);
+                } else{
+                hideKeyboard(editTextTitle);
+                    addItemEditTextBackground.setVisibility(View.VISIBLE);
+                    addItemButton.setVisibility(View.VISIBLE);
+                    itemEditText.setVisibility(View.VISIBLE);
+                }
             }
         });
+
 
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
         lbm.registerReceiver(receiver, new IntentFilter("sendItemListData"));
@@ -395,15 +417,16 @@ public class AddSettingActivity extends AppCompatActivity {
             addItemListButton.setVisibility(View.INVISIBLE);
             // Show Views for Item List
             itemListRecyclerView.setVisibility(View.VISIBLE);
-            addSettingConstraint.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.add_item_list_background));
             maxNumberTextRepositioned.setVisibility(View.VISIBLE);
             addItemButton.setVisibility(View.VISIBLE);
             itemEditText.setVisibility(View.VISIBLE);
             deleteItemsList.setVisibility(View.VISIBLE);
+            itemsNumberTitleTextView.setVisibility(View.VISIBLE);
+            itemListBackground.setVisibility(View.VISIBLE);
+            addItemEditTextBackground.setVisibility(View.VISIBLE);
         } else {
             //Show Items List Views
             itemListRecyclerView.setVisibility(View.INVISIBLE);
-            addSettingConstraint.setBackgroundColor(getResources().getColor(R.color.white));
             seekBarMaxNumber.setVisibility(View.VISIBLE);
             maxNumberText.setVisibility(View.VISIBLE);
             addItemListButton.setVisibility(View.VISIBLE);
@@ -412,6 +435,9 @@ public class AddSettingActivity extends AppCompatActivity {
             addItemButton.setVisibility(View.INVISIBLE);
             itemEditText.setVisibility(View.INVISIBLE);
             deleteItemsList.setVisibility(View.INVISIBLE);
+            itemsNumberTitleTextView.setVisibility(View.INVISIBLE);
+            itemListBackground.setVisibility(View.INVISIBLE);
+            addItemEditTextBackground.setVisibility(View.INVISIBLE);
             //Transition Max Num from Number of Items to SeekBar
             maxNumber = itemListAdapter.getItems().size();
             items.clear();
@@ -476,6 +502,15 @@ public class AddSettingActivity extends AppCompatActivity {
 
     }
 
+    public void hideKeyboard() {
+        // Check if no view has focus:
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
     public void hideKeyboard(View view /*edit text*/) {
         InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
@@ -484,10 +519,7 @@ public class AddSettingActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-        hideKeyboard(editTextTitle);
-        hideKeyboard(itemEditText);
-
+        hideKeyboard();
     }
 
     @Override

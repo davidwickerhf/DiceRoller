@@ -29,7 +29,7 @@
     <string name="add_item_hint">Add Item...</string>
     <string name="add_setting_toast_item_title_is_too_long">Item Title should be shorter</string>
     <string name="add_setting_toast_no_title">Item should have a title</string>
-    <string name="add_setting_text_view_maximum_number_title">Maximum number:</string>
+    <string name="add_setting_text_view_items_number_title">Items:</string>
     <string name="add_setting_edit_text_setting_title">Title</string>
     <!--HomeFragment-->
     <string name="home_roll_btn">Roll</string>
