@@ -64,12 +64,6 @@ public class ItemListAdapter  extends RecyclerView.Adapter<ItemListAdapter.ItemV
         String prev = items.remove(fromPosition);
         items.add(toPosition > fromPosition ? toPosition - 1 : toPosition, prev);
         notifyItemMoved(fromPosition, toPosition);
-
-        Intent intent = new Intent("sendItemListData");
-        intent.putExtra(MainActivity.EXTRA_ITEMS_LIST, items);
-        // put your all data using put extra
-
-        LocalBroadcastManager.getInstance(activityContext).sendBroadcast(intent);
     }
 
     @Override
@@ -83,6 +77,16 @@ public class ItemListAdapter  extends RecyclerView.Adapter<ItemListAdapter.ItemV
 
         LocalBroadcastManager.getInstance(activityContext).sendBroadcast(intent);
     }
+
+    @Override
+    public void onClearView() {
+        Intent intent = new Intent("sendItemListData");
+        intent.putExtra(MainActivity.EXTRA_ITEMS_LIST, items);
+        // put your all data using put extra
+
+        LocalBroadcastManager.getInstance(activityContext).sendBroadcast(intent);
+    }
+
 
     //todo GET ITEM COUNT  to return to setting holder as Max Number
     @Override

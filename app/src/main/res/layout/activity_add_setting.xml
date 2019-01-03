@@ -231,7 +231,7 @@
     <!--Add Item String Edit Text-->
     <EditText
         android:id="@+id/edit_text_item_string"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/item_title_edit_text_background"
         android:hint="@string/add_item_hint"

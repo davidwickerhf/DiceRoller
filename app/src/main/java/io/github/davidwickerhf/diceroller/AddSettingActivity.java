@@ -346,6 +346,8 @@ public class AddSettingActivity extends AppCompatActivity {
                     set.connect(itemListRecyclerView.getId(), ConstraintSet.BOTTOM, R.id.edit_text_item_string, ConstraintSet.TOP, 0);
                     // Save changes
                     set.applyTo(addSettingConstraint);
+
+
                 }
             }
         });
@@ -362,10 +364,12 @@ public class AddSettingActivity extends AppCompatActivity {
             if (intent != null) {
                 items = intent.getStringArrayListExtra(MainActivity.EXTRA_ITEMS_LIST);
                 maxNumber = items.size();
+                itemListAdapter.setItems(items);
                 maxNumberTextRepositioned.setText(String.valueOf(maxNumber));
             }
         }
     };
+
 
 
 
