@@ -165,7 +165,28 @@ public class AddSettingActivity extends AppCompatActivity {
             setTitle(R.string.add_setting_toolbar_title);
         }
 
+
+
+
+
+        // Show Keyboard
         showKeyboard(editTextTitle);
+
+
+        addItemEditTextBackground.setVisibility(View.INVISIBLE);
+        addItemButton.setVisibility(View.INVISIBLE);
+        itemEditText.setVisibility(View.INVISIBLE);
+
+        ConstraintSet set = new ConstraintSet();
+
+        set.clone(addSettingConstraint);
+        // The following breaks the connection.
+        set.clear(R.id.item_list_recycler_view, ConstraintSet.BOTTOM);
+        // This is the new connection
+        set.connect(itemListRecyclerView.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0);
+        // Save changes
+        set.applyTo(addSettingConstraint);
+
 
         seekBarMaxNumber.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
@@ -184,6 +205,7 @@ public class AddSettingActivity extends AppCompatActivity {
             }
         });
 
+
         //todo Add and Delete Items Button
         // ADD ITEM LIST
         addItemListButton.setOnClickListener(new View.OnClickListener() {
@@ -198,7 +220,7 @@ public class AddSettingActivity extends AppCompatActivity {
         deleteItemsList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(itemListAdapter.getItems().size() > 0) {
+                if (itemListAdapter.getItems().size() > 0) {
                     AlertDialog dialog = new AlertDialog.Builder(AddSettingActivity.this, R.style.DeleteItemListAlertDialog)
                             .setTitle("Delete Item List?")
                             .setMessage("If you delete the item list of this Setting, you won't be able to recover it.")
@@ -210,6 +232,7 @@ public class AddSettingActivity extends AppCompatActivity {
                                     hasItemList = false;
                                     changeStateHasItems(hasItemList);
                                     itemListAdapter.setItems(items); // This clears the items in the ItemListAdapter (item list is in fact null)
+
                                 }
                             })
                             .setNegativeButton("Abort", new DialogInterface.OnClickListener() {
@@ -218,7 +241,7 @@ public class AddSettingActivity extends AppCompatActivity {
                                 }
                             })
                             .show();
-                } else{
+                } else {
                     //This part of code is copied from the method above!
                     hideKeyboard();
 
@@ -234,7 +257,7 @@ public class AddSettingActivity extends AppCompatActivity {
         itemEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId == EditorInfo.IME_ACTION_DONE){
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
                     saveItem(isEditing);
                     // Return true to tell system the right key has been pressed
                     return true;
@@ -247,7 +270,7 @@ public class AddSettingActivity extends AppCompatActivity {
         editTextTitle.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId == EditorInfo.IME_ACTION_DONE){
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
                     editTextTitle.clearFocus();
                     return true;
                 }
@@ -284,25 +307,25 @@ public class AddSettingActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    if(isEditing) {
-                            String itemString = itemEditText.getText().toString();
-                            if (itemString.trim().isEmpty()) {
-                                Toast.makeText(AddSettingActivity.this, getString(R.string.add_setting_toast_no_title), Toast.LENGTH_SHORT).show();
-                            } else if (itemString.length() > 23) {
-                                Toast.makeText(AddSettingActivity.this, getString(R.string.add_setting_toast_item_title_is_too_long), Toast.LENGTH_SHORT).show();
-                            } else {
-                                // Save Item String
-                                items.set(itemPosition, itemString);
-                                itemListAdapter.setItems(items);
+                    if (isEditing) {
+                        String itemString = itemEditText.getText().toString();
+                        if (itemString.trim().isEmpty()) {
+                            Toast.makeText(AddSettingActivity.this, getString(R.string.add_setting_toast_no_title), Toast.LENGTH_SHORT).show();
+                        } else if (itemString.length() > 23) {
+                            Toast.makeText(AddSettingActivity.this, getString(R.string.add_setting_toast_item_title_is_too_long), Toast.LENGTH_SHORT).show();
+                        } else {
+                            // Save Item String
+                            items.set(itemPosition, itemString);
+                            itemListAdapter.setItems(items);
 
-                                // Reset View and Variables
-                                itemEditText.setText("");
-                                //itemListView.setBackgroundResource(R.drawable.list_item);
-                                addItemButton.setImageResource(R.drawable.ic_add_dark);
-                                itemPosition = 0;
-                                itemListView = null;
-                                isEditing = false;
-                            }
+                            // Reset View and Variables
+                            itemEditText.setText("");
+                            //itemListView.setBackgroundResource(R.drawable.list_item);
+                            addItemButton.setImageResource(R.drawable.ic_add_dark);
+                            itemPosition = 0;
+                            itemListView = null;
+                            isEditing = false;
+                        }
 
                     }
                     hideKeyboard(itemEditText);
@@ -313,7 +336,7 @@ public class AddSettingActivity extends AppCompatActivity {
         editTextTitle.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
+                if (hasFocus) {
                     addItemEditTextBackground.setVisibility(View.INVISIBLE);
                     addItemButton.setVisibility(View.INVISIBLE);
                     itemEditText.setVisibility(View.INVISIBLE);
@@ -329,7 +352,7 @@ public class AddSettingActivity extends AppCompatActivity {
                     set.applyTo(addSettingConstraint);
 
 
-                } else{
+                } else {
 
                     hideKeyboard(editTextTitle);
 
@@ -369,8 +392,6 @@ public class AddSettingActivity extends AppCompatActivity {
             }
         }
     };
-
-
 
 
     //todo CHANGE STATE
@@ -419,7 +440,7 @@ public class AddSettingActivity extends AppCompatActivity {
         }
     }
 
-    private void saveItem(boolean isEditing){
+    private void saveItem(boolean isEditing) {
         if (!isEditing) {
             String itemString = itemEditText.getText().toString();
             if (itemString.trim().isEmpty()) {
@@ -510,7 +531,7 @@ public class AddSettingActivity extends AppCompatActivity {
 
     }
 
-    public void showKeyboard(View view){
+    public void showKeyboard(View view) {
         view.requestFocus();
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
@@ -520,14 +541,20 @@ public class AddSettingActivity extends AppCompatActivity {
         // Check if no view has focus:
         View view = this.getCurrentFocus();
         if (view != null) {
-            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
 
     public void hideKeyboard(View view /*edit text*/) {
-        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    @Override
+    protected void onPause() {
+        hideKeyboard();
+        super.onPause();
     }
 
     @Override

@@ -15,7 +15,7 @@
     <!--STRINGS-->
     <!--AlertDialog-->
     <string name="dialog_add_setting_title">Add Setting Method:</string>
-    <string name="dialog_add_custom_setting">Add Custom Setting</string>
+    <string name="dialog_add_custom_setting">Create Custom Setting</string>
     <string name="dialog_add_setting_by_id">Add Setting by ID</string>
 
 
