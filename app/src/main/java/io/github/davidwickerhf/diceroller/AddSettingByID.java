@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import io.github.davidwickerhf.diceroller.adapters.ShowItemListAdapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -86,11 +88,9 @@ public class AddSettingByID extends AppCompatActivity {
         // Set Adapter
         showItemListAdapter = new ShowItemListAdapter();
         showItemListRecyclerView.setAdapter(showItemListAdapter);
+        // Show Keyboard
+        showKeyboard(idInputEditText);
 
-        // Show Soft Keyboard
-        idInputEditText.requestFocus();
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
         //todo Methods
         // Check input on ENTER button press
         idInputEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -98,11 +98,23 @@ public class AddSettingByID extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     String inputID = idInputEditText.getText().toString();
-                    initiate(inputID);
+                    if (initiate(inputID)) {
+                        hideKeyboard(idInputEditText);
+                    }
                     // Return true (tell system that right key is pressed)
                     return true;
                 }
                 return false;
+            }
+        });
+
+        idInputEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    hideKeyboard(idInputEditText);
+                    initiate(idInputEditText.getText().toString());
+                }
             }
         });
         // Check input on button press
@@ -117,14 +129,11 @@ public class AddSettingByID extends AppCompatActivity {
 
     }
 
-    private void initiate(String inputID){
+    private boolean initiate(String inputID) {
         switch (inputID) {
             case "!1EPascal2018!":
                 changeViewsVisibility(true);
                 Toast.makeText(AddSettingByID.this, getString(R.string.add_setting_by_id_correct_toast_text), Toast.LENGTH_SHORT).show();
-                // Hide Soft Keyboard
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(idInputEditText.getWindowToken(), 0);
                 //Set Variables
                 title = "Classe 1E";
                 maxNum = 28;
@@ -161,12 +170,14 @@ public class AddSettingByID extends AppCompatActivity {
                 hasItems = true;
                 isInitiated = true;
                 setVariablesToViews(maxNum, title, items, isInitiated);
-                break;
+                return isInitiated;
+
 
             default: // No Setting Showed or Saved
                 changeViewsVisibility(false);
                 Toast.makeText(AddSettingByID.this, getString(R.string.add_setting_by_id_wrong_toast_text), Toast.LENGTH_SHORT).show();
                 isInitiated = false;
+                return isInitiated;
         }
     }
 
@@ -193,8 +204,8 @@ public class AddSettingByID extends AppCompatActivity {
         finish();
     }
 
-    private void changeViewsVisibility(boolean show){
-        if(show){
+    private void changeViewsVisibility(boolean show) {
+        if (show) {
             correctOrWrong.setVisibility(View.VISIBLE);
             correctOrWrong.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
             correctOrWrong.setText(getString(R.string.add_setting_by_id_correct));
@@ -220,19 +231,46 @@ public class AddSettingByID extends AppCompatActivity {
         }
     }
 
-    private void setVariablesToViews(int maxNum, String title, ArrayList<String> items, boolean isInitiated){
-        if(isInitiated) {
+    private void setVariablesToViews(int maxNum, String title, ArrayList<String> items, boolean isInitiated) {
+        if (isInitiated) {
             maxNumTextView.setText(String.valueOf(maxNum));
             settingTitleTextView.setText(title);
             showItemListAdapter.setItems(items);
         }
     }
 
-    private void setVariablesToViews(int maxNum, String title, boolean isInitiated){
-        if(isInitiated) {
+    private void setVariablesToViews(int maxNum, String title, boolean isInitiated) {
+        if (isInitiated) {
             maxNumTextView.setText(String.valueOf(maxNum));
             settingTitleTextView.setText(title);
         }
+    }
+
+    public void showKeyboard(View view){
+        view.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+    }
+
+    public void hideKeyboard() {
+        // Check if no view has focus:
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    public void hideKeyboard(View view /*edit text*/) {
+        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        hideKeyboard();
+        super.onDestroy();
     }
 
     @Override
@@ -250,8 +288,9 @@ public class AddSettingByID extends AppCompatActivity {
                     saveSetting();
                 else
                     Toast.makeText(this, getString(R.string.add_setting_by_id_save_setting_no_id_toast), Toast.LENGTH_SHORT).show();
-                    return true;
+                return true;
             default:
+                hideKeyboard();
                 return super.onOptionsItemSelected(item);
         }
     }

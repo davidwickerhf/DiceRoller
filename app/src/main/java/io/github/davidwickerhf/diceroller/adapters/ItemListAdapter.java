@@ -62,7 +62,7 @@ public class ItemListAdapter  extends RecyclerView.Adapter<ItemListAdapter.ItemV
     @Override
     public void onItemMove(int fromPosition, int toPosition) {
         String prev = items.remove(fromPosition);
-        items.add(toPosition > fromPosition ? toPosition - 1 : toPosition, prev);
+        items.add(/*toPosition > fromPosition ? toPosition - 1 : toPosition*/ toPosition, prev);
         notifyItemMoved(fromPosition, toPosition);
     }
 

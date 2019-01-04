@@ -165,6 +165,8 @@ public class AddSettingActivity extends AppCompatActivity {
             setTitle(R.string.add_setting_toolbar_title);
         }
 
+        showKeyboard(editTextTitle);
+
         seekBarMaxNumber.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
@@ -274,9 +276,7 @@ public class AddSettingActivity extends AppCompatActivity {
                 itemEditText.setSelection(itemEditText.getText().length()); //This moves the cursor to the end of the string
 
                 //Show Soft Keyboard
-                itemEditText.requestFocus();
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                showKeyboard(itemEditText);
             }
         });
 
@@ -510,6 +510,12 @@ public class AddSettingActivity extends AppCompatActivity {
 
     }
 
+    public void showKeyboard(View view){
+        view.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+    }
+
     public void hideKeyboard() {
         // Check if no view has focus:
         View view = this.getCurrentFocus();
@@ -526,8 +532,8 @@ public class AddSettingActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         hideKeyboard();
+        super.onDestroy();
     }
 
     @Override

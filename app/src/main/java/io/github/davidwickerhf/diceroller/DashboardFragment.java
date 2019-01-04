@@ -2,6 +2,7 @@ package io.github.davidwickerhf.diceroller;
 
 
 //Todo   REMINDERS
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,6 +27,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -74,6 +76,7 @@ public class DashboardFragment extends Fragment {
     public View onCreateView(@Nullable LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         final View fragmentView =  inflater.inflate(R.layout.fragment_dashboard, container, false);
+
         coordinatorLayout = (CoordinatorLayout) fragmentView.findViewById(R.id.coordinatorLayout);
 
         //todo Toolbar
@@ -205,7 +208,6 @@ public class DashboardFragment extends Fragment {
 
         return fragmentView;
     }
-
 
     @Override
     public void onAttach(Context context) {
