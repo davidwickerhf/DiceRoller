@@ -41,7 +41,7 @@ public class ItemListAdapter  extends RecyclerView.Adapter<ItemListAdapter.ItemV
     //todo Variables
     ArrayList<String> items = new ArrayList<>();
     Context activityContext;
-
+    public boolean isClickable = true;
 
     @NonNull
     @Override
@@ -120,6 +120,11 @@ public class ItemListAdapter  extends RecyclerView.Adapter<ItemListAdapter.ItemV
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    if(!isClickable)
+                        return;
+
+
                     if(itemClickListener != null) {
                         int position = getAdapterPosition();
                         if(position != RecyclerView.NO_POSITION) {

@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 import io.github.davidwickerhf.diceroller.adapters.ItemListAdapter;
 import io.github.davidwickerhf.diceroller.itemTouchHelper.SimpleItemTouchHelperCallback;
@@ -21,6 +22,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -29,6 +31,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -51,6 +54,7 @@ public class AddSettingActivity extends AppCompatActivity {
     // for editing an item
     boolean isEditing;
     int itemPosition;
+    boolean wasKeyboardOpen = false;
 
     //todo Views
     private ConstraintLayout addSettingConstraint;
@@ -116,7 +120,7 @@ public class AddSettingActivity extends AppCompatActivity {
 
         //todo RecyclerView
         itemListRecyclerView = findViewById(R.id.item_list_recycler_view);
-        itemListRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        itemListRecyclerView.setLayoutManager(new LinearLayoutManagareWithSmoothScroller(getApplicationContext()));
         itemListRecyclerView.setHasFixedSize(true);
 
         //todo Adapter
@@ -166,26 +170,47 @@ public class AddSettingActivity extends AppCompatActivity {
         }
 
 
-
-
-
-        // Show Keyboard
+        // Show Keyboard When opening activity
         showKeyboard(editTextTitle);
+        showItemEditText(false);
 
 
-        addItemEditTextBackground.setVisibility(View.INVISIBLE);
-        addItemButton.setVisibility(View.INVISIBLE);
-        itemEditText.setVisibility(View.INVISIBLE);
+        // This piace of code detects a change in the layout height, so if the keyboard is open or not.
+        // After that it shows or hides the itemEditText and related views.
+        try {
+            addSettingConstraint.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
 
-        ConstraintSet set = new ConstraintSet();
+                    Rect r = new Rect();
+                    addSettingConstraint.getWindowVisibleDisplayFrame(r);
 
-        set.clone(addSettingConstraint);
-        // The following breaks the connection.
-        set.clear(R.id.item_list_recycler_view, ConstraintSet.BOTTOM);
-        // This is the new connection
-        set.connect(itemListRecyclerView.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0);
-        // Save changes
-        set.applyTo(addSettingConstraint);
+                    int heightDiff = addSettingConstraint.getRootView().getHeight() - (r.bottom - r.top);
+                    if (heightDiff > 100) {
+                        wasKeyboardOpen = true;
+                        // kEYBOARD IS OPEN
+                        if (editTextTitle.hasFocus()) {
+                            showItemEditText(false);
+                        } else {
+                            showItemEditText(true);
+                        }
+
+                    } else {
+                        if (wasKeyboardOpen) {
+                            wasKeyboardOpen = false;
+                            // Do your toast here
+                            showItemEditText(true);
+                            if(itemEditText.hasFocus()){
+                                itemListRecyclerView.setLayoutFrozen(false);
+                            }
+                        }
+                        // kEYBOARD IS HIDDEN
+                    }
+                }
+            });
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
 
 
         seekBarMaxNumber.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -259,6 +284,7 @@ public class AddSettingActivity extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     saveItem(isEditing);
+                    itemListRecyclerView.setLayoutFrozen(false);
                     // Return true to tell system the right key has been pressed
                     return true;
                 }
@@ -283,6 +309,7 @@ public class AddSettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 saveItem(isEditing);
+                itemListRecyclerView.setLayoutFrozen(false);
             }
         });
 
@@ -297,11 +324,16 @@ public class AddSettingActivity extends AppCompatActivity {
                 addItemButton.setImageResource(R.drawable.ic_save_green);
                 isEditing = true;
                 itemEditText.setSelection(itemEditText.getText().length()); //This moves the cursor to the end of the string
-
                 //Show Soft Keyboard
                 showKeyboard(itemEditText);
+                itemListRecyclerView.smoothScrollToPosition(itemPosition);
+                itemListAdapter.isClickable = false;
+                itemListRecyclerView.setLayoutFrozen(true);
+
             }
         });
+
+
 
         itemEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -337,40 +369,10 @@ public class AddSettingActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    addItemEditTextBackground.setVisibility(View.INVISIBLE);
-                    addItemButton.setVisibility(View.INVISIBLE);
-                    itemEditText.setVisibility(View.INVISIBLE);
-
-                    ConstraintSet set = new ConstraintSet();
-
-                    set.clone(addSettingConstraint);
-                    // The following breaks the connection.
-                    set.clear(R.id.item_list_recycler_view, ConstraintSet.BOTTOM);
-                    // This is the new connection
-                    set.connect(itemListRecyclerView.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0);
-                    // Save changes
-                    set.applyTo(addSettingConstraint);
-
-
+                    showItemEditText(false);
                 } else {
-
                     hideKeyboard(editTextTitle);
-
-                    addItemEditTextBackground.setVisibility(View.VISIBLE);
-                    addItemButton.setVisibility(View.VISIBLE);
-                    itemEditText.setVisibility(View.VISIBLE);
-
-                    ConstraintSet set = new ConstraintSet();
-
-                    set.clone(addSettingConstraint);
-                    // The following breaks the connection.
-                    set.clear(R.id.item_list_recycler_view, ConstraintSet.BOTTOM);
-                    // This is the new connection
-                    set.connect(itemListRecyclerView.getId(), ConstraintSet.BOTTOM, R.id.edit_text_item_string, ConstraintSet.TOP, 0);
-                    // Save changes
-                    set.applyTo(addSettingConstraint);
-
-
+                    showItemEditText(true);
                 }
             }
         });
@@ -544,11 +546,44 @@ public class AddSettingActivity extends AppCompatActivity {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+        itemListAdapter.isClickable = true;
     }
 
     public void hideKeyboard(View view /*edit text*/) {
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    public void showItemEditText(boolean show /*true = show; false = hide*/) {
+        if (show) {
+            addItemEditTextBackground.setVisibility(View.VISIBLE);
+            addItemButton.setVisibility(View.VISIBLE);
+            itemEditText.setVisibility(View.VISIBLE);
+
+            ConstraintSet set = new ConstraintSet();
+
+            set.clone(addSettingConstraint);
+            // The following breaks the connection.
+            set.clear(R.id.item_list_recycler_view, ConstraintSet.BOTTOM);
+            // This is the new connection
+            set.connect(itemListRecyclerView.getId(), ConstraintSet.BOTTOM, R.id.edit_text_item_string, ConstraintSet.TOP, 0);
+            // Save changes
+            set.applyTo(addSettingConstraint);
+        } else {
+            addItemEditTextBackground.setVisibility(View.INVISIBLE);
+            addItemButton.setVisibility(View.INVISIBLE);
+            itemEditText.setVisibility(View.INVISIBLE);
+
+            ConstraintSet set = new ConstraintSet();
+
+            set.clone(addSettingConstraint);
+            // The following breaks the connection.
+            set.clear(R.id.item_list_recycler_view, ConstraintSet.BOTTOM);
+            // This is the new connection
+            set.connect(itemListRecyclerView.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0);
+            // Save changes
+            set.applyTo(addSettingConstraint);
+        }
     }
 
     @Override
