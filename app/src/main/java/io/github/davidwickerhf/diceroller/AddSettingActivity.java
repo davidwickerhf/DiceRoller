@@ -120,7 +120,7 @@ public class AddSettingActivity extends AppCompatActivity {
 
         //todo RecyclerView
         itemListRecyclerView = findViewById(R.id.item_list_recycler_view);
-        itemListRecyclerView.setLayoutManager(new LinearLayoutManagareWithSmoothScroller(getApplicationContext()));
+        itemListRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         itemListRecyclerView.setHasFixedSize(true);
 
         //todo Adapter
@@ -202,6 +202,7 @@ public class AddSettingActivity extends AppCompatActivity {
                             showItemEditText(true);
                             if(itemEditText.hasFocus()){
                                 itemListRecyclerView.setLayoutFrozen(false);
+                                itemListAdapter.isClickable = true;
                             }
                         }
                         // kEYBOARD IS HIDDEN
@@ -326,7 +327,7 @@ public class AddSettingActivity extends AppCompatActivity {
                 itemEditText.setSelection(itemEditText.getText().length()); //This moves the cursor to the end of the string
                 //Show Soft Keyboard
                 showKeyboard(itemEditText);
-                itemListRecyclerView.smoothScrollToPosition(itemPosition);
+                itemListRecyclerView.scrollTo(itemPosition, itemPosition);
                 itemListAdapter.isClickable = false;
                 itemListRecyclerView.setLayoutFrozen(true);
 

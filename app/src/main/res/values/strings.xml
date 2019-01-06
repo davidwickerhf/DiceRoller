@@ -21,7 +21,6 @@
 
     <!--AddSettingActivity-->
     <string name="save_setting">Save Setting</string>
-    <string name="profile_fragment_toolbar_title">My Profile</string>
     <string name="edit_setting_toolbar_title">Edit Setting</string>
     <string name="_btn">ADD ITEMS</string>
     <string name="maximum_number">Maximum number:</string>
@@ -33,6 +32,12 @@
     <string name="add_setting_edit_text_setting_title">Title</string>
     <!--HomeFragment-->
     <string name="home_roll_btn">Roll</string>
+    <!--Preferences Fragment-->
+    <string name="preferences_fragment_profile_fragment_toolbar_title">App Preferences</string>
+    <string name="preferences_fragment_features_not_yet_available_salute_text">Hello There!</string>
+    <string name="preferences_fragment_features_not_yet_available_introduction_text">My name is David Wicker and I am the developer of DiceRoller!</string>
+    <string name="preferences_fragment_features_not_yet_available_apologize_text">I am working hard on developing new features for the app, unfortunatelly though this page is still under development...</string>
+    <string name="preferences_fragment_features_not_yet_available_conclusion_text">New features, like dark theme, will be available soon in the next update!</string>
     <!--AddSettingByIDActivity-->
     <string name="add_setting_by_id_text_view">ID</string>
     <string name="add_setting_by_id_check_button_text">CHECK</string>
@@ -42,5 +47,6 @@
     <string name="add_setting_by_id_correct_toast_text">ID corresponds to a default Setting</string>
     <string name="add_setting_by_id_wrong_toast_text">ID does not correspond to any default setting</string>
     <string name="add_setting_by_id_save_setting_no_id_toast">Please insert a valid ID</string>
+
 
 </resources>
