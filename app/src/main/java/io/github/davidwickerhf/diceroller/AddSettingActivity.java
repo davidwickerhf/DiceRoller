@@ -189,20 +189,24 @@ public class AddSettingActivity extends AppCompatActivity {
                     if (heightDiff > 100) {
                         wasKeyboardOpen = true;
                         // kEYBOARD IS OPEN
-                        if (editTextTitle.hasFocus()) {
-                            showItemEditText(false);
-                        } else {
-                            showItemEditText(true);
+                        if(itemListRecyclerView.getVisibility() == View.VISIBLE) {
+                            if (editTextTitle.hasFocus()) {
+                                showItemEditText(false);
+                            } else {
+                                showItemEditText(true);
+                            }
                         }
 
                     } else {
                         if (wasKeyboardOpen) {
                             wasKeyboardOpen = false;
                             // Do your toast here
-                            showItemEditText(true);
-                            if(itemEditText.hasFocus()){
-                                itemListRecyclerView.setLayoutFrozen(false);
-                                itemListAdapter.isClickable = true;
+                            if(itemListRecyclerView.getVisibility() == View.VISIBLE) {
+                                showItemEditText(true);
+                                if (itemEditText.hasFocus()) {
+                                    itemListRecyclerView.setLayoutFrozen(false);
+                                    itemListAdapter.isClickable = true;
+                                }
                             }
                         }
                         // kEYBOARD IS HIDDEN

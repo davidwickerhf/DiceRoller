@@ -2,6 +2,7 @@ package io.github.davidwickerhf.diceroller;
 
 
 //Todo   REMINDERS
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -28,6 +29,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -49,22 +51,25 @@ public class DashboardFragment extends Fragment {
     //TODO VIEWS
     androidx.appcompat.widget.Toolbar dashboardToolbar;
     FloatingActionButton dashboardFab;
+    TextView addSettingTextView;
     //TODO VARIABLES
     private static final int ADD_SETTING_REQUEST = 1;
     private Setting recoveredSetting;
     public int selectedItemPosition;
     private String[] optionList;
-
+    private int itemCount;
 
 
     //todo Interface for sharing data ( get Settings Information from AddSettingActivity)
     private FragmentDashboardListener listener;
+
     public interface FragmentDashboardListener {
         void onInputASent(int maxNumber, ArrayList<String> items, int position, String title, View itemView);
     }
 
 
     private DashboardItemPositionListener itemListener;
+
     public interface DashboardItemPositionListener {
         void onEditInputASent(int position);
     }
@@ -75,15 +80,14 @@ public class DashboardFragment extends Fragment {
     @Override
     public View onCreateView(@Nullable LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        final View fragmentView =  inflater.inflate(R.layout.fragment_dashboard, container, false);
+        final View fragmentView = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
         coordinatorLayout = (CoordinatorLayout) fragmentView.findViewById(R.id.coordinatorLayout);
 
         //todo Toolbar
         dashboardToolbar = fragmentView.findViewById(R.id.dashboard_toolbar);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(dashboardToolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(dashboardToolbar);
         getActivity().setTitle(R.string.dashboard_title);
-
 
 
         //TODO FLOATING ACTION BUTTON
@@ -98,12 +102,11 @@ public class DashboardFragment extends Fragment {
                 mBuilder.setSingleChoiceItems(optionList, -1, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int selected) {
-                        if(selected == 0) {
+                        if (selected == 0) {
                             Intent intent = new Intent(getActivity(), AddSettingActivity.class);
                             getActivity().startActivityForResult(intent, ADD_SETTING_REQUEST);
                             dialog.dismiss();
-                        }
-                        else{
+                        } else {
                             Intent intent = new Intent(getActivity(), AddSettingByID.class);
                             getActivity().startActivityForResult(intent, ADD_SETTING_REQUEST);
                             dialog.dismiss();
@@ -116,17 +119,25 @@ public class DashboardFragment extends Fragment {
             }
         });
 
+        addSettingTextView = fragmentView.findViewById(R.id.dashboard_fragment_ask_to_add_setting_text_view);
         //todo View Model
         settingsViewModel = ViewModelProviders.of(this).get(SettingsViewModel.class);
         settingsViewModel.getAllSettings().observe(this, new Observer<List<Setting>>() {
             @Override
             public void onChanged(@Nullable List<Setting> settings) {
                 adapter.setSettings(settings);
+                itemCount = adapter.getItemCount();
+
+                if (itemCount < 2){
+                    addSettingTextView.setVisibility(View.VISIBLE);
+                } else{
+                    addSettingTextView.setVisibility(View.INVISIBLE);
+                }
             }
         });
 
         //todo Retrieve Selected Item from Previous session
-        if (getArguments() != null){
+        if (getArguments() != null) {
             selectedItemPosition = getArguments().getInt("selectedItemPosition");
         }
 
@@ -149,8 +160,6 @@ public class DashboardFragment extends Fragment {
         });
 
 
-
-
         //todo Interface for returning clicked item From SETTING ADAPTER - Than passes setting info to MainActivity
         adapter.setOnItemClickLister(new SettingAdapter.OnItemClickListener() {
             @Override
@@ -159,7 +168,7 @@ public class DashboardFragment extends Fragment {
                 int maxNum = adapter.getSettingAt(position).getMaxDiceSum();
                 ArrayList<String> items = new ArrayList<>();
                 String title = adapter.getSettingAt(position).getTitle();
-                if(adapter.getSettings().get(position).getItems() != null) {
+                if (adapter.getSettings().get(position).getItems() != null) {
                     items.addAll(adapter.getSettings().get(position).getItems());
                     Log.d("HomeFragment", "Item List in DashboardFragment is:" + items.toString());
                 }
@@ -168,13 +177,6 @@ public class DashboardFragment extends Fragment {
                 listener.onInputASent(maxNum, items, position, title, itemView);
             }
         });
-
-
-
-
-
-
-
 
 
         //todo Make Recycler Swipable
@@ -212,8 +214,8 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        listener = (FragmentDashboardListener)context;
-        itemListener = (DashboardItemPositionListener)context;
+        listener = (FragmentDashboardListener) context;
+        itemListener = (DashboardItemPositionListener) context;
     }
 
     @Override

@@ -51,6 +51,16 @@
         app:layout_anchorGravity="bottom|center" />
 
 
+    <TextView
+        android:id="@+id/dashboard_fragment_ask_to_add_setting_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Click the button below\nto add a setting:"
+        android:visibility="invisible"
+        android:textAlignment="center"
+        android:textColor="@color/greyText"
+        app:layout_anchor="@+id/recycler_view"
+        app:layout_anchorGravity="center" />
 
 
 
