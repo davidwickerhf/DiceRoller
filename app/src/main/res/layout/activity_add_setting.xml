@@ -48,8 +48,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:textAlignment="center"
-        android:textColor="@color/greyText"
-        android:textColorHint="@color/hintColor"
+        android:textColor="@color/darkerGrey"
+        android:textColorHint="@color/grey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
@@ -81,7 +81,7 @@
         android:layout_marginBottom="8dp"
         android:elevation="0dp"
         android:text="@string/_btn"
-        android:textColor="@color/greyText"
+        android:textColor="@color/darkerGrey"
         android:textSize="18dp"
         android:textStyle="bold"
         android:windowSoftInputMode="adjustNothing"
@@ -89,7 +89,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/seek_bar"
-        app:strokeColor="@color/greyText"
+        app:strokeColor="@color/darkerGrey"
         app:strokeWidth="9dp" />
 
     <TextView
@@ -100,7 +100,7 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
         android:text="0"
-        android:textColor="@color/greyText"
+        android:textColor="@color/darkerGrey"
         android:textSize="18dp"
         android:windowSoftInputMode="adjustNothing"
         app:layout_constraintEnd_toEndOf="parent"
@@ -128,7 +128,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:text="@string/add_setting_text_view_items_number_title"
-        android:textColor="@color/hintColor"
+        android:textColor="@color/grey"
         android:textSize="24sp"
         android:elevation="2dp"
         android:outlineProvider="none"

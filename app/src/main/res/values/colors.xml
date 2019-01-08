@@ -10,14 +10,13 @@
     <color name="lightBlue">#E5F4FB</color>
 
     <color name="white">#FFFFFF</color>
-    <color name="lightGrey">#F7F7F7</color>
     <color name="lighterGrey">#FBFBFB</color>
-    <color name="hintColor">#B2B7BE</color>
-    <color name="greyText">#4A5058</color>
-    <color name="defaultMenuColor">#949494</color>
+    <color name="lightGrey">#F7F7F7</color>
+    <color name="grey">#B2B7BE</color>
+    <color name="darkGrey">#949494</color>
+    <color name="darkerGrey">#4A5058</color>
 
     <color name="red">#FF4E6B</color>
-    <color name="lightRed">#FCBFC9</color>
     <color name="green">#3FBB9F</color>
 
 

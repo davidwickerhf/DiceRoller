@@ -4,7 +4,7 @@
     <string name="dashboard_title">Dashboard</string>
     <string name="nav_home_icon">Home</string>
     <string name="nav_dashboard_icon">Dashboard</string>
-    <string name="nav_myprofile_icon">My Profile</string>
+    <string name="nav_myprofile_icon">Preferences</string>
     <string name="add_setting_toolbar_title">Add Setting</string>
 
 
@@ -13,12 +13,6 @@
     <string name="user_text_view"> </string>
 
     <!--STRINGS-->
-    <!--AlertDialog-->
-    <string name="dialog_add_setting_title">Add Setting Method:</string>
-    <string name="dialog_add_custom_setting">Create Custom Setting</string>
-    <string name="dialog_add_setting_by_id">Add Setting by ID</string>
-
-
     <!--AddSettingActivity-->
     <string name="save_setting">Save Setting</string>
     <string name="edit_setting_toolbar_title">Edit Setting</string>
@@ -32,6 +26,12 @@
     <string name="add_setting_edit_text_setting_title">Title</string>
     <!--HomeFragment-->
     <string name="home_roll_btn">Roll</string>
+    <!--Dashboard Fragment-->
+    <string name="dashboard_fragment_ask_to_add_setting_text">Click the button below to add a setting</string>
+    <!--AlertDialog in Dashboard Fragment-->
+    <string name="dialog_add_setting_title">Add Setting Method:</string>
+    <string name="dialog_add_custom_setting">Create Custom Setting</string>
+    <string name="dialog_add_setting_by_id">Add Setting by ID</string>
     <!--Preferences Fragment-->
     <string name="preferences_fragment_profile_fragment_toolbar_title">App Preferences</string>
     <string name="preferences_fragment_features_not_yet_available_salute_text">Hello There!</string>

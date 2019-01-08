@@ -10,12 +10,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import io.github.davidwickerhf.diceroller.adapters.SettingAdapter;
 import io.github.davidwickerhf.diceroller.settingDatabase.Setting;
 import io.github.davidwickerhf.diceroller.settingDatabase.SettingsViewModel;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -47,7 +52,8 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
             "EXTRA_HAS_ITEMS";
     public static final String EXTRA_POSITION =
             "EXTRA_HAS_POSITION";
-
+    public static final String EXTRA_HAS_SELECTED =
+            "EXTRA_HAS_SELECTED";
 
 
     //todo Views
@@ -95,7 +101,21 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         changeSelectedMenuItem(1);
         settingSelected = false;
 
+        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
+        lbm.registerReceiver(receiver, new IntentFilter("clearHomeArguments"));
     }
+
+
+    public BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            intent.getBooleanExtra(MainActivity.EXTRA_HAS_SELECTED, false);
+            if (true)
+                settingSelected = true;
+            else
+                settingSelected = false;
+        }
+    };
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -104,12 +124,19 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
                     Fragment selectedFragment = null;
                     switch (item.getItemId()) {
                         case R.id.nav_home:
-                            if(settingSelected) {
+                            if (settingSelected) {
                                 selectedFragment = mHomeFragment;
-                            }else{
+                            } else {
                                 Toast.makeText(MainActivity.this, "Select a Setting first", Toast.LENGTH_SHORT).show();
                                 selectedFragment = mDashboardFragment;
-                                changeSelectedMenuItem(1);
+                                // Delay Method which switches selected icon
+                                final Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        changeSelectedMenuItem(1);
+                                    }
+                                }, 250);
                             }
                             break;
                         case R.id.nav_dashboard:
@@ -119,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
                             selectedFragment = mProfileFragment;
                             break;
                     }
-                    
+
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.fragment_container, selectedFragment)
                             .commit();
@@ -142,11 +169,10 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
             boolean hasItems = data.getBooleanExtra(MainActivity.EXTRA_HAS_ITEMS, false);
             maxDiceSum = data.getIntExtra(MainActivity.EXTRA_MAX_NUMBER, 2);
 
-            if(hasItems) {
+            if (hasItems) {
                 items = (ArrayList<String>) data.getStringArrayListExtra(MainActivity.EXTRA_ITEMS_LIST);
                 setting = new Setting(title, maxDiceSum, items, hasItems);
-            }
-            else {
+            } else {
                 setting = new Setting(title, maxDiceSum, hasItems);
             }
 
@@ -155,15 +181,12 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
             Toast.makeText(MainActivity.this, "Setting saved", Toast.LENGTH_SHORT).show();
 
 
-
-
-
         } else if (requestCode == EDIT_SETTING_REQUEST && resultCode == RESULT_OK) {
 
             int id = data.getIntExtra(MainActivity.EXTRA_ID, -1);
             boolean hasItems = data.getBooleanExtra(MainActivity.EXTRA_HAS_ITEMS, false);
 
-            if(id == -1){
+            if (id == -1) {
                 Toast.makeText(MainActivity.this, "Setting Can't be Updated", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -175,11 +198,10 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
             Setting setting;
 
             // Generate new Setting
-            if (hasItems){
+            if (hasItems) {
                 items = data.getStringArrayListExtra(MainActivity.EXTRA_ITEMS_LIST);
                 setting = new Setting(title, maxDiceSum, items, true);
-            }
-            else{
+            } else {
                 setting = new Setting(title, maxDiceSum, false);
             }
 
@@ -190,7 +212,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 
             // Update Selected Setting
             Bundle updateSelectedSetting = mHomeFragment.getArguments();
-            if(updateSelectedSetting != null) {
+            if (updateSelectedSetting != null) {
                 int selectedSettingPosition = /*Argument set in onInputASent*/updateSelectedSetting.getInt(MainActivity.EXTRA_POSITION);
                 int editedSettingPosition = data.getIntExtra(MainActivity.EXTRA_POSITION, -1);
 
@@ -205,18 +227,16 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
             }
 
 
+            //todo  ADD WAY TO ADD A SETTING BY ID
 
 
-         //todo  ADD WAY TO ADD A SETTING BY ID
-
-
-        }else {
+        } else {
             Toast.makeText(MainActivity.this, "Setting Not Saved", Toast.LENGTH_SHORT).show();
         }
     }
     //todo
 
-    public void changeSelectedMenuItem(int position){
+    public void changeSelectedMenuItem(int position) {
         BottomNavigationView.getMenu().getItem(position).setChecked(true);
     }
 
@@ -231,8 +251,8 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         args.putStringArrayList(MainActivity.EXTRA_ITEMS_LIST, items);
         settingSelected = true;
         // Change color of selected setting back to normal
-        if(!(selectedItemView == null)) {
-            if (selectedItem != position && selectedItemView != itemView){
+        if (!(selectedItemView == null)) {
+            if (selectedItem != position && selectedItemView != itemView) {
                 selectedItemView.setBackgroundResource(R.drawable.recycler_view_background);
             }
         }

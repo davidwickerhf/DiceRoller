@@ -38,7 +38,7 @@
             android:elevation="2dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="@color/greyText"
+            android:textColor="@color/darkerGrey"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/item_position_text_view"

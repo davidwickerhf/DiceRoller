@@ -3,7 +3,6 @@ package io.github.davidwickerhf.diceroller;
 
 //Todo   REMINDERS
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,10 +12,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,8 +29,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -51,7 +52,7 @@ public class DashboardFragment extends Fragment {
     //TODO VIEWS
     androidx.appcompat.widget.Toolbar dashboardToolbar;
     FloatingActionButton dashboardFab;
-    TextView addSettingTextView;
+    ConstraintLayout addSettingConstraing;
     //TODO VARIABLES
     private static final int ADD_SETTING_REQUEST = 1;
     private Setting recoveredSetting;
@@ -119,7 +120,7 @@ public class DashboardFragment extends Fragment {
             }
         });
 
-        addSettingTextView = fragmentView.findViewById(R.id.dashboard_fragment_ask_to_add_setting_text_view);
+        addSettingConstraing = fragmentView.findViewById(R.id.dashboard_fragment_ask_to_add_setting_constraint_layout);
         //todo View Model
         settingsViewModel = ViewModelProviders.of(this).get(SettingsViewModel.class);
         settingsViewModel.getAllSettings().observe(this, new Observer<List<Setting>>() {
@@ -129,9 +130,9 @@ public class DashboardFragment extends Fragment {
                 itemCount = adapter.getItemCount();
 
                 if (itemCount < 2){
-                    addSettingTextView.setVisibility(View.VISIBLE);
+                    addSettingConstraing.setVisibility(View.VISIBLE);
                 } else{
-                    addSettingTextView.setVisibility(View.INVISIBLE);
+                    addSettingConstraing.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -165,6 +166,7 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onItemClick(int position, View itemView) {
 
+                selectedItemPosition = position;
                 int maxNum = adapter.getSettingAt(position).getMaxDiceSum();
                 ArrayList<String> items = new ArrayList<>();
                 String title = adapter.getSettingAt(position).getTitle();
@@ -190,8 +192,16 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
 
+                final int deletedPosition = viewHolder.getAdapterPosition();
                 recoveredSetting = adapter.getSettingAt(viewHolder.getAdapterPosition());
                 settingsViewModel.delete(adapter.getSettingAt(viewHolder.getAdapterPosition()));
+                // Send Local Broadcast to MainActivity
+                if(selectedItemPosition == deletedPosition){
+                    Intent intent = new Intent("clearHomeArguments");
+                    intent.putExtra(MainActivity.EXTRA_HAS_SELECTED, false);
+                    LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
+                }
+
 
                 mSnackbar = Snackbar
                         .make(coordinatorLayout, "Setting deleted", Snackbar.LENGTH_LONG)
@@ -201,6 +211,11 @@ public class DashboardFragment extends Fragment {
                                 settingsViewModel.insert(recoveredSetting);
                                 Snackbar snackbar1 = Snackbar.make(coordinatorLayout, "Setting restored", Snackbar.LENGTH_SHORT);
                                 snackbar1.show();
+                                if(selectedItemPosition == deletedPosition){
+                                    Intent intent = new Intent("clearHomeArguments");
+                                    intent.putExtra(MainActivity.EXTRA_HAS_SELECTED, true);
+                                    LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
+                                }
                             }
                         });
 
@@ -210,6 +225,8 @@ public class DashboardFragment extends Fragment {
 
         return fragmentView;
     }
+
+
 
     @Override
     public void onAttach(Context context) {
