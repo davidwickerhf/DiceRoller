@@ -201,7 +201,7 @@ public class AddSettingActivity extends AppCompatActivity {
                                         }
                                     }, 150);
                                 }
-                            }l
+                            }
                         }
 
                     } else {
