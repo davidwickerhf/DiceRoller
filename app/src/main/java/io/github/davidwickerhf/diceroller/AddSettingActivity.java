@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -37,9 +38,8 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.util.ArrayList;
-
-
 
 
 public class AddSettingActivity extends AppCompatActivity {
@@ -182,32 +182,42 @@ public class AddSettingActivity extends AppCompatActivity {
 
                     Rect r = new Rect();
                     addSettingConstraint.getWindowVisibleDisplayFrame(r);
-
                     int heightDiff = addSettingConstraint.getRootView().getHeight() - (r.bottom - r.top);
+
                     if (heightDiff > 100) {
                         wasKeyboardOpen = true;
-                        // kEYBOARD IS OPEN
-                        if(itemListRecyclerView.getVisibility() == View.VISIBLE) {
+                        if (itemListRecyclerView.getVisibility() == View.VISIBLE) {
                             if (editTextTitle.hasFocus()) {
                                 showItemEditText(false);
+                                itemListAdapter.isClickable = false;
                             } else {
                                 showItemEditText(true);
-                            }
+                                if(!isEditing) {
+                                    final Handler handler = new Handler();
+                                    handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            itemListRecyclerView.smoothScrollToPosition(itemListAdapter.getItemCount());
+                                        }
+                                    }, 150);
+                                }
+                            }l
                         }
 
                     } else {
                         if (wasKeyboardOpen) {
                             wasKeyboardOpen = false;
-                            // Do your toast here
-                            if(itemListRecyclerView.getVisibility() == View.VISIBLE) {
+                            if (itemListRecyclerView.getVisibility() == View.VISIBLE) {
+
+                                itemListRecyclerView.setLayoutFrozen(false);
+                                itemListAdapter.isClickable = true;
                                 showItemEditText(true);
-                                if (itemEditText.hasFocus()) {
-                                    itemListRecyclerView.setLayoutFrozen(false);
-                                    itemListAdapter.isClickable = true;
-                                }
+                            } else {
+                                showItemEditText(false);
                             }
+
+
                         }
-                        // kEYBOARD IS HIDDEN
                     }
                 }
             });
@@ -263,7 +273,7 @@ public class AddSettingActivity extends AppCompatActivity {
 
                                 }
                             })
-                            .setNegativeButton("Abort", new DialogInterface.OnClickListener() {
+                            .setNegativeButton("No, abort!", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                 }
@@ -329,13 +339,12 @@ public class AddSettingActivity extends AppCompatActivity {
                 itemEditText.setSelection(itemEditText.getText().length()); //This moves the cursor to the end of the string
                 //Show Soft Keyboard
                 showKeyboard(itemEditText);
-                itemListRecyclerView.scrollTo(itemPosition, itemPosition);
                 itemListAdapter.isClickable = false;
                 itemListRecyclerView.setLayoutFrozen(true);
+                //Scroll to selected item
 
             }
         });
-
 
 
         itemEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -343,25 +352,7 @@ public class AddSettingActivity extends AppCompatActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
                     if (isEditing) {
-                        String itemString = itemEditText.getText().toString();
-                        if (itemString.trim().isEmpty()) {
-                            Toast.makeText(AddSettingActivity.this, getString(R.string.add_setting_toast_no_title), Toast.LENGTH_SHORT).show();
-                        } else if (itemString.length() > 23) {
-                            Toast.makeText(AddSettingActivity.this, getString(R.string.add_setting_toast_item_title_is_too_long), Toast.LENGTH_SHORT).show();
-                        } else {
-                            // Save Item String
-                            items.set(itemPosition, itemString);
-                            itemListAdapter.setItems(items);
-
-                            // Reset View and Variables
-                            itemEditText.setText("");
-                            //itemListView.setBackgroundResource(R.drawable.list_item);
-                            addItemButton.setImageResource(R.drawable.ic_add_dark);
-                            itemPosition = 0;
-                            itemListView = null;
-                            isEditing = false;
-                        }
-
+                        saveItem(isEditing);
                     }
                     hideKeyboard(itemEditText);
                 }
@@ -375,7 +366,6 @@ public class AddSettingActivity extends AppCompatActivity {
                     showItemEditText(false);
                 } else {
                     hideKeyboard(editTextTitle);
-                    showItemEditText(true);
                 }
             }
         });
@@ -549,7 +539,7 @@ public class AddSettingActivity extends AppCompatActivity {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
-        itemListAdapter.isClickable = true;
+//        itemListAdapter.isClickable = true;
     }
 
     public void hideKeyboard(View view /*edit text*/) {

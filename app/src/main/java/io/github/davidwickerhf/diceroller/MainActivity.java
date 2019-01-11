@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
         BottomNavigationView = findViewById(R.id.bottom_navigation);
         BottomNavigationView.setOnNavigationItemSelectedListener(navListener);
 
-        //todo Initialize fragments
+        //todo Initialize fragment
         mHomeFragment = new HomeFragment();
         mDashboardFragment = new DashboardFragment();
         mProfileFragment = new PreferencesFragment();
@@ -109,11 +109,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
     public BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            intent.getBooleanExtra(MainActivity.EXTRA_HAS_SELECTED, false);
-            if (true)
-                settingSelected = true;
-            else
-                settingSelected = false;
+            settingSelected = intent.getBooleanExtra(MainActivity.EXTRA_HAS_SELECTED, false);
         }
     };
 

@@ -30,6 +30,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -197,6 +198,7 @@ public class DashboardFragment extends Fragment {
                 settingsViewModel.delete(adapter.getSettingAt(viewHolder.getAdapterPosition()));
                 // Send Local Broadcast to MainActivity
                 if(selectedItemPosition == deletedPosition){
+                    Toast.makeText(getContext(), "Selected is Deleted", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent("clearHomeArguments");
                     intent.putExtra(MainActivity.EXTRA_HAS_SELECTED, false);
                     LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
