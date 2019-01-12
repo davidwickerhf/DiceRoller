@@ -242,7 +242,6 @@ public class AddSettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 saveItem(isEditing);
-                itemListRecyclerView.setLayoutFrozen(false);
             }
         });
 
@@ -370,12 +369,16 @@ public class AddSettingActivity extends AppCompatActivity {
             // Show Views for Item List
             itemListRecyclerView.setVisibility(View.VISIBLE);
             maxNumberTextRepositioned.setVisibility(View.VISIBLE);
-            addItemButton.setVisibility(View.VISIBLE);
-            itemEditText.setVisibility(View.VISIBLE);
             deleteItemsList.setVisibility(View.VISIBLE);
             itemsNumberTitleTextView.setVisibility(View.VISIBLE);
             itemListBackground.setVisibility(View.VISIBLE);
-            addItemEditTextBackground.setVisibility(View.VISIBLE);
+
+            if(!editTextTitle.hasFocus()){
+                addItemButton.setVisibility(View.VISIBLE);
+                itemEditText.setVisibility(View.VISIBLE);
+                addItemEditTextBackground.setVisibility(View.VISIBLE);
+            }
+
         } else {
             //Show Items List Views
             itemListRecyclerView.setVisibility(View.INVISIBLE);
@@ -601,7 +604,7 @@ public class AddSettingActivity extends AppCompatActivity {
                     set.applyTo(addSettingConstraint);
                 }
 
-            }, 210);
+            }, 150);
         }
     }
 
