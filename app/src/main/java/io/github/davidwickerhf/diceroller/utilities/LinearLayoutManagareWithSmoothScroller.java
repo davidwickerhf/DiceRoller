@@ -1,4 +1,4 @@
-package io.github.davidwickerhf.diceroller;
+package io.github.davidwickerhf.diceroller.utilities;
 
 import android.content.Context;
 import android.graphics.PointF;
