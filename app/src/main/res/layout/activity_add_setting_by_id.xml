@@ -68,15 +68,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="21dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
         android:text=""
         android:textColor="@color/darkerGrey"
         android:textSize="18dp"
 
 
         android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/add_setting_by_id_edit_text" />
 

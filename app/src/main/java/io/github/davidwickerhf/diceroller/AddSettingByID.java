@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import io.github.davidwickerhf.diceroller.adapters.ShowItemListAdapter;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -68,6 +69,7 @@ public class AddSettingByID extends AppCompatActivity {
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
         ab.setHomeAsUpIndicator(R.drawable.ic_close);
+
 
         //Initialize views
         addSettingByIdConstraint = findViewById(R.id.add_setting_by_id_constraint);
@@ -217,6 +219,9 @@ public class AddSettingByID extends AppCompatActivity {
             maxNumBackground.setVisibility(View.VISIBLE);
             showItemListRecyclerView.setVisibility(View.VISIBLE);
 
+            //Hide Check Button
+            checkIDButton.setVisibility(View.INVISIBLE);
+
         } else {
             correctOrWrong.setVisibility(View.VISIBLE);
             correctOrWrong.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.red));
@@ -228,6 +233,9 @@ public class AddSettingByID extends AppCompatActivity {
             maxNumDescription.setVisibility(View.INVISIBLE);
             maxNumBackground.setVisibility(View.INVISIBLE);
             showItemListRecyclerView.setVisibility(View.INVISIBLE);
+
+            //Show Check Button
+            checkIDButton.setVisibility(View.VISIBLE);
         }
     }
 

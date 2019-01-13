@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="add_setting_toolbar_title">"Aggiungi "</string>
+    <string name="save_setting">Salva Impostazione</string>
+    <string name="edit_setting_toolbar_title">"Modifica "</string>
+    <string name="_btn">AGGIUNGI  ELEMENTI</string>
+    <string name="maximum_number">Numero  Massimo:</string>
+    <string name="add_item_hint">Aggiungi elemento...</string>
+    <string name="add_setting_toast_item_title_is_too_long">Il  titolo dell\'elemento dovrebbe essere più corto</string>
+    <string name="add_setting_toast_no_title">L\'elemento dovrebbe avere un titolo</string>
+    <string name="add_setting_text_view_items_number_title">Elementi:</string>
+    <string name="add_setting_edit_text_setting_title">Titolo</string>
+    <string name="home_roll_btn">Lancia</string>
+    <string name="dashboard_fragment_ask_to_add_setting_text">Clicca il bottone qui sotto per aggiungere un\'impostazione</string>
+    <string name="dialog_add_setting_title">Aggiungi:</string>
+    <string name="dialog_add_custom_setting">Impostazione Costumizzata</string>
+    <string name="dialog_add_setting_by_id">Impostazione con ID</string>
+    <string name="preferences_fragment_profile_fragment_toolbar_title">Preferenze</string>
+    <string name="preferences_fragment_features_not_yet_available_salute_text">Ciao!</string>
+    <string name="preferences_fragment_features_not_yet_available_introduction_text">Sono David Wicker e sono lo sviluppatore di DiceRoller!</string>
+    <string name="preferences_fragment_features_not_yet_available_apologize_text">Sto lavorando sodo nello sviluppo di nuove funzioni per l\'app, ma sfortunatamente questa pagina è ancora sotto sviluppo...</string>
+    <string name="preferences_fragment_features_not_yet_available_conclusion_text">Nuove funzioni , come il tema scuro, saranno disponibili nel prossimo aggiornamento!</string>
+    <string name="add_setting_by_id_check_button_text">CONTROLLA</string>
+    <string name="add_setting_by_id_correct">ID è corretto</string>
+    <string name="add_setting_by_id_wrong">ID non è corretto</string>
+    <string name="add_setting_by_id_activity_title">Aggiungi con ID</string>
+    <string name="add_setting_by_id_correct_toast_text">Impostazione trovata!</string>
+    <string name="add_setting_by_id_wrong_toast_text">Impostazione non trovata...</string>
+    <string name="add_setting_by_id_save_setting_no_id_toast">Per favore inserisci un ID valido</string>
+    <string name="nav_myprofile_icon">Preferenze</string>
+    <string name="add_setting_delete_item_list_allert_title">Rimuovere Elementi?</string>
+    <string name="add_setting_delete_item_list_allert_description">Se rimuovi la lista di elementi di questa impostazione, non potrai più recuperarla!</string>
+    <string name="add_setting_delete_item_list_allert_confirm">Si, Rimuovi</string>
+    <string name="add_setting_delete_item_list_allert_abort">No, indietro!</string>
+    <string name="dashboard_snackbar_setting_deleted">Impostazione Cancellata</string>
+    <string name="dashboard_setting_deleted_undo_button">INDIETRO</string>
+    <string name="dashboard_snackbar_setting_restored">Impostazione Restaurata</string>
+    <string name="dashboard_snackbar_setting_selected">Impostazione Selezionata</string>
+    <string name="dashboard_setting_saved_snackbar">Impostazione Salvata</string>
+    <string name="dashboard_setting_not_updated">Impostazione Non Salvata</string>
+    <string name="dashboard_setting_updated">Impostazione Aggiornata</string>
+    <string name="dashboard_setting_not_saved_snackbar">Impostazione Non Salvata</string>
+    <string name="main_activity_select_setting_first">Seleziona un\'Impostazione prima</string>
+</resources>

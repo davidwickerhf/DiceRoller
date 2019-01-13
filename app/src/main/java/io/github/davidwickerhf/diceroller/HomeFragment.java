@@ -91,7 +91,8 @@ public class HomeFragment extends Fragment {
         selectedItemTextView = fragmentView.findViewById(R.id.selected_item_text_view);
         //todo Selected Setting Text View
         selectedSettingItemView = fragmentView.findViewById(R.id.home_selected_setting_text);
-        selectedSettingItemView.setText(selectedSettingText);
+        String settingInfoText = selectedSettingText + ": " + String.valueOf(mMaximumGenerated);
+        selectedSettingItemView.setText(settingInfoText);
         //todo Dices - Initialize 6 Dices
         mDice1 = fragmentView.findViewById(R.id.dice1);
         mDice2 = fragmentView.findViewById(R.id.dice2);
@@ -109,7 +110,6 @@ public class HomeFragment extends Fragment {
         diceArray[5] = R.drawable.dice5;
         diceArray[6] = R.drawable.dice6;
 
-        Toast.makeText(getActivity(), "Maximum Number is: " + mMaximumGenerated, Toast.LENGTH_SHORT).show();
         Log.d("HomeFragment", "Max Num is: " + mMaximumGenerated);
 
 

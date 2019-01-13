@@ -48,7 +48,7 @@ public class DashboardFragment extends Fragment {
 
     //TODO DEFAULT ELEMENTS
     private Snackbar mSnackbar;
-    private CoordinatorLayout coordinatorLayout;
+    public CoordinatorLayout coordinatorLayout;
 
     //TODO VIEWS
     androidx.appcompat.widget.Toolbar dashboardToolbar;
@@ -175,7 +175,7 @@ public class DashboardFragment extends Fragment {
                     items.addAll(adapter.getSettings().get(position).getItems());
                     Log.d("HomeFragment", "Item List in DashboardFragment is:" + items.toString());
                 }
-                Snackbar.make(coordinatorLayout, "Setting selected", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(coordinatorLayout, getString(R.string.dashboard_snackbar_setting_selected), Snackbar.LENGTH_LONG).show();
 
                 listener.onInputASent(maxNum, items, position, title, itemView);
             }
@@ -198,7 +198,6 @@ public class DashboardFragment extends Fragment {
                 settingsViewModel.delete(adapter.getSettingAt(viewHolder.getAdapterPosition()));
                 // Send Local Broadcast to MainActivity
                 if(selectedItemPosition == deletedPosition){
-                    Toast.makeText(getContext(), "Selected is Deleted", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent("clearHomeArguments");
                     intent.putExtra(MainActivity.EXTRA_HAS_SELECTED, false);
                     LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
@@ -206,12 +205,12 @@ public class DashboardFragment extends Fragment {
 
 
                 mSnackbar = Snackbar
-                        .make(coordinatorLayout, "Setting deleted", Snackbar.LENGTH_LONG)
-                        .setAction("UNDO", new View.OnClickListener() {
+                        .make(coordinatorLayout, getString(R.string.dashboard_snackbar_setting_deleted), Snackbar.LENGTH_LONG)
+                        .setAction(getString(R.string.dashboard_setting_deleted_undo_button), new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 settingsViewModel.insert(recoveredSetting);
-                                Snackbar snackbar1 = Snackbar.make(coordinatorLayout, "Setting restored", Snackbar.LENGTH_SHORT);
+                                Snackbar snackbar1 = Snackbar.make(coordinatorLayout, getString(R.string.dashboard_snackbar_setting_restored), Snackbar.LENGTH_SHORT);
                                 snackbar1.show();
                                 if(selectedItemPosition == deletedPosition){
                                     Intent intent = new Intent("clearHomeArguments");

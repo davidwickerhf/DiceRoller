@@ -1,16 +1,14 @@
 <resources>
     <!--Activity Names-->
-    <string name="app_name">DiceRoller</string>
-    <string name="dashboard_title">Dashboard</string>
-    <string name="nav_home_icon">Home</string>
-    <string name="nav_dashboard_icon">Dashboard</string>
-    <string name="nav_myprofile_icon">Preferences</string>
+    <string name="app_name" translatable="false">DiceRoller</string>
+    <string name="dashboard_title" translatable="false">Dashboard</string>
+    <string name="nav_home_icon" translatable="false">Home</string>
     <string name="add_setting_toolbar_title">Add Setting</string>
-
-
+    <string name="nav_dashboard_icon" translatable="false">Dashboard</string>
+    <string name="nav_myprofile_icon">Preferences</string>
     <!--Default Text-->
-    <string name="selected_number_textview">00</string>
-    <string name="user_text_view"> </string>
+    <string name="selected_number_textview" translatable="false">00</string>
+    <string name="user_text_view" translatable="false"> </string>
 
     <!--STRINGS-->
     <!--AddSettingActivity-->
@@ -18,16 +16,27 @@
     <string name="edit_setting_toolbar_title">Edit Setting</string>
     <string name="_btn">ADD ITEMS</string>
     <string name="maximum_number">Maximum number:</string>
-    <string name="max_num_default_value">0</string>
+    <string name="max_num_default_value" translatable="false">0</string>
     <string name="add_item_hint">Add Item...</string>
     <string name="add_setting_toast_item_title_is_too_long">Item Title should be shorter</string>
     <string name="add_setting_toast_no_title">Item should have a title</string>
     <string name="add_setting_text_view_items_number_title">Items:</string>
     <string name="add_setting_edit_text_setting_title">Title</string>
+    <string name="add_setting_delete_item_list_allert_title">Delete Item List?</string>
+    <string name="add_setting_delete_item_list_allert_description">If you delete the item list of this Setting, you won\'t be able to recover it.</string>
+    <string name="add_setting_delete_item_list_allert_confirm">Yes, delete it!</string>
+    <string name="add_setting_delete_item_list_allert_abort">No, abort!</string>
     <!--HomeFragment-->
     <string name="home_roll_btn">Roll</string>
     <!--Dashboard Fragment-->
     <string name="dashboard_fragment_ask_to_add_setting_text">Click the button below to add a setting</string>
+    <string name="dashboard_snackbar_setting_deleted">Setting deleted</string>
+    <string name="dashboard_setting_deleted_undo_button">UNDO</string>
+    <string name="dashboard_snackbar_setting_restored">Setting restored</string>
+    <string name="dashboard_snackbar_setting_selected">Setting selected</string>
+    <string name="dashboard_setting_saved_snackbar">Setting Saved</string>
+    <string name="dashboard_setting_updated">Setting updated</string>
+    <string name="dashboard_setting_not_updated">Setting Can\'t be Updated</string>
     <!--AlertDialog in Dashboard Fragment-->
     <string name="dialog_add_setting_title">Add Setting Method:</string>
     <string name="dialog_add_custom_setting">Create Custom Setting</string>
@@ -39,14 +48,16 @@
     <string name="preferences_fragment_features_not_yet_available_apologize_text">I am working hard on developing new features for the app, unfortunatelly though this page is still under development...</string>
     <string name="preferences_fragment_features_not_yet_available_conclusion_text">New features, like dark theme, will be available soon in the next update!</string>
     <!--AddSettingByIDActivity-->
-    <string name="add_setting_by_id_text_view">ID</string>
+    <string name="add_setting_by_id_text_view" translatable="false">ID</string>
     <string name="add_setting_by_id_check_button_text">CHECK</string>
     <string name="add_setting_by_id_correct">ID is Correct</string>
     <string name="add_setting_by_id_wrong">ID is not Correct</string>
     <string name="add_setting_by_id_activity_title">Add Setting By ID</string>
-    <string name="add_setting_by_id_correct_toast_text">ID corresponds to a default Setting</string>
-    <string name="add_setting_by_id_wrong_toast_text">ID does not correspond to any default setting</string>
+    <string name="add_setting_by_id_correct_toast_text">Setting found!</string>
+    <string name="add_setting_by_id_wrong_toast_text">Setting not found...</string>
     <string name="add_setting_by_id_save_setting_no_id_toast">Please insert a valid ID</string>
+    <string name="dashboard_setting_not_saved_snackbar">Setting Not saved</string>
+    <string name="main_activity_select_setting_first">Select a Setting first</string>
 
 
 </resources>

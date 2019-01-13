@@ -1,7 +1,3 @@
-//todo REMAINDER
-// ADD COPY OF DASHBOARD FRAGMENT LAYOUT FOR ADDING LISTS OF ITEMS
-
-
 package io.github.davidwickerhf.diceroller;
 
 import androidx.annotation.NonNull;
@@ -123,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
                             if (settingSelected) {
                                 selectedFragment = mHomeFragment;
                             } else {
-                                Toast.makeText(MainActivity.this, "Select a Setting first", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, getString(R.string.main_activity_select_setting_first), Toast.LENGTH_SHORT).show();
                                 selectedFragment = mDashboardFragment;
                                 // Delay Method which switches selected icon
                                 final Handler handler = new Handler();
@@ -173,8 +169,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
             }
 
             settingsViewModel.insert(setting);
-
-            Toast.makeText(MainActivity.this, "Setting saved", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, getString(R.string.dashboard_setting_saved_snackbar), Toast.LENGTH_SHORT).show();
 
 
         } else if (requestCode == EDIT_SETTING_REQUEST && resultCode == RESULT_OK) {
@@ -183,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
             boolean hasItems = data.getBooleanExtra(MainActivity.EXTRA_HAS_ITEMS, false);
 
             if (id == -1) {
-                Toast.makeText(MainActivity.this, "Setting Can't be Updated", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, getString(R.string.dashboard_setting_not_updated), Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -204,7 +199,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
             // Add Generated Setting
             setting.setId(id);
             settingsViewModel.update(setting);
-            Toast.makeText(MainActivity.this, "Setting updated", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, getString(R.string.dashboard_setting_updated), Toast.LENGTH_SHORT).show();
 
             // Update Selected Setting
             Bundle updateSelectedSetting = mHomeFragment.getArguments();
@@ -227,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements DashboardFragment
 
 
         } else {
-            Toast.makeText(MainActivity.this, "Setting Not Saved", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, getString(R.string.dashboard_setting_not_saved_snackbar), Toast.LENGTH_SHORT).show();
         }
     }
     //todo

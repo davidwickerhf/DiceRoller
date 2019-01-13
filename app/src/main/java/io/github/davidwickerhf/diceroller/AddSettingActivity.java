@@ -52,6 +52,7 @@ public class AddSettingActivity extends AppCompatActivity {
     // for editing an item
     boolean isEditing;
     int itemPosition;
+    boolean closeActivity;
 
     //todo Views
     private ConstraintLayout addSettingConstraint;
@@ -206,9 +207,9 @@ public class AddSettingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (itemListAdapter.getItems().size() > 0) {
                     AlertDialog dialog = new AlertDialog.Builder(AddSettingActivity.this, R.style.DeleteItemListAlertDialog)
-                            .setTitle("Delete Item List?")
-                            .setMessage("If you delete the item list of this Setting, you won't be able to recover it.")
-                            .setPositiveButton("Yes, delete it!", new DialogInterface.OnClickListener() {
+                            .setTitle(getString(R.string.add_setting_delete_item_list_allert_title))
+                            .setMessage(getString(R.string.add_setting_delete_item_list_allert_description))
+                            .setPositiveButton(getString(R.string.add_setting_delete_item_list_allert_confirm), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     hideKeyboard();
@@ -219,7 +220,7 @@ public class AddSettingActivity extends AppCompatActivity {
 
                                 }
                             })
-                            .setNegativeButton("No, abort!", new DialogInterface.OnClickListener() {
+                            .setNegativeButton(getString(R.string.add_setting_delete_item_list_allert_abort), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                 }
@@ -598,7 +599,7 @@ public class AddSettingActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.save_setting:
                 saveSetting(hasItemList);
