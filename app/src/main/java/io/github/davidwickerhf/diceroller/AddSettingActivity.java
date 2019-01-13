@@ -242,6 +242,8 @@ public class AddSettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 saveItem(isEditing);
+                itemListRecyclerView.setLayoutFrozen(false);
+                itemListAdapter.isClickable = true;
             }
         });
 
@@ -276,6 +278,9 @@ public class AddSettingActivity extends AppCompatActivity {
                         itemListAdapter.isClickable = true;
                     }
                     hideKeyboard(itemEditText);
+                } else {
+                    if (!isEditing)
+                        scrollRecycler(itemListAdapter.getItemCount());
                 }
             }
         });
@@ -321,22 +326,6 @@ public class AddSettingActivity extends AppCompatActivity {
         });
 
 
-        final View activityRootView = findViewById(R.id.add_setting_constraint_layout);
-        activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                Rect r = new Rect();
-
-                activityRootView.getWindowVisibleDisplayFrame(r);
-
-                int heightDiff = activityRootView.getRootView().getHeight() - (r.bottom - r.top);
-                if (heightDiff <= 0) {
-                    onHideKeyboard();
-                }
-            }
-        });
-
-
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
         lbm.registerReceiver(receiver, new IntentFilter("sendItemListData"));
 
@@ -373,7 +362,7 @@ public class AddSettingActivity extends AppCompatActivity {
             itemsNumberTitleTextView.setVisibility(View.VISIBLE);
             itemListBackground.setVisibility(View.VISIBLE);
 
-            if(!editTextTitle.hasFocus()){
+            if (!editTextTitle.hasFocus()) {
                 addItemButton.setVisibility(View.VISIBLE);
                 itemEditText.setVisibility(View.VISIBLE);
                 addItemEditTextBackground.setVisibility(View.VISIBLE);
@@ -450,40 +439,21 @@ public class AddSettingActivity extends AppCompatActivity {
 
     private void scrollRecycler(int toRecyclerPosition) {
         final Handler handler = new Handler();
-
-        // Action 0 = Scroll to end of RecyclerView
         final int toPosition = toRecyclerPosition;
-        if (toPosition + 1 == itemListAdapter.getItemCount()) {
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    itemListRecyclerView.smoothScrollToPosition(itemListAdapter.getItemCount());
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            itemListRecyclerView.setLayoutFrozen(true);
-                        }
-                    }, 150);
-                }
-            }, 300);
-            // Action 1 = Scroll to selected item
-        } else {
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    itemListRecyclerView.smoothScrollToPosition(toPosition);
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            itemListRecyclerView.setLayoutFrozen(true);
-                        }
-                    }, 150);
-                }
-            }, 300);
-        }
-
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                itemListRecyclerView.smoothScrollToPosition(toPosition);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        itemListRecyclerView.setLayoutFrozen(true);
+                    }
+                }, 150);
+            }
+        }, 300);
     }
-
+    
     private void saveSetting(boolean hasItemList) {
         String title = editTextTitle.getText().toString();
 
@@ -532,11 +502,6 @@ public class AddSettingActivity extends AppCompatActivity {
         setResult(RESULT_OK, data);
         finish();
 
-    }
-
-    public void onHideKeyboard() {
-        if (getCurrentFocus() != null)
-            getCurrentFocus().clearFocus();
     }
 
     public void showKeyboard(View view) {
