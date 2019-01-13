@@ -400,7 +400,8 @@ public class AddSettingActivity extends AppCompatActivity {
         if (!isEditing) {
             String itemString = itemEditText.getText().toString();
             if (itemString.trim().isEmpty()) {
-                Toast.makeText(AddSettingActivity.this, getString(R.string.add_setting_toast_no_title), Toast.LENGTH_SHORT).show();
+                itemEditText.setText("");
+                hideKeyboard(itemEditText);
             } else if (itemString.length() > 30) {
                 Toast.makeText(AddSettingActivity.this, getString(R.string.add_setting_toast_item_title_is_too_long), Toast.LENGTH_SHORT).show();
             } else {
@@ -443,7 +444,11 @@ public class AddSettingActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                itemListRecyclerView.smoothScrollToPosition(toPosition);
+                if (toPosition == itemListAdapter.getItemCount())
+                    itemListRecyclerView.smoothScrollToPosition(toPosition + 1);
+                else
+                    itemListRecyclerView.smoothScrollToPosition(toPosition);
+
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -453,7 +458,7 @@ public class AddSettingActivity extends AppCompatActivity {
             }
         }, 300);
     }
-    
+
     private void saveSetting(boolean hasItemList) {
         String title = editTextTitle.getText().toString();
 
