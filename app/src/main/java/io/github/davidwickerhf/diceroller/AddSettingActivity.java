@@ -454,7 +454,7 @@ public class AddSettingActivity extends AppCompatActivity {
                     public void run() {
                         itemListRecyclerView.setLayoutFrozen(true);
                     }
-                }, 150);
+                }, 250);
             }
         }, 300);
     }

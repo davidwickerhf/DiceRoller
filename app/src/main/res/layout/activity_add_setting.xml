@@ -221,10 +221,10 @@
 
         android:backgroundTint="@color/lightGrey"
         android:elevation="2dp"
-
         android:outlineProvider="none"
         android:visibility="invisible"
         android:windowSoftInputMode="adjustNothing"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/item_edit_text_background"
