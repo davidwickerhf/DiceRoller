@@ -15,7 +15,7 @@
         android:elevation="4dp"
         android:text="Roll"
         android:textAlignment="center"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/white"
         android:textSize="36sp"
         app:layout_constraintBottom_toBottomOf="@+id/home_roll_button"
         app:layout_constraintEnd_toEndOf="@+id/home_roll_button"
@@ -48,7 +48,7 @@
         android:text="@string/user_text_view"
         android:textAlignment="center"
         android:textAllCaps="false"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/lightBlue"
         android:textSize="25dp"
         app:layout_constraintBottom_toTopOf="@+id/user_guideline"
         app:layout_constraintEnd_toStartOf="@+id/margin_left"
@@ -78,6 +78,21 @@
         app:layout_constraintTop_toTopOf="@+id/user_guideline2"
         app:srcCompat="@drawable/dice0" />
 
+    <TextView
+        android:id="@+id/home_selected_setting_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Selected Setting"
+        android:textColor="@color/darkGrey"
+        android:textStyle="bold"
+
+        app:layout_constraintBottom_toTopOf="@+id/home_roll_button"
+        app:layout_constraintEnd_toStartOf="@+id/margin_left"
+        app:layout_constraintStart_toStartOf="@+id/margin_right"
+        app:layout_constraintTop_toTopOf="@+id/guideline8" />
+
     <Button
         android:id="@+id/home_roll_button"
         android:layout_width="wrap_content"
@@ -91,20 +106,6 @@
         app:layout_constraintEnd_toStartOf="@+id/margin_left"
         app:layout_constraintStart_toStartOf="@+id/margin_right"
         app:layout_constraintTop_toTopOf="@+id/guideline8" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:elevation="4dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline2"
-        app:layout_constraintEnd_toStartOf="@+id/roll_button_text"
-        app:layout_constraintStart_toStartOf="@+id/home_roll_button"
-        app:layout_constraintTop_toTopOf="@+id/guideline"
-        app:srcCompat="@drawable/rollbutton_icon" />
 
 
 

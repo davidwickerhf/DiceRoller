@@ -1,33 +1,63 @@
 <resources>
-    <string name="app_name">DiceRoller</string>
-    <string name="nav_home_icon">Home</string>
-    <string name="nav_dashboard_icon">Dashboard</string>
-    <string name="nav_myprofile_icon">My Profile</string>
-    <string name="selected_number_textview">00</string>
-    <string name="user_text_view">User</string>
+    <!--Activity Names-->
+    <string name="app_name" translatable="false">DiceRoller</string>
+    <string name="dashboard_title" translatable="false">Dashboard</string>
+    <string name="nav_home_icon" translatable="false">Home</string>
+    <string name="add_setting_toolbar_title">Add Setting</string>
+    <string name="nav_dashboard_icon" translatable="false">Dashboard</string>
+    <string name="nav_myprofile_icon">Preferences</string>
+    <!--Default Text-->
+    <string name="selected_number_textview" translatable="false">00</string>
+    <string name="user_text_view" translatable="false"> </string>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="dashboard_title">Dashboard</string>
-    <string name="settings_number">3 Settings</string>
+    <!--STRINGS-->
+    <!--AddSettingActivity-->
+    <string name="save_setting">Save Setting</string>
+    <string name="edit_setting_toolbar_title">Edit Setting</string>
+    <string name="_btn">ADD ITEMS</string>
+    <string name="maximum_number">Maximum number:</string>
+    <string name="max_num_default_value" translatable="false">0</string>
+    <string name="add_item_hint">Add Item...</string>
+    <string name="add_setting_toast_item_title_is_too_long">Item Title should be shorter</string>
+    <string name="add_setting_toast_no_title">Item should have a title</string>
+    <string name="add_setting_text_view_items_number_title">Items:</string>
+    <string name="add_setting_edit_text_setting_title">Title</string>
+    <string name="add_setting_delete_item_list_allert_title">Delete Item List?</string>
+    <string name="add_setting_delete_item_list_allert_description">If you delete the item list of this Setting, you won\'t be able to recover it.</string>
+    <string name="add_setting_delete_item_list_allert_confirm">Yes, delete it!</string>
+    <string name="add_setting_delete_item_list_allert_abort">No, abort!</string>
+    <!--HomeFragment-->
+    <string name="home_roll_btn">Roll</string>
+    <!--Dashboard Fragment-->
+    <string name="dashboard_fragment_ask_to_add_setting_text">Click the button below to add a setting</string>
+    <string name="dashboard_snackbar_setting_deleted">Setting deleted</string>
+    <string name="dashboard_setting_deleted_undo_button">UNDO</string>
+    <string name="dashboard_snackbar_setting_restored">Setting restored</string>
+    <string name="dashboard_snackbar_setting_selected">Setting selected</string>
+    <string name="dashboard_setting_saved_snackbar">Setting Saved</string>
+    <string name="dashboard_setting_updated">Setting updated</string>
+    <string name="dashboard_setting_not_updated">Setting Can\'t be Updated</string>
+    <!--AlertDialog in Dashboard Fragment-->
+    <string name="dialog_add_setting_title">Add Setting Method:</string>
+    <string name="dialog_add_custom_setting">Create Custom Setting</string>
+    <string name="dialog_add_setting_by_id">Add Setting by ID</string>
+    <!--Preferences Fragment-->
+    <string name="preferences_fragment_profile_fragment_toolbar_title">App Preferences</string>
+    <string name="preferences_fragment_features_not_yet_available_salute_text">Hello There!</string>
+    <string name="preferences_fragment_features_not_yet_available_introduction_text">My name is David Wicker and I am the developer of DiceRoller!</string>
+    <string name="preferences_fragment_features_not_yet_available_apologize_text">I am working hard on developing new features for the app, unfortunatelly though this page is still under development...</string>
+    <string name="preferences_fragment_features_not_yet_available_conclusion_text">New features, like dark theme, will be available soon in the next update!</string>
+    <!--AddSettingByIDActivity-->
+    <string name="add_setting_by_id_text_view" translatable="false">ID</string>
+    <string name="add_setting_by_id_check_button_text">CHECK</string>
+    <string name="add_setting_by_id_correct">ID is Correct</string>
+    <string name="add_setting_by_id_wrong">ID is not Correct</string>
+    <string name="add_setting_by_id_activity_title">Add Setting By ID</string>
+    <string name="add_setting_by_id_correct_toast_text">Setting found!</string>
+    <string name="add_setting_by_id_wrong_toast_text">Setting not found...</string>
+    <string name="add_setting_by_id_save_setting_no_id_toast">Please insert a valid ID</string>
+    <string name="dashboard_setting_not_saved_snackbar">Setting Not saved</string>
+    <string name="main_activity_select_setting_first">Select a Setting first</string>
 
 
-
-    <string name="prompt_email">Email</string>
-    <string name="prompt_username">Username</string>
-    <string name="prompt_password">Password</string>
-    <string name="prompt_password_again">Confirm Password</string>
-    <string name="prompt_msg">Type a message</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_register">Register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="action_sign_up">Sign up</string>
-    <string name="action_send">Send</string>
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">Password too short or does not match</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
-    <string name="sample_message">Hello!</string>
 </resources>

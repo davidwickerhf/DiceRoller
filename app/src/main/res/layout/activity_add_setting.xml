@@ -4,245 +4,273 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/add_setting"
+    android:background="@color/white"
     android:orientation="vertical"
-    android:padding="16dp"
-    tools:context=".AddSettingActivity">
+    android:id="@+id/add_setting_constraint_layout"
+    tools:context=".AddSettingActivity"
+    android:clickable="true"
+    android:fitsSystemWindows="true"
+    android:layout_alignParentBottom="true"
+    android:focusableInTouchMode="true" >
 
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="8dp"
-        android:text="Add a Title"
-        android:textColor="@color/greyText"
-        android:textSize="35dp"
-        app:layout_constraintBottom_toTopOf="@+id/top_dices_guideline"
-        app:layout_constraintEnd_toStartOf="@+id/margin_left"
-        app:layout_constraintStart_toStartOf="@+id/margin_right"
-        app:layout_constraintTop_toTopOf="@+id/top_dices_guideline2" />
+        app:elevation="0dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/add_setting_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/white"
+            app:elevation="0dp"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:layout_scrollFlags="scroll|enterAlways|snap"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <EditText
         android:id="@+id/edit_text_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp"
         android:background="@drawable/setting_title_edit_text"
-        android:hint="Title"
+        android:hint="@string/add_setting_edit_text_setting_title"
+
         android:inputType="text"
-        android:singleLine="true"
+        android:imeOptions="actionDone"
+        android:maxLines="1"
+
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:textAlignment="center"
-        android:textColor="@color/greyText"
-        android:textColorHint="@color/hintColor"
-        app:layout_constraintEnd_toStartOf="@+id/margin_left"
-        app:layout_constraintStart_toStartOf="@+id/margin_right"
-        app:layout_constraintTop_toTopOf="@+id/top_dices_guideline" />
+        android:textColor="@color/darkerGrey"
+        android:textColorHint="@color/grey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
-
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="Maximum number:"
-        android:textColor="@color/greyText"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/user_guideline2"
-        app:layout_constraintEnd_toStartOf="@+id/margin_left"
-        app:layout_constraintStart_toStartOf="@+id/margin_right"
-        app:layout_constraintTop_toTopOf="@+id/user_guideline3"
-        app:layout_constraintVertical_bias="0.0" />
-
+    <!--Ask for Max Num Text View-->
     <SeekBar
         android:id="@+id/seek_bar"
         style="@style/Base.Widget.AppCompat.SeekBar.Discrete"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:max="36"
+        android:windowSoftInputMode="adjustNothing"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/user_guideline2" />
+        app:layout_constraintTop_toBottomOf="@+id/max_number_text" />
 
-    <TextView
-        android:id="@+id/max_number_text"
+    <Button
+        android:id="@+id/add_items_btn"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="0"
-        android:textColor="@color/greyText"
+        android:elevation="0dp"
+        android:text="@string/_btn"
+        android:textColor="@color/darkerGrey"
         android:textSize="18dp"
-        app:layout_constraintBottom_toTopOf="@+id/seek_bar"
-        app:layout_constraintEnd_toStartOf="@+id/margin_left"
-        app:layout_constraintStart_toStartOf="@+id/margin_right"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+        android:textStyle="bold"
+        android:windowSoftInputMode="adjustNothing"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/seek_bar"
+        app:strokeColor="@color/darkerGrey"
+        app:strokeWidth="9dp" />
+
+    <TextView
+        android:id="@+id/max_number_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
+        android:text="0"
+        android:textColor="@color/darkerGrey"
+        android:textSize="18dp"
+        android:windowSoftInputMode="adjustNothing"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_title" />
+
+
+
+    <!--Maximum Number Text Views-->
+
+
+    <!--Choose Max Num SeekBar - Should disappear on click -->
+
+
+    <!--Add Item List Button - Should disappear on click-->
+
+
+    <!--Views Appear after button click-->
+    <!--Max Num TextView With Items-->
+
+    <TextView
+        android:id="@+id/items_max_num_title_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/add_setting_text_view_items_number_title"
+        android:textColor="@color/grey"
+        android:textSize="24sp"
+        android:elevation="2dp"
+        android:outlineProvider="none"
+
+        android:visibility="invisible"
+        android:windowSoftInputMode="adjustNothing"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_title" />
 
 
     <TextView
+        android:id="@+id/max_number_text_with_items"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="Priority:"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-        android:textColor="@color/greyText"
-        android:textSize="30dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline6"
-        app:layout_constraintEnd_toStartOf="@+id/margin_left"
-        app:layout_constraintStart_toStartOf="@+id/margin_right" />
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:elevation="4dp"
 
-    <NumberPicker
-        android:id="@+id/priority_picker"
-        style="@style/Base.Widget.AppCompat.SeekBar.Discrete"
+        android:text="@string/max_num_default_value"
+        android:textColor="@color/colorAccent"
+        android:textSize="24dp"
+        android:visibility="invisible"
+        android:windowSoftInputMode="adjustNothing"
+        app:layout_constraintStart_toEndOf="@+id/items_max_num_title_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_title" />
+    <!--Add Item Button-->
+    <ImageButton
+        android:id="@+id/delete_item_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="2dp"
+        android:outlineProvider="none"
+        android:backgroundTint="@color/lighterGrey"
+
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:visibility="invisible"
+        android:windowSoftInputMode="adjustNothing"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_title"
+        app:srcCompat="@drawable/ic_cancel_red" />
+
+    <ImageView
+        android:id="@+id/item_list_background"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:adjustViewBounds="true"
+        android:cropToPadding="true"
+        android:elevation="0dp"
+        android:scaleType="fitXY"
+        android:visibility="invisible"
+
+        app:elevation="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/item_list_recycler_view"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_title"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/add_item_list_background" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/item_list_recycler_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+
+        android:layout_marginBottom="8dp"
+        android:elevation="0dp"
+        android:visibility="invisible"
+        android:windowSoftInputMode="adjustResize"
+
+        app:layout_constraintBottom_toTopOf="@+id/item_edit_text_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/items_max_num_title_text_view"
+        app:layout_constraintVertical_bias="0.0"
+        tools:listitem="@layout/item_list_item">
+
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <ImageButton
+        android:id="@+id/add_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:max="36"
-        android:progress="13"
-        app:layout_constraintEnd_toStartOf="@+id/margin_left"
-        app:layout_constraintStart_toStartOf="@+id/margin_right"
-        app:layout_constraintTop_toTopOf="@+id/guideline6">
 
-    </NumberPicker>
+        android:backgroundTint="@color/lightGrey"
+        android:elevation="2dp"
+        android:outlineProvider="none"
+        android:visibility="invisible"
+        android:windowSoftInputMode="adjustNothing"
 
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/item_edit_text_background"
+        app:srcCompat="@drawable/ic_add_dark" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/margin_right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.02" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/margin_left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.98" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/number_guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.15" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/user_guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.22" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/user_guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.35" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/user_guideline3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.28" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/top_dices_guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.1" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/top_dices_guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.02" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.58" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.66" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.84" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.87" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.95" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline9"
+    <!--Add Item String Edit Text-->
+    <EditText
+        android:id="@+id/edit_text_item_string"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/item_title_edit_text_background"
+        android:elevation="4dp"
+        android:hint="@string/add_item_hint"
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline10"
-        android:layout_width="wrap_content"
+
+        android:imeOptions="actionDone"
+
+        android:inputType="text"
+        android:maxLines="1"
+        android:visibility="invisible"
+        android:windowSoftInputMode="adjustNothing"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/add_item"
+        app:layout_constraintTop_toTopOf="@+id/item_edit_text_background" />
+
+    <!--Delete Items List Button-->
+
+
+    <ImageView
+        android:id="@+id/item_edit_text_background"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.36" />
+        android:adjustViewBounds="true"
+        android:elevation="0dp"
+        android:scaleType="center"
+        android:visibility="invisible"
+        android:windowSoftInputMode="adjustNothing"
+        app:elevation="0dp"
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline12"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.32" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline13"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.68" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.64" />
-
-
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/add_item"
+        app:srcCompat="@drawable/add_item_edit_text_layout" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
