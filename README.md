@@ -1,5 +1,5 @@
 # DiceRoller
-This is an Android app with two main uses:
+This is an Android app which:
 
  1. This app let's you throw dices, outputting a random number.
  
