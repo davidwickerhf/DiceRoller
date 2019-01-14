@@ -306,8 +306,15 @@ public class AddSettingActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
+                    // Open Keyboard focused on TitleEditText, Hide ItemEditText
                     showItemEditText(1);
-                } else {
+                } else if (itemListRecyclerView.getVisibility() != View.VISIBLE){
+                    // If HasItems is false, On close keyboard hide itemEditText and hide keyboard if no focus is set
+                    showItemEditText(1);
+                    if (!itemEditText.hasFocus())
+                        hideKeyboard(editTextTitle);
+                } else if (itemListRecyclerView.getVisibility() == View.VISIBLE){
+                    //When closing keyboard, show ItemEditTxt if HasItems
                     showItemEditText(0);
                     if (!itemEditText.hasFocus())
                         hideKeyboard(editTextTitle);
