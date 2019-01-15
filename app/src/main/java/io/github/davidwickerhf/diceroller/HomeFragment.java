@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +48,8 @@ public class HomeFragment extends Fragment {
     private String selectedSettingText;
     private int mMaximumGenerated;
     private ArrayList<String> items;
-
+    private int[] previosGeneratedArray;
+    private int arrayIndex;
 
     @Nullable
     @Override
@@ -91,8 +91,11 @@ public class HomeFragment extends Fragment {
         selectedItemTextView = fragmentView.findViewById(R.id.selected_item_text_view);
         //todo Selected Setting Text View
         selectedSettingItemView = fragmentView.findViewById(R.id.home_selected_setting_text);
+        //todo Vaiables
         String settingInfoText = selectedSettingText + ": " + String.valueOf(mMaximumGenerated);
         selectedSettingItemView.setText(settingInfoText);
+        previosGeneratedArray = new int[10];
+        arrayIndex = 0;
         //todo Dices - Initialize 6 Dices
         mDice1 = fragmentView.findViewById(R.id.dice1);
         mDice2 = fragmentView.findViewById(R.id.dice2);
@@ -117,10 +120,36 @@ public class HomeFragment extends Fragment {
         mRollButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("HomeFragment", " ");
+
                 Log.d("HomeFragment", "Roll Button Clicked");
 
                 Random randomNumberGenerator = new Random();
                 int mKeyNumber = randomNumberGenerator.nextInt(mMaximumGenerated) + 1;
+                Log.d("HomeFragment", "original key: " + mKeyNumber);
+                // if a number has been outputted and if output is NOT 0, the dices are going to roll again
+                if(isIncluded(mKeyNumber) && mKeyNumber != 0){
+                    mKeyNumber = randomNumberGenerator.nextInt(mMaximumGenerated) + 1;
+                    Log.d("HomeFragment", "original key was included in array, new: " + mKeyNumber);
+                }
+
+                // Add generated number to array and update index
+                Log.d("HomeFragment", "ArrayIndex: " + arrayIndex);
+                if (arrayIndex < 10 && mKeyNumber != 0) {
+                    previosGeneratedArray[arrayIndex] = mKeyNumber;
+                    arrayIndex++;
+                    Log.d("HomeFragment", "Added key to array:" + previosGeneratedArray + " Index: " + arrayIndex);
+
+                } else if (arrayIndex == 9){
+                    // If the array contains more than 10 items, it gets reset.
+                    arrayIndex = 0;
+                    Log.d("HomeFragment", "Array Full, Index: " + arrayIndex);
+                    previosGeneratedArray[arrayIndex] = mKeyNumber;
+                    arrayIndex++;
+                    Log.d("HomeFragment", "Item at position " + (arrayIndex-1) +" changed, array index aumented by 1: " +arrayIndex);
+                }
+
+                Log.d("HomeFragment", " ");
                 Log.d("HomeFragment", "Chosen number: " + mKeyNumber);
                 Log.d("HomeFragment", "List size in HomeFragment = " + items.size());
                 Log.d("HomeFragment", "Item List arrived in Home is:" + items.toString());
@@ -144,6 +173,14 @@ public class HomeFragment extends Fragment {
 
 
         return fragmentView;
+    }
+
+    private boolean isIncluded(int key){
+        for(int a = 0; a > previosGeneratedArray.length - 1; a++){
+            if(a == key)
+                return true;
+        }
+        return false;
     }
 
     private void update2Dices(int key, int maximumGenerated) {
@@ -355,7 +392,6 @@ public class HomeFragment extends Fragment {
         addedItems.clear();
 
     }
-
 
     private int returnDiceIndex(int maximumGenerated) {
         Random randomNumber = new Random();

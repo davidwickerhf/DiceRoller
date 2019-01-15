@@ -2,16 +2,16 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/add_setting_constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_alignParentBottom="true"
     android:background="@color/white"
-    android:orientation="vertical"
-    android:id="@+id/add_setting_constraint_layout"
-    tools:context=".AddSettingActivity"
     android:clickable="true"
     android:fitsSystemWindows="true"
-    android:layout_alignParentBottom="true"
-    android:focusableInTouchMode="true" >
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    tools:context=".AddSettingActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -24,8 +24,8 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/white"
-            app:elevation="0dp"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:elevation="0dp"
             app:layout_scrollFlags="scroll|enterAlways|snap"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
@@ -37,16 +37,16 @@
         android:id="@+id/edit_text_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+
+        android:layout_marginEnd="16dp"
         android:background="@drawable/setting_title_edit_text"
         android:hint="@string/add_setting_edit_text_setting_title"
 
-        android:inputType="text"
         android:imeOptions="actionDone"
+        android:inputType="text"
         android:maxLines="1"
-
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:textAlignment="center"
         android:textColor="@color/darkerGrey"
         android:textColorHint="@color/grey"
@@ -108,7 +108,6 @@
         app:layout_constraintTop_toBottomOf="@+id/edit_text_title" />
 
 
-
     <!--Maximum Number Text Views-->
 
 
@@ -127,11 +126,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
+        android:elevation="2dp"
+        android:outlineProvider="none"
         android:text="@string/add_setting_text_view_items_number_title"
         android:textColor="@color/grey"
         android:textSize="24sp"
-        android:elevation="2dp"
-        android:outlineProvider="none"
 
         android:visibility="invisible"
         android:windowSoftInputMode="adjustNothing"
@@ -159,12 +158,12 @@
         android:id="@+id/delete_item_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:elevation="2dp"
-        android:outlineProvider="none"
-        android:backgroundTint="@color/lighterGrey"
-
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
+        android:backgroundTint="@color/lighterGrey"
+
+        android:elevation="2dp"
+        android:outlineProvider="none"
         android:visibility="invisible"
         android:windowSoftInputMode="adjustNothing"
         app:layout_constraintEnd_toEndOf="parent"
@@ -219,12 +218,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
 
+        android:layout_marginBottom="8dp"
         android:backgroundTint="@color/lightGrey"
-        android:elevation="2dp"
+        android:elevation="6dp"
         android:outlineProvider="none"
         android:visibility="invisible"
-        android:windowSoftInputMode="adjustNothing"
 
+        android:windowSoftInputMode="adjustNothing"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/item_edit_text_background"
@@ -237,13 +237,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/item_title_edit_text_background"
-        android:elevation="4dp"
+        android:elevation="6dp"
+
+
         android:hint="@string/add_item_hint"
 
-
         android:imeOptions="actionDone"
-
         android:inputType="text"
         android:maxLines="1"
         android:visibility="invisible"
@@ -255,22 +256,45 @@
 
     <!--Delete Items List Button-->
 
+    <View
+        android:id="@+id/item_edit_text_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_above="@id/item_edit_text_background"
+
+        android:angle="90"
+        android:background="@drawable/shadow"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/shadow_top_guideline" />
 
     <ImageView
         android:id="@+id/item_edit_text_background"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:elevation="0dp"
-        android:scaleType="center"
+        android:adjustViewBounds="false"
+        android:cropToPadding="false"
+        android:elevation="4dp"
+        android:scaleType="fitXY"
         android:visibility="invisible"
         android:windowSoftInputMode="adjustNothing"
-        app:elevation="0dp"
 
+        app:elevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/add_item"
         app:srcCompat="@drawable/add_item_edit_text_layout" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/shadow_top_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="98dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintGuide_end="98dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.constraintlayout.widget.Guideline;
 import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -68,6 +69,7 @@ public class AddSettingActivity extends AppCompatActivity {
     private TextView itemsNumberTitleTextView;
     private ImageView addItemEditTextBackground;
     private ImageView itemListBackground;
+    private View editTextShadow;
 
     //todo Components
     private ItemListAdapter itemListAdapter;
@@ -98,7 +100,8 @@ public class AddSettingActivity extends AppCompatActivity {
         itemsNumberTitleTextView = findViewById(R.id.items_max_num_title_text_view);
         addItemEditTextBackground = findViewById(R.id.item_edit_text_background);
         itemListBackground = findViewById(R.id.item_list_background);
-
+        editTextShadow = findViewById(R.id.item_edit_text_shadow);
+        //Variables
         hasItemList = false; //default Value for adding a setting. If true, It means the setting has Items (strings entered by users, attached to the number)
         isEditing = false; //Default. This is used to edit an item in the list
         maxNumber = 2; // Lowest number should be 2
@@ -157,6 +160,7 @@ public class AddSettingActivity extends AppCompatActivity {
                 itemsNumberTitleTextView.setVisibility(View.VISIBLE);
                 itemListBackground.setVisibility(View.VISIBLE);
                 addItemEditTextBackground.setVisibility(View.VISIBLE);
+                editTextShadow.setVisibility(View.VISIBLE);
                 //variables
                 items = intent.getStringArrayListExtra(MainActivity.EXTRA_ITEMS_LIST);
                 itemListAdapter.setItems(items);
@@ -374,6 +378,7 @@ public class AddSettingActivity extends AppCompatActivity {
                 addItemButton.setVisibility(View.VISIBLE);
                 itemEditText.setVisibility(View.VISIBLE);
                 addItemEditTextBackground.setVisibility(View.VISIBLE);
+                editTextShadow.setVisibility(View.VISIBLE);
             }
 
         } else {
@@ -390,6 +395,8 @@ public class AddSettingActivity extends AppCompatActivity {
             itemsNumberTitleTextView.setVisibility(View.INVISIBLE);
             itemListBackground.setVisibility(View.INVISIBLE);
             addItemEditTextBackground.setVisibility(View.INVISIBLE);
+            editTextShadow.setVisibility(View.INVISIBLE);
+
             //Transition Max Num from Number of Items to SeekBar
             maxNumber = itemListAdapter.getItems().size();
             items.clear();
@@ -548,6 +555,7 @@ public class AddSettingActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     addItemEditTextBackground.setVisibility(View.VISIBLE);
+                    editTextShadow.setVisibility(View.VISIBLE);
                     addItemButton.setVisibility(View.VISIBLE);
                     itemEditText.setVisibility(View.VISIBLE);
 
@@ -568,6 +576,7 @@ public class AddSettingActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     addItemEditTextBackground.setVisibility(View.INVISIBLE);
+                    editTextShadow.setVisibility(View.INVISIBLE);
                     addItemButton.setVisibility(View.INVISIBLE);
                     itemEditText.setVisibility(View.INVISIBLE);
 
